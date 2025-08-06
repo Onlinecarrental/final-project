@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import logo from '../assets/LOGO.png';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase/config';
@@ -275,7 +275,7 @@ const Login = () => {
 
               <div className="mt-8 text-center">
                 <p className="text-gray-700 text-base font-medium">
-                  Don't have an account?{' '}
+                  Dont have an account?{' '}
                   <Link
                   to="/signup" 
                     className="text-[#5937E0] hover:text-[#000000] font-semibold transition duration-200 hover:underline"

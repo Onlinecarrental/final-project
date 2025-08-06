@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
-  Bell,
   Search,
   Menu,
   User,
   BarChart2,
   Users,
-  Package,
   Settings,
   LogOut,
   ChevronDown,
@@ -16,8 +14,7 @@ import {
   MessageSquare,
   FileText,
   Plus, // Add this import for the plus icon
-  Folder, // Add this import for the folder icon
-  LayoutDashboard,
+  Folder,
   Home,
   Info
 } from 'lucide-react';
@@ -28,7 +25,7 @@ import ReviewManagement from './ReviewManagement/ReviewManagement'; // Add this 
 import HomepageManagement from './HomepageManagement/HomepageManagement';
 import AboutUsManagement from './AboutUsManagement/AboutUsManagement';
 import AdminChat from './AdminChat';
-import BookingManagement from './BookingManagement/BookingManagement';
+import BookingManagement from './bookingManagement/BookingManagement';
 import PaymentManagement from './paymentManagemnt/PaymentManagement';
 
 function SidebarItem({ icon, text, isOpen, isActive, onClick, badge }) {
