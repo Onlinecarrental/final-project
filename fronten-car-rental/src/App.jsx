@@ -5,7 +5,7 @@ import './index.css';
 import HomeView from './views/HomeView/homeView';
 import BestCarsView from './views/BestCarsView/bestCarsView';
 import AboutUsView from './views/AboutUsView/aboutUsView';
-import CustomerReviewView from './views/customerReviewView/customerReview';
+import CustomerReviewView from './views/customerReviewView/customerReviewView';
 import ContactUsView from './views/ContactUsView/contactUsView';
 import BlogsView from './views/BlogsView/blogView';
 import DetailCar from './views/BestCarsView/cardetailview';
