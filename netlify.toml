@@ -1,4 +1,5 @@
 [build]
+  base = "fronten-car-rental"   
   command = "npm run build"
   publish = "dist"
 
