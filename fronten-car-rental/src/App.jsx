@@ -27,7 +27,7 @@ import AgentContactUsView from './views/AgentsPanelView/agentContactUsView/agent
 import AdminDashboard from './views/AdminDashboardView/adminpanel';
 import BlogManagement from './views/AdminDashboardView/BlogManagement/BlogManagement';
 import CustomerBookings from './views/CustomerAddCarView/customerBookings';
-// import CustomerReviewView from './views/customerReviewView/customerReviewView';
+import CustomerReviewView from './views/customerReviewView/customerReviewView';
 
 
 const App = () => {
@@ -66,14 +66,14 @@ const App = () => {
                         </ProtectedRoute>
                     }
                 />
-                {/* <Route
+                <Route
                     path="/home/customerreviews"
                     element={
                         <ProtectedRoute type="customer">
                             <Layout><CustomerReviewView/></Layout>
                         </ProtectedRoute>
                     }
-                /> */}
+                />
                 <Route
                     path="/home/contactus"
                     element={
