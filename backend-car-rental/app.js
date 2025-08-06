@@ -1,9 +1,9 @@
 // backend-car-rental/app.js
-const express   = require('express');
-const cors      = require('cors');
-const path      = require('path');
-const fs        = require('fs');
-const multer    = require('multer');
+const express = require('express');
+const cors    = require('cors');
+const path    = require('path');
+const fs      = require('fs');
+const multer  = require('multer');
 
 // Import route modules
 const carRoutes       = require('./routes/carRoutes');
@@ -19,37 +19,45 @@ const paymentRoutes   = require('./routes/paymentRoutes');
 
 const app = express();
 
-// Ensure upload directories exist
-const directories = [
-  'uploads',
-  'uploads/cars',
-  'uploads/blogs',
-  'uploads/reviews',
-  'uploads/reviews/profiles',
-  'uploads/homepage',
-  'uploads/about',
-  'uploads/about/services',
-  'uploads/about/trust',
-  'uploads/about/cars'
-];
-directories.forEach(dir => {
-  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-});
+// === LOCAL-FS SETUP ===
+// Skip this block if running inside Netlify Functions
+if (!process.env.NETLIFY) {
+  // Ensure upload directories exist
+  const directories = [
+    'uploads',
+    'uploads/cars',
+    'uploads/blogs',
+    'uploads/reviews',
+    'uploads/reviews/profiles',
+    'uploads/homepage',
+    'uploads/about',
+    'uploads/about/services',
+    'uploads/about/trust',
+    'uploads/about/cars'
+  ];
+  directories.forEach(dir => {
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+  });
+
+  // Serve uploads folder in local dev
+  app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+}
 
 // === CORS SETUP ===
 const allowedOrigins = [
-  'https://onlinecarrental234.netlify.app',
-  'http://localhost:5173'
+  'https://onlinecarrental234.netlify.app',  // your Netlify frontend
+  'http://localhost:5173'                    // local Vite dev
 ];
 app.use(cors({
   origin: allowedOrigins,
-  credentials: true
+  credentials: true,
 }));
 
-// Body parsing & static files
+// Body parsing
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Health-check
 app.get('/health', (req, res) => {
@@ -75,7 +83,7 @@ app.use((req, res, next) => {
       success: false,
       message: 'API route not found',
       path: req.url,
-      method: req.method
+      method: req.method,
     });
   }
   next();
@@ -89,17 +97,19 @@ app.use((err, req, res, next) => {
       message: err.code === 'LIMIT_FILE_SIZE'
         ? 'File size is too large'
         : 'File upload error',
-      error: err.message
+      error: err.message,
     });
   }
 
-  // Cleanup uploaded files on error
+  // Cleanup uploaded files on error (local dev only)
   if (req.file) {
     fs.unlink(req.file.path, () => {});
   }
   if (req.files) {
     Object.values(req.files).flat().forEach(f => {
-      if (fs.existsSync(f.path)) fs.unlink(f.path, () => {});
+      if (fs.existsSync(f.path)) {
+        fs.unlink(f.path, () => {});
+      }
     });
   }
 
@@ -108,13 +118,15 @@ app.use((err, req, res, next) => {
     stack: process.env.NODE_ENV === 'development' ? err.stack : undefined,
     path: req.path,
     method: req.method,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   });
 
   res.status(err.status || 500).json({
     success: false,
     message: err.message || 'Something went wrong!',
-    error: process.env.NODE_ENV === 'development' ? { stack: err.stack } : {}
+    error: process.env.NODE_ENV === 'development'
+      ? { stack: err.stack }
+      : {},
   });
 });
 
