@@ -1,5 +1,6 @@
+# netlify.toml
 [build]
-  base = "frontend-car-rental"
+  base    = "fronten-car-rental"
   command = "npm run build"
   publish = "dist"
 
@@ -7,5 +8,5 @@
   NODE_VERSION = "20"
 
 [functions]
-  directory = "netlify/functions"
+  directory    = "backend-car-rental/functions"
   node_bundler = "esbuild"
