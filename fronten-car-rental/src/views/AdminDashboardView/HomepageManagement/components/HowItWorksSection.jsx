@@ -66,8 +66,8 @@ const StatusMessage = ({ status }) => {
 const getImageUrl = (path) => {
   if (!path) return null;
   if (path.startsWith('http')) return path;
-  if (path.startsWith('/')) return `https://backendonlinecar.netlify.app/.netlify/functions/express-server${path}`;
-  return `https://backendonlinecar.netlify.app/.netlify/functions/express-server/${path}`;
+  if (path.startsWith('/')) return `https://backendonlinecar.netlify.app/functions/express-server${path}`;
+  return `https://backendonlinecar.netlify.app/functions/express-server/${path}`;
 };
 
 // Move defaultData before any function that uses it

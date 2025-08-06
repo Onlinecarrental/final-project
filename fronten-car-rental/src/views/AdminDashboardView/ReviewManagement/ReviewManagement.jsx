@@ -19,7 +19,7 @@ export default function ReviewManagement() {
 
   const fetchReviews = async () => {
     try {
-      const response = await axios.get('https://backendonlinecar.netlify.app/.netlify/functions/express-server/api/reviews/all');
+      const response = await axios.get('https://backendonlinecar.netlify.app/functions/express-server/api/reviews/all');
       setReviews(response.data.data);
       setLoading(false);
     } catch (error) {
@@ -115,7 +115,7 @@ export default function ReviewManagement() {
                   ) : (
                     <div className="flex items-center">
                       <img
-                        src={`https://backendonlinecar.netlify.app/.netlify/functions/express-server${review.image}`}
+                        src={`https://backendonlinecar.netlify.app/functions/express-server${review.image}`}
                         alt={review.name}
                         className="h-10 w-10 rounded-full"
                         onError={(e) => {

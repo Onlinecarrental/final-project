@@ -15,7 +15,7 @@ export default function CategoryManagement() {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get('https://backendonlinecar.netlify.app/.netlify/functions/express-server/api/categories');
+      const response = await axios.get('https://backendonlinecar.netlify.app/functions/express-server/api/categories');
       if (response.data.success) {
         setCategories(response.data.data);
       }
@@ -30,7 +30,7 @@ export default function CategoryManagement() {
 
     try {
       setLoading(true);
-      const response = await axios.post('https://backendonlinecar.netlify.app/.netlify/functions/express-server/api/categories', {
+      const response = await axios.post('https://backendonlinecar.netlify.app/functions/express-server/api/categories', {
         name: newCategory.trim()
       });
       

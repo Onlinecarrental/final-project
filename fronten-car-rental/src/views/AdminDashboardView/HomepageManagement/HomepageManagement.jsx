@@ -62,7 +62,7 @@ export default function HomepageManagement({ section = 'hero' }) {
       setLoading(true);
       setError(null);
 
-      const response = await axios.get('https://backendonlinecar.netlify.app/.netlify/functions/express-server/api/homepage');
+      const response = await axios.get('https://backendonlinecar.netlify.app/functions/express-server/api/homepage');
       console.log('API Response:', response.data);
 
       // Default sections structure
@@ -211,7 +211,7 @@ export default function HomepageManagement({ section = 'hero' }) {
     if (!imagePath) return null;
     return imagePath.startsWith('http')
       ? imagePath
-      : `https://backendonlinecar.netlify.app/.netlify/functions/express-server${imagePath}`;
+      : `https://backendonlinecar.netlify.app/functions/express-server${imagePath}`;
   };
 
   // Update the prepareFormData helper function

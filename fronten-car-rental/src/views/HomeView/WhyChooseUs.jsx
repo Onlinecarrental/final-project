@@ -30,7 +30,7 @@ export default function WhyChooseUs() {
         setLoading(true);
         setError(null);
 
-        const response = await axios.get('https://backendonlinecar.netlify.app/.netlify/functions/express-server/api/homepage/whyChoose');
+        const response = await axios.get('https://backendonlinecar.netlify.app/functions/express-server/api/homepage/whyChoose');
         
         if (response.data.success && response.data.data?.content) {
           const content = response.data.data.content;

@@ -11,7 +11,7 @@ export default function BookingManagement() {
             try {
                 setLoading(true);
                 setError('');
-                const res = await axios.get('https://backendonlinecar.netlify.app/.netlify/functions/express-server/api/bookings');
+                const res = await axios.get('https://backendonlinecar.netlify.app/functions/express-server/api/bookings');
                 setBookings(res.data.data || []);
             } catch (err) {
                 setError('Failed to load bookings.');

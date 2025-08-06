@@ -50,9 +50,9 @@ const getImageUrl = (path) => {
   if (path.startsWith('http')) return path;
   // Handle the uploads/homepage path specifically
   if (path.includes('uploads/homepage')) {
-    return `https://backendonlinecar.netlify.app/.netlify/functions/express-server/${path}`;
+    return `https://backendonlinecar.netlify.app/functions/express-server/${path}`;
   }
-  return `https://backendonlinecar.netlify.app/.netlify/functions/express-server/uploads/homepage/${path}`;
+  return `https://backendonlinecar.netlify.app/functions/express-server/uploads/homepage/${path}`;
 };
 
 export default function HowItWork() {
@@ -66,7 +66,7 @@ export default function HowItWork() {
         setLoading(true);
         setError(null);
 
-        const response = await axios.get('https://backendonlinecar.netlify.app/.netlify/functions/express-server/api/homepage/howItWorks');
+        const response = await axios.get('https://backendonlinecar.netlify.app/functions/express-server/api/homepage/howItWorks');
 
         if (response.data.success && response.data.data?.content) {
           const content = response.data.data.content;
