@@ -97,7 +97,7 @@ export default function CarDetailCard() {
         {/* Images Section */}
         <div>
           <img
-            src={`https://backendonlinecar.netlify.app/.netlify/functions/express-server/${car.coverImage}`}
+            src={`/.netlify/functions/api/${car.coverImage}`}
             alt={car.name}
             className="w-full h-[400px] object-cover rounded-lg"
           />
@@ -108,7 +108,7 @@ export default function CarDetailCard() {
                 .map((image, idx) => (
                   <SwiperSlide key={idx}>
                     <img
-                      src={`https://backendonlinecar.netlify.app/.netlify/functions/express-server/${image}`}
+                      src={`/.netlify/functions/api/${image}`}
                       alt={`View ${idx + 1}`}
                       className="w-full h-24 object-cover rounded-lg cursor-pointer"
                     />

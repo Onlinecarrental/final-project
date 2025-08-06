@@ -5,8 +5,8 @@ import { Edit2, Save, RotateCcw, Plus, Trash, Upload } from 'lucide-react';
 const getImageUrl = (path) => {
   if (!path) return null;
   if (path.startsWith('http')) return path;
-  if (path.startsWith('/')) return `https://backendonlinecar.netlify.app/.netlify/functions/express-server${path}`;
-  if (path.startsWith('uploads/')) return `https://backendonlinecar.netlify.app/.netlify/functions/express-server/${path}`;
+  if (path.startsWith('/')) return `/.netlify/functions/api${path}`;
+  if (path.startsWith('uploads/')) return `/.netlify/functions/api/${path}`;
   return path;
 };
 

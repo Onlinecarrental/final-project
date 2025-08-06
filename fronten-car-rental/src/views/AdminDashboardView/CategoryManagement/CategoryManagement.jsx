@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Plus, Trash2, Edit2, Save, X } from 'lucide-react';
 import axios from 'axios';
 
@@ -15,7 +15,7 @@ export default function CategoryManagement() {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get('https://backendonlinecar.netlify.app/.netlify/functions/express-server/api/categories');
+      const response = await axios.get('/.netlify/functions/api/api/categories');
       if (response.data.success) {
         setCategories(response.data.data);
       }
@@ -30,7 +30,7 @@ export default function CategoryManagement() {
 
     try {
       setLoading(true);
-      const response = await axios.post('https://backendonlinecar.netlify.app/.netlify/functions/express-server/api/categories', {
+      const response = await axios.post('/.netlify/functions/api/api/categories', {
         name: newCategory.trim()
       });
       

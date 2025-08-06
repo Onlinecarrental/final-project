@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Edit2, Save, RotateCcw, Upload } from 'lucide-react';
 import axios from 'axios';
 
@@ -6,7 +6,7 @@ import axios from 'axios';
 const getImageUrl = (path) => {
   if (!path) return null;
   if (path.startsWith('http')) return path;
-  return `https://backendonlinecar.netlify.app/.netlify/functions/express-server/${path.replace(/^\/+/, '')}`;
+  return `/.netlify/functions/api/${path.replace(/^\/+/, '')}`;
 };
 
 export default function HeroSection({ sections, setSections, editingSection, setEditingSection, handleUpdate }) {
@@ -77,7 +77,7 @@ export default function HeroSection({ sections, setSections, editingSection, set
   // Add a new function to validate SSL connection
   const validateConnection = async () => {
     try {
-      await axios.get('https://backendonlinecar.netlify.app/.netlify/functions/express-server/api/health');
+      await axios.get('/.netlify/functions/api/api/health');
       return true;
     } catch (error) {
       console.error('Connection validation failed:', error);

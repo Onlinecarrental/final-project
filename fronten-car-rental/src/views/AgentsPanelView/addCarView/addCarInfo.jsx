@@ -104,11 +104,11 @@ export default function AddCarInfo() {
 
             // Set image previews
             setImagePreviews({
-              coverImage: `https://backendonlinecar.netlify.app/.netlify/functions/express-server/${carData.coverImage}`,
-              image1: carData.image1 ? `https://backendonlinecar.netlify.app/.netlify/functions/express-server/${carData.image1}` : null,
-              image2: carData.image2 ? `https://backendonlinecar.netlify.app/.netlify/functions/express-server/${carData.image2}` : null,
-              image3: carData.image3 ? `https://backendonlinecar.netlify.app/.netlify/functions/express-server/${carData.image3}` : null,
-              image4: carData.image4 ? `https://backendonlinecar.netlify.app/.netlify/functions/express-server/${carData.image4}` : null
+              coverImage: `/.netlify/functions/api/${carData.coverImage}`,
+              image1: carData.image1 ? `/.netlify/functions/api/${carData.image1}` : null,
+              image2: carData.image2 ? `/.netlify/functions/api/${carData.image2}` : null,
+              image3: carData.image3 ? `/.netlify/functions/api/${carData.image3}` : null,
+              image4: carData.image4 ? `/.netlify/functions/api/${carData.image4}` : null
             });
           }
         } catch (error) {
@@ -278,7 +278,7 @@ export default function AddCarInfo() {
       // Make API request based on whether we're adding or editing
       const response = await axios({
         method: isEditing ? 'put' : 'post',
-        url: isEditing ? `${import.meta.env.VITE_API_URL}/api/cars/${id}` : 'https://backendonlinecar.netlify.app/.netlify/functions/express-server/api/cars',
+        url: isEditing ? `${import.meta.env.VITE_API_URL}/api/cars/${id}` : '/.netlify/functions/api/api/cars',
         data: formDataToSend,
         headers: {
           'Content-Type': 'multipart/form-data'

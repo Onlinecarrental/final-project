@@ -181,7 +181,7 @@ export default function BlogManagement() {
       // Make the API request
       const url = isEditing 
         ? `${import.meta.env.VITE_API_URL}/api/blogs/${currentBlog._id}`
-        : 'https://backendonlinecar.netlify.app/.netlify/functions/express-server/api/blogs';
+        : '/.netlify/functions/api/api/blogs';
 
       const response = await axios({
         method: isEditing ? 'put' : 'post',
@@ -208,7 +208,7 @@ export default function BlogManagement() {
 
   const fetchBlogs = async () => {
     try {
-      const response = await axios.get('https://backendonlinecar.netlify.app/.netlify/functions/express-server/api/blogs');
+      const response = await axios.get('/.netlify/functions/api/api/blogs');
       if (response.data.success) {
         setBlogs(response.data.data);
       } else {
@@ -222,7 +222,7 @@ export default function BlogManagement() {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get('https://backendonlinecar.netlify.app/.netlify/functions/express-server/api/categories');
+      const response = await axios.get('/.netlify/functions/api/api/categories');
       if (response.data.success) {
         setCategories(response.data.data.map(cat => cat.name));
       }
