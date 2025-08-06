@@ -5,7 +5,7 @@ const path      = require('path');
 const fs        = require('fs');
 const multer    = require('multer');
 
-// Import your existing route modules:
+// Import route modules
 const carRoutes       = require('./routes/carRoutes');
 const contactRoutes   = require('./routes/contactRoutes');
 const blogRoutes      = require('./routes/blogRoutes');
@@ -19,7 +19,7 @@ const paymentRoutes   = require('./routes/paymentRoutes');
 
 const app = express();
 
-// Ensure upload directories exist:
+// Ensure upload directories exist
 const directories = [
   'uploads',
   'uploads/cars',
@@ -36,8 +36,17 @@ directories.forEach(dir => {
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 });
 
-// Middleware
-app.use(cors());
+// === CORS SETUP ===
+const allowedOrigins = [
+  'https://onlinecarrental234.netlify.app',
+  'http://localhost:5173'
+];
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true
+}));
+
+// Body parsing & static files
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -47,17 +56,17 @@ app.get('/health', (req, res) => {
   res.json({ status: 'healthy', timestamp: new Date().toISOString() });
 });
 
-// Mount your API routes under `/api/...`
-app.use('/api/cars', carRoutes);
-app.use('/api/contact', contactRoutes);
-app.use('/api/blogs', blogRoutes);
+// Mount API routes
+app.use('/api/cars',       carRoutes);
+app.use('/api/contact',    contactRoutes);
+app.use('/api/blogs',      blogRoutes);
 app.use('/api/categories', categoryRoutes);
-app.use('/api/reviews', reviewRoutes);
-app.use('/api/homepage', homepageRoutes);
-app.use('/api/about', aboutRoutes);
-app.use('/api/chats', chatRoutes);
-app.use('/api/bookings', bookingRoutes);
-app.use('/api/payments', paymentRoutes);
+app.use('/api/reviews',    reviewRoutes);
+app.use('/api/homepage',   homepageRoutes);
+app.use('/api/about',      aboutRoutes);
+app.use('/api/chats',      chatRoutes);
+app.use('/api/bookings',   bookingRoutes);
+app.use('/api/payments',   paymentRoutes);
 
 // 404 for unknown API routes
 app.use((req, res, next) => {
@@ -83,7 +92,8 @@ app.use((err, req, res, next) => {
       error: err.message
     });
   }
-  // cleanup on error
+
+  // Cleanup uploaded files on error
   if (req.file) {
     fs.unlink(req.file.path, () => {});
   }
@@ -92,6 +102,7 @@ app.use((err, req, res, next) => {
       if (fs.existsSync(f.path)) fs.unlink(f.path, () => {});
     });
   }
+
   console.error('Error details:', {
     message: err.message,
     stack: process.env.NODE_ENV === 'development' ? err.stack : undefined,
@@ -99,6 +110,7 @@ app.use((err, req, res, next) => {
     method: req.method,
     timestamp: new Date().toISOString()
   });
+
   res.status(err.status || 500).json({
     success: false,
     message: err.message || 'Something went wrong!',
@@ -106,7 +118,7 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Global rejection/exception handlers
+// Global unhandled promise/exception handlers
 process.on('unhandledRejection', error => {
   console.error('Unhandled Rejection:', error);
   if (process.env.NODE_ENV === 'production') process.exit(1);
