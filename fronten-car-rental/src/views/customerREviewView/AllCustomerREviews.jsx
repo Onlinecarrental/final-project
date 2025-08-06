@@ -16,7 +16,7 @@ export default function AllCustomerREviews() {
     const fetchReviews = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('http://localhost:5000//api/reviews');
+        const response = await axios.get('https://backendonlinecar.netlify.app/.netlify/functions/express-server/api/reviews');
         if (response.data.success) {
           setTestimonials(response.data.data);
         }
@@ -68,7 +68,7 @@ export default function AllCustomerREviews() {
         }
 
         const response = await axios.post(
-          'http://localhost:5000//api/reviews',
+          'https://backendonlinecar.netlify.app/.netlify/functions/express-server/api/reviews',
           formDataToSend,
           {
             headers: {
@@ -272,7 +272,7 @@ export default function AllCustomerREviews() {
               <div className="flex items-center">
                 <div className="mr-3">
                   <img
-                    src={`http://localhost:5000/${review.image}`}
+                    src={`https://backendonlinecar.netlify.app/.netlify/functions/express-server${review.image}`}
                     alt={review.name}
                     className="w-10 h-10 rounded-full object-cover"
                     onError={(e) => {

@@ -88,7 +88,7 @@ export default function BookingForm() {
       if (!agentId) throw new Error('No agent assigned to this car.');
 
       // Create chat
-      const chatResponse = await axios.post('http://localhost:5000//api/chats', { userId, agentId });
+      const chatResponse = await axios.post('https://backendonlinecar.netlify.app/.netlify/functions/express-server/api/chats', { userId, agentId });
       const chatData = chatResponse.data.data;
       // Check participants array
       if (!chatData.participants || chatData.participants.length !== 2 || !chatData.participants.includes(userId) || !chatData.participants.includes(agentId)) {
@@ -104,7 +104,7 @@ export default function BookingForm() {
         senderRole: 'customer',
         text: `New booking: ${formData.carName} ${formData.carModel} from ${formData.dateFrom} to ${formData.dateTo} at ${formData.location}. Customer: ${formData.name} (${formData.email})`
       };
-      await axios.post('http://localhost:5000//api/chats/messages', messageData);
+      await axios.post('https://backendonlinecar.netlify.app/.netlify/functions/express-server/api/chats/messages', messageData);
       return { success: true, chatId: chatData._id };
     } catch (error) {
       console.error('Error in createChatWithAgent:', error);
@@ -128,7 +128,7 @@ export default function BookingForm() {
           location: formData.location,
           price: Number(formData.price)
         };
-        await axios.post('http://localhost:5000//api/bookings', bookingPayload);
+        await axios.post('https://backendonlinecar.netlify.app/.netlify/functions/express-server/api/bookings', bookingPayload);
         // 2. Proceed with chat system as before
         const chatResult = await createChatWithAgent();
         setBookingSuccess(true);

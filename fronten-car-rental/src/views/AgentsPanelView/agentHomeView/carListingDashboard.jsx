@@ -20,7 +20,7 @@ const CarListingDashboard = () => {
       setLoading(true);
       setError("");
       if (!user.uid) return;
-      const res = await axios.get('http://localhost:5000//api/cars');
+      const res = await axios.get('https://backendonlinecar.netlify.app/.netlify/functions/express-server/api/cars');
       // Only show available cars for this agent
       const agentCars = (res.data.data || []).filter(car => car.agentId === user.uid && car.status === 'available');
       setCars(agentCars);
@@ -94,7 +94,7 @@ const CarListingDashboard = () => {
                 <span className={`w-4 h-4 rounded-full ${statusColors[car.status] || 'bg-gray-400'}`}></span>
                 <div className="w-10 h-10 rounded-md overflow-hidden bg-white">
                   <img
-                    src={`http://localhost:5000//${car.coverImage}`}
+                    src={`https://backendonlinecar.netlify.app/.netlify/functions/express-server/${car.coverImage}`}
                     alt={car.name}
                     className="w-full h-full object-cover"
                   />

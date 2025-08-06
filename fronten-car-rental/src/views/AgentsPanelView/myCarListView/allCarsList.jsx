@@ -16,7 +16,7 @@ const Card = ({ car, onEdit, onDelete }) => {
   return (
     <BaseCard bgColor="bg-gray" className="w-auto h-auto p-2">
       <img
-        src={`http://localhost:5000//${car.coverImage}`}
+        src={`https://backendonlinecar.netlify.app/.netlify/functions/express-server/${car.coverImage}`}
         alt={car.name}
         className="rounded-[10px] w-full h-[180px] object-cover"
         onError={(e) => {
@@ -139,7 +139,7 @@ const AllCarsList = () => {
       });
 
       // Fetch all cars
-      const response = await axios.get('http://localhost:5000//api/cars');
+      const response = await axios.get('https://backendonlinecar.netlify.app/.netlify/functions/express-server/api/cars');
       console.log('Full API Response:', JSON.stringify(response.data, null, 2));
 
       if (response.data.success) {

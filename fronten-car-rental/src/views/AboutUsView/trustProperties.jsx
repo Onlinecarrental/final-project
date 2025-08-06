@@ -105,7 +105,7 @@ export default function TrustProperties() {
       <div className="w-full md:w-1/2 mt-6 md:mt-0">
         <div className="rounded-lg overflow-hidden">
           <img
-            src={imagePath ? (imagePath.startsWith('http') ? imagePath : `http://localhost:5000//${imagePath}`) : "../src/assets/AUcar.svg"}
+            src={imagePath ? (imagePath.startsWith('http') ? imagePath : `https://backendonlinecar.netlify.app/.netlify/functions/express-server/${imagePath}`) : "../src/assets/AUcar.svg"}
             alt="Luxury car"
             className="w-full h-auto mt-10 object-cover rounded-lg"
             onError={(e) => {

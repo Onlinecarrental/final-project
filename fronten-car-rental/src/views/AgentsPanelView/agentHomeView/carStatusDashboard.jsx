@@ -17,7 +17,7 @@ function CarStatusDashboard() {
     const fetchCars = async () => {
       try {
         if (!user.uid) return;
-        const res = await axios.get('http://localhost:5000//api/cars');
+        const res = await axios.get('https://backendonlinecar.netlify.app/.netlify/functions/express-server/api/cars');
         const agentCars = (res.data.data || []).filter(car => car.agentId === user.uid);
         const approved = agentCars.filter(car => car.status === 'rented').length;
         const pending = agentCars.filter(car => car.status === 'pending').length;

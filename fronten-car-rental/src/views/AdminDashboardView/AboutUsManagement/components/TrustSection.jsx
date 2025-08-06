@@ -5,7 +5,7 @@ import { Edit2, Save, RotateCcw, Plus, Trash, Upload, Image, Shield, Award, Thum
 const getImageUrl = (path) => {
   if (!path) return null;
   if (path.startsWith('http')) return path;
-  return `http://localhost:5000/${path}`;
+  return `https://backendonlinecar.netlify.app/.netlify/functions/express-server${path}`;
 };
 
 // Add validation helper
