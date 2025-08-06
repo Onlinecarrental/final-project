@@ -20,8 +20,10 @@ const paymentRoutes   = require('./routes/paymentRoutes');
 const app = express();
 
 // === LOCAL-FS SETUP ===
-// Only create/upload directories when NOT running in Netlify Functions
-if (!process.env.NETLIFY) {
+// Detect Netlify Functions (AWS Lambda) by presence of LAMBDA_TASK_ROOT or AWS_LAMBDA_FUNCTION_NAME
+const isServerless = !!process.env.LAMBDA_TASK_ROOT || !!process.env.AWS_LAMBDA_FUNCTION_NAME;
+
+if (!isServerless) {
   const directories = [
     'uploads',
     'uploads/cars',
@@ -99,14 +101,12 @@ app.use((err, req, res, next) => {
   }
 
   // Cleanup uploaded files on error (local only)
-  if (req.file) {
+  if (req.file && fs.existsSync(req.file.path)) {
     fs.unlink(req.file.path, () => {});
   }
   if (req.files) {
     Object.values(req.files).flat().forEach(f => {
-      if (fs.existsSync(f.path)) {
-        fs.unlink(f.path, () => {});
-      }
+      if (fs.existsSync(f.path)) fs.unlink(f.path, () => {});
     });
   }
 
