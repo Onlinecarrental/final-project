@@ -28,7 +28,7 @@ function PaymentForm({ booking, onPaymentSuccess, onPaymentError }) {
 
         try {
             // Create payment intent
-            const paymentIntentResponse = await axios.post('http://localhost:5000/api/payments/create-payment-intent', {
+            const paymentIntentResponse = await axios.post('https://backendonlinecar.netlify.app/.netlify/functions/express-server/api/payments/create-payment-intent', {
                 bookingId: booking._id,
                 amount: booking.price,
                 currency: 'usd'
@@ -51,7 +51,7 @@ function PaymentForm({ booking, onPaymentSuccess, onPaymentError }) {
 
             if (paymentIntent.status === 'succeeded') {
                 // Confirm payment with backend
-                await axios.post('http://localhost:5000/api/payments/confirm-payment', {
+                await axios.post('https://backendonlinecar.netlify.app/.netlify/functions/express-server/api/payments/confirm-payment', {
                     paymentIntentId,
                     paymentId
                 });
@@ -151,11 +151,11 @@ export default function CustomerBookings() {
                 const userId = currentUser?.uid || userFromStorage.uid;
                 const agentId = booking.agent;
                 // Create chat if not exists
-                const chatRes = await axios.post('http://localhost:5000/api/chats', { userId, agentId });
+                const chatRes = await axios.post('https://backendonlinecar.netlify.app/.netlify/functions/express-server/api/chats', { userId, agentId });
                 chatId = chatRes.data.data._id;
                 // Send payment confirmation message as customer
                 const paymentMsg = `Payment of $${booking.price} has been successfully processed for your car booking. The booking is now confirmed and ready for pickup.`;
-                await axios.post('http://localhost:5000/api/chats/messages', {
+                await axios.post('https://backendonlinecar.netlify.app/.netlify/functions/express-server/api/chats/messages', {
                     chatId,
                     senderId: userId,
                     senderRole: 'customer',

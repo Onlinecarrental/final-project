@@ -76,7 +76,7 @@ export default function HerosectionAboutUs() {
         <div
           className="w-full h-full bg-cover opacity-30 bg-center"
           style={{
-            backgroundImage: `url(${imagePath ? `http://localhost:5000/${imagePath}` : heroImage})`,
+            backgroundImage: `url(${imagePath ? `https://backendonlinecar.netlify.app/.netlify/functions/express-server/${imagePath}` : heroImage})`,
           }}
         />
       </div>
