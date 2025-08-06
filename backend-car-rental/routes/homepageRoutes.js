@@ -5,36 +5,28 @@ const multer   = require('multer');
 const path     = require('path');
 const homepageController = require('../controllers/homepageController');
 
-// Determine storage strategy:
-// - Locally (no NETLIFY env var): store files under /uploads/homepage
-// - In Functions (NETLIFY=true): use memoryStorage
-const isServerless = !!process.env.NETLIFY;
+// Detect Netlify Lambda by presence of LAMBDA_TASK_ROOT
+const isServerless = !!process.env.LAMBDA_TASK_ROOT;
 
+// Configure multer storage
 const storage = isServerless
   ? multer.memoryStorage()
   : multer.diskStorage({
       destination: (req, file, cb) => {
         const dir = 'uploads/homepage';
-        // Safe-guard: only runs locally
-        if (!fs.existsSync(dir)) {
-          fs.mkdirSync(dir, { recursive: true });
-        }
+        // Only runs locally—never in Function
+        if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
         cb(null, dir);
       },
       filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-        cb(
-          null,
-          `${req.params.sectionType}-${uniqueSuffix}${path.extname(
-            file.originalname
-          )}`
-        );
+        const suffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+        cb(null, `${req.params.sectionType}-${suffix}${path.extname(file.originalname)}`);
       }
     });
 
 const upload = multer({
   storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
+  limits: { fileSize: 5 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
       return cb(new Error('Only image files are allowed!'), false);
@@ -43,14 +35,11 @@ const upload = multer({
   }
 });
 
-// Validation middleware
+// Validation
+const valid = ['hero','services','howItWorks','whyChoose','faqs'];
 const validateSection = (req, res, next) => {
-  const valid = ['hero', 'services', 'howItWorks', 'whyChoose', 'faqs'];
   if (!valid.includes(req.params.sectionType)) {
-    return res.status(400).json({
-      success: false,
-      message: 'Invalid section type'
-    });
+    return res.status(400).json({ success: false, message: 'Invalid section type' });
   }
   next();
 };
@@ -65,12 +54,9 @@ router.patch(
   homepageController.updateSection
 );
 
-// 404 for unmatched
+// 404 fallback
 router.use((req, res) => {
-  res.status(404).json({
-    success: false,
-    message: 'Homepage section not found'
-  });
+  res.status(404).json({ success: false, message: 'Homepage section not found' });
 });
 
 module.exports = router;
