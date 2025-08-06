@@ -5,7 +5,6 @@ import './index.css';
 import HomeView from './views/HomeView/homeView';
 import BestCarsView from './views/BestCarsView/bestCarsView';
 import AboutUsView from './views/AboutUsView/aboutUsView';
-import CustomerReviewView from './views/customerReviewView/customerReviewView';
 import ContactUsView from './views/ContactUsView/contactUsView';
 import BlogsView from './views/BlogsView/blogView';
 import DetailCar from './views/BestCarsView/cardetailview';
@@ -28,6 +27,7 @@ import AgentContactUsView from './views/AgentsPanelView/agentContactUsView/agent
 import AdminDashboard from './views/AdminDashboardView/adminpanel';
 import BlogManagement from './views/AdminDashboardView/BlogManagement/BlogManagement';
 import CustomerBookings from './views/CustomerAddCarView/customerBookings';
+import CustomerReviewView from './views/customerReviewView/customerReviewView';
 
 
 const App = () => {
@@ -70,7 +70,7 @@ const App = () => {
                     path="/home/customerreviews"
                     element={
                         <ProtectedRoute type="customer">
-                            <Layout><CustomerReviewView /></Layout>
+                            <Layout><CustomerReviewView/></Layout>
                         </ProtectedRoute>
                     }
                 />
