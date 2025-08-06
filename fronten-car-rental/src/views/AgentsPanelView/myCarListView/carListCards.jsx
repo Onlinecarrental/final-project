@@ -29,7 +29,7 @@ export default function CarListCards() {
       const agentId = userData.uid;
 
       // Fetch all cars using the existing endpoint
-      const response = await axios.get('https://backendonlinecar.netlify.app/functions/express-server/api/cars');
+      const response = await axios.get('https://backendonlinecar.netlify.app/.netlify/functions/express-server/api/cars');
       
       if (response.data.success) {
         // Filter cars for this agent

@@ -19,7 +19,7 @@ const BlogCard = ({ blog, onImageLoad, onImageError, imageLoadingStates }) => (
         <div className="absolute inset-0 bg-gray-100 animate-pulse" />
       )}
       <img 
-        src={`https://backendonlinecar.netlify.app/functions/express-server/uploads/blogs/${blog.image}`}
+        src={`https://backendonlinecar.netlify.app/.netlify/functions/express-server/uploads/blogs/${blog.image}`}
         alt={blog.title} 
         className="w-full h-52 object-cover"
         onLoad={() => onImageLoad(`blog-${blog._id}`)}
@@ -51,7 +51,7 @@ const BlogCard = ({ blog, onImageLoad, onImageError, imageLoadingStates }) => (
             )}
             <img 
               src={blog.author.image 
-                ? `https://backendonlinecar.netlify.app/functions/express-server/uploads/authors/${blog.author.image}`
+                ? `https://backendonlinecar.netlify.app/.netlify/functions/express-server/uploads/authors/${blog.author.image}`
                 : "/default-avatar.jpg"
               }
               alt={blog.author.name}
@@ -110,8 +110,8 @@ export default function BlogListPage() {
       setError(null);
       
       const [blogsResponse, categoriesResponse] = await Promise.all([
-        axios.get('https://backendonlinecar.netlify.app/functions/express-server/api/blogs'),
-        axios.get('https://backendonlinecar.netlify.app/functions/express-server/api/categories')
+        axios.get('https://backendonlinecar.netlify.app/.netlify/functions/express-server/api/blogs'),
+        axios.get('https://backendonlinecar.netlify.app/.netlify/functions/express-server/api/categories')
       ]);
       
       if (blogsResponse.data.success) {

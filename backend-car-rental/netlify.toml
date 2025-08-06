@@ -1,0 +1,7 @@
+[build]
+  command = "npm install"         # or "npm install && npm run build" if you have a build step
+  functions = "functions"
+  publish = "."                   # static assets (if any) live here
+
+[functions]
+  node_bundler = "esbuild"

@@ -81,7 +81,7 @@ export default function AboutUsManagement({ section = 'hero' }) {
       setLoading(true);
       setError(null);
 
-      const response = await axios.get('https://backendonlinecar.netlify.app/functions/express-server/api/about');
+      const response = await axios.get('https://backendonlinecar.netlify.app/.netlify/functions/express-server/api/about');
 
       if (response.data.success) {
         setSections(prev => ({

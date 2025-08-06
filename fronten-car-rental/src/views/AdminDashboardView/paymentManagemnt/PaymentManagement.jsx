@@ -28,7 +28,7 @@ function AdminPaymentForm({ payment, onPaymentSuccess, onPaymentError }) {
 
         try {
             // Create payment intent for admin to agent payment
-            const paymentIntentResponse = await axios.post('https://backendonlinecar.netlify.app/functions/express-server/api/payments/create-admin-payment-intent', {
+            const paymentIntentResponse = await axios.post('https://backendonlinecar.netlify.app/.netlify/functions/express-server/api/payments/create-admin-payment-intent', {
                 paymentId: payment._id,
                 amount: payment.amount,
                 currency: 'usd',
@@ -121,7 +121,7 @@ export default function PaymentManagement() {
     const fetchPayments = async () => {
         try {
             setLoading(true);
-            const response = await axios.get('https://backendonlinecar.netlify.app/functions/express-server/api/payments/admin/all');
+            const response = await axios.get('https://backendonlinecar.netlify.app/.netlify/functions/express-server/api/payments/admin/all');
             setPayments(response.data.data || []);
         } catch (err) {
             setError('Failed to load payments.');

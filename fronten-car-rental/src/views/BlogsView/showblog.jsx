@@ -79,7 +79,7 @@ const BlogPost = () => {
             className="w-full h-full bg-cover bg-center blur-sm" // Added blur effect
             style={{
               backgroundImage: `url(${blog.image ? 
-                `https://backendonlinecar.netlify.app/functions/express-server/uploads/blogs/${blog.image}` : 
+                `https://backendonlinecar.netlify.app/.netlify/functions/express-server/uploads/blogs/${blog.image}` : 
                 heroImage
               })`,
             }}
@@ -95,7 +95,7 @@ const BlogPost = () => {
             <div className="flex items-center">
               {blog.author.image ? (
                 <img 
-                  src={`https://backendonlinecar.netlify.app/functions/express-server/uploads/authors/${blog.author.image}`}
+                  src={`https://backendonlinecar.netlify.app/.netlify/functions/express-server/uploads/authors/${blog.author.image}`}
                   alt={blog.author.name}
                   className="w-12 h-12 rounded-full object-cover border-2 border-white mr-2"
                   onError={(e) => {
@@ -133,7 +133,7 @@ const BlogPost = () => {
             <BaseCard width='w-auto' boxShadow={false} className='border border-gray-200 rounded-xl overflow-hidden' height='h-auto'>
               <div className="relative">
                 <img 
-                  src={`https://backendonlinecar.netlify.app/functions/express-server/uploads/blogs/${blog.image}`}
+                  src={`https://backendonlinecar.netlify.app/.netlify/functions/express-server/uploads/blogs/${blog.image}`}
                   alt={blog.title}
                   className="w-full h-[500px] object-cover"
                   onError={(e) => {

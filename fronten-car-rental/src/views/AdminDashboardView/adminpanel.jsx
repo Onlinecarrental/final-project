@@ -234,7 +234,7 @@ function MessagesContent() {
   useEffect(() => {
     const fetchChats = async () => {
       try {
-        const url = new URL("https://backendonlinecar.netlify.app/functions/express-server/api/chats/all");
+        const url = new URL("https://backendonlinecar.netlify.app/.netlify/functions/express-server/api/chats/all");
         if (showInactive) {
           url.searchParams.append('includeInactive', 'true');
         }
