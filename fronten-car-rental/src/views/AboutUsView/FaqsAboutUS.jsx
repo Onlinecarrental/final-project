@@ -40,7 +40,7 @@ export default function FaqsAboutus() {
       try {
         // Add timestamp to prevent caching
         const timestamp = new Date().getTime();
-        const response = await axios.get(`http://localhost:5000/api/about/faqs?timestamp=${timestamp}`, {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/about/faqs?timestamp=${timestamp}`, {
           headers: {
             'Cache-Control': 'no-cache',
             'Pragma': 'no-cache',

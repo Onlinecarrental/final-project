@@ -30,7 +30,7 @@ export default function ReviewManagement() {
 
   const handleStatusUpdate = async (id, status) => {
     try {
-      await axios.patch(`http://localhost:5000/api/reviews/${id}/status`, { status });
+      await axios.patch(`${import.meta.env.VITE_API_URL}/api/reviews/${id}/status`, { status });
       fetchReviews();
     } catch (error) {
       console.error('Error updating review:', error);
@@ -49,7 +49,7 @@ export default function ReviewManagement() {
   const handleUpdate = async (id) => {
     try {
       const response = await axios.patch(
-        `http://localhost:5000/api/reviews/${id}`,
+        `${import.meta.env.VITE_API_URL}/api/reviews/${id}`,
         editForm
       );
 
@@ -69,7 +69,7 @@ export default function ReviewManagement() {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this review? This action cannot be undone.')) {
       try {
-        const response = await axios.delete(`http://localhost:5000/api/reviews/${id}`);
+        const response = await axios.delete(`${import.meta.env.VITE_API_URL}/api/reviews/${id}`);
         
         if (response.data.success) {
           setReviews(reviews.filter(review => review._id !== id));

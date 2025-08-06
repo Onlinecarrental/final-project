@@ -39,7 +39,7 @@ const CarListingDashboard = () => {
   const handleEdit = async (car) => {
     try {
       // First fetch the car details
-      const response = await axios.get(`http://localhost:5000/api/cars/${car._id}`);
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/cars/${car._id}`);
       if (response.data.success) {
         localStorage.setItem('editCarData', JSON.stringify(response.data.data));
         navigate(`/agent/addcar/${car._id}`);
@@ -57,7 +57,7 @@ const CarListingDashboard = () => {
     }
     try {
       setLoading(true);
-      const response = await axios.delete(`http://localhost:5000/api/cars/${car._id}`);
+      const response = await axios.delete(`${import.meta.env.VITE_API_URL}/api/cars/${car._id}`);
       if (response.data.success) {
         alert('Car deleted successfully!');
         await fetchCars();

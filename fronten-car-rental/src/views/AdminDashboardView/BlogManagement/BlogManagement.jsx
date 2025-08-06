@@ -180,7 +180,7 @@ export default function BlogManagement() {
 
       // Make the API request
       const url = isEditing 
-        ? `http://localhost:5000/api/blogs/${currentBlog._id}`
+        ? `${import.meta.env.VITE_API_URL}/api/blogs/${currentBlog._id}`
         : 'http://localhost:5000/api/blogs';
 
       const response = await axios({
@@ -252,7 +252,7 @@ export default function BlogManagement() {
   const handleDelete = async (blogId) => {
     if (window.confirm('Are you sure you want to delete this blog?')) {
       try {
-        await axios.delete(`http://localhost:5000/api/blogs/${blogId}`);
+        await axios.delete(`${import.meta.env.VITE_API_URL}/api/blogs/${blogId}`);
         fetchBlogs();
       } catch (error) {
         console.error('Error deleting blog:', error);

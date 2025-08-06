@@ -66,7 +66,7 @@ export default function AddCarInfo() {
       if (id) {
         try {
           setIsEditing(true);
-          const response = await axios.get(`http://localhost:5000/api/cars/${id}`);
+          const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/cars/${id}`);
           
           if (response.data.success) {
             const carData = response.data.data;
@@ -278,7 +278,7 @@ export default function AddCarInfo() {
       // Make API request based on whether we're adding or editing
       const response = await axios({
         method: isEditing ? 'put' : 'post',
-        url: isEditing ? `http://localhost:5000/api/cars/${id}` : 'http://localhost:5000/api/cars',
+        url: isEditing ? `${import.meta.env.VITE_API_URL}/api/cars/${id}` : 'http://localhost:5000/api/cars',
         data: formDataToSend,
         headers: {
           'Content-Type': 'multipart/form-data'

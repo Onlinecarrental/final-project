@@ -51,13 +51,13 @@ function AgentDashboardView() {
     const fetchStats = async () => {
       try {
         if (!user.uid) return;
-        const carRes = await axios.get('http://localhost:5000/api/cars');
+        const carRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/cars`);
         const agentCars = (carRes.data.data || []).filter(car => car.agentId === user.uid);
         setCarStats({
           total: agentCars.length,
           available: agentCars.filter(car => car.status === 'available').length
         });
-        const bookingRes = await axios.get(`http://localhost:5000/api/bookings/agent/${user.uid}`);
+        const bookingRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/bookings/agent/${user.uid}`);
         setBookingCount((bookingRes.data.data || []).length);
       } catch (err) {
         setCarStats({ total: 0, available: 0 });

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Button from '../../components/button';
 import HeadingTitle from '../../components/heading';
 import axios from 'axios';
@@ -7,8 +7,8 @@ import axios from 'axios';
 const getImageUrl = (path) => {
   if (!path) return "../src/assets/AUcar.svg";
   if (path.startsWith('http')) return path;
-  if (path.startsWith('/')) return `http://localhost:5000${path}`;
-  if (path.startsWith('uploads/')) return `http://localhost:5000/${path}`;
+  if (path.startsWith('/')) return `${import.meta.env.VITE_API_URL}${path}`;
+  if (path.startsWith('uploads/')) return `${import.meta.env.VITE_API_URL}/${path}`;
   return path;
 };
 
@@ -46,7 +46,7 @@ export default function CarCollection() {
     try {
       // Add timestamp to prevent caching
       const timestamp = new Date().getTime();
-      const response = await axios.get(`http://localhost:5000/api/about/carCollection?timestamp=${timestamp}`, {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/about/carCollection?timestamp=${timestamp}`, {
         headers: {
           'Cache-Control': 'no-cache',
           'Pragma': 'no-cache',

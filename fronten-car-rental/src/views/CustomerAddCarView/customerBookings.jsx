@@ -120,7 +120,7 @@ export default function CustomerBookings() {
                     setLoading(false);
                     return;
                 }
-                const res = await axios.get(`http://localhost:5000/api/bookings/customer/${user.uid}`);
+                const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/bookings/customer/${user.uid}`);
                 setBookings(res.data.data || []);
             } catch (err) {
                 setError('Failed to load bookings.');
@@ -188,7 +188,7 @@ export default function CustomerBookings() {
         const confirmDelete = window.confirm('Are you sure you want to delete this booking? This action cannot be undone.');
         if (!confirmDelete) return;
         try {
-            await axios.delete(`http://localhost:5000/api/bookings/${bookingId}`);
+            await axios.delete(`${import.meta.env.VITE_API_URL}/api/bookings/${bookingId}`);
             setBookings(prev => prev.filter(b => b._id !== bookingId));
         } catch (err) {
             alert('Failed to delete booking. Please try again.');

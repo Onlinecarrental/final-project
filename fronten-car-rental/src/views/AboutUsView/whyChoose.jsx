@@ -44,7 +44,7 @@ export default function WhyChoose() {
       try {
         // Add timestamp to prevent caching
         const timestamp = new Date().getTime();
-        const response = await axios.get(`http://localhost:5000/api/about/whyChoose?timestamp=${timestamp}`, {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/about/whyChoose?timestamp=${timestamp}`, {
           headers: {
             'Cache-Control': 'no-cache',
             'Pragma': 'no-cache',

@@ -18,7 +18,7 @@ export default function CarDetailCard() {
         setError(null);
         
         console.log('Fetching car details for ID:', id);
-        const response = await axios.get(`http://localhost:5000/api/cars/${id}`);
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/cars/${id}`);
         
         // Log the full response structure
         console.log('Full response:', {

@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import heroImage from "../../assets/Bannerimage.jpg";
-import BaseCard from "../../components/card";
 import axios from 'axios';
 
 export default function HerosectionAboutUs() {
@@ -18,7 +17,7 @@ export default function HerosectionAboutUs() {
       try {
         // Add timestamp to prevent caching
         const timestamp = new Date().getTime();
-        const response = await axios.get(`http://localhost:5000/api/about/hero?timestamp=${timestamp}`, {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/about/hero?timestamp=${timestamp}`, {
           headers: {
             'Cache-Control': 'no-cache',
             'Pragma': 'no-cache',

@@ -1,14 +1,12 @@
+# netlify.toml
 [build]
-  base    = "fronten-car-rental"   # Netlify will cd into this
-  command = "npm run build"        # runs `npm install && vite build`
-  publish = "dist"                 # serves fronten-car-rental/dist
+  base    = "fronten-car-rental"
+  command = "npm run build"
+  publish = "dist"
 
 [build.environment]
   NODE_VERSION = "20"
 
 [functions]
+  directory    = "backend-car-rental/functions"
   node_bundler = "esbuild"
-  # (Optional) if you have Netlify Functions, you can also explicitly
-  # set `directory = "backend-car-rental"` here, but only if that folder
-  # contains only your function entrypoints—otherwise you'd refactor your
-  # APIs into fronten-car-rental/netlify/functions/.

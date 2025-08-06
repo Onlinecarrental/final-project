@@ -2,7 +2,7 @@
   const handleDelete = async (bookingId) => {
     if (!window.confirm('Are you sure you want to delete this booking? This action cannot be undone.')) return;
     try {
-      await axios.delete(`http://localhost:5000/api/bookings/${bookingId}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL}/api/bookings/${bookingId}`);
       setBookings(prev => prev.filter(b => b._id !== bookingId));
     } catch (err) {
       alert('Failed to delete booking.');
@@ -45,7 +45,7 @@ export default function AllBookings() {
           setLoading(false);
           return;
         }
-        const res = await axios.get(`http://localhost:5000/api/bookings/agent/${user.uid}`);
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/bookings/agent/${user.uid}`);
         setBookings(res.data.data || []);
       } catch (err) {
         setError("Failed to load bookings.");
@@ -88,7 +88,7 @@ export default function AllBookings() {
 
   const handleApprove = async (bookingId) => {
     try {
-      await axios.patch(`http://localhost:5000/api/bookings/${bookingId}/approve`);
+      await axios.patch(`${import.meta.env.VITE_API_URL}/api/bookings/${bookingId}/approve`);
       setBookings(prev => prev.map(b => b._id === bookingId ? { ...b, status: 'approved' } : b));
     } catch (err) {
       alert('Failed to approve booking.');
@@ -97,7 +97,7 @@ export default function AllBookings() {
 
   const handleReject = async (bookingId) => {
     try {
-      await axios.patch(`http://localhost:5000/api/bookings/${bookingId}/reject`);
+      await axios.patch(`${import.meta.env.VITE_API_URL}/api/bookings/${bookingId}/reject`);
       setBookings(prev => prev.map(b => b._id === bookingId ? { ...b, status: 'rejected' } : b));
     } catch (err) {
       alert('Failed to reject booking.');
@@ -118,7 +118,7 @@ export default function AllBookings() {
   const handleApprovalSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`http://localhost:5000/api/payments/booking/${selectedBooking._id}/approve-with-bank-details`, approvalForm);
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/payments/booking/${selectedBooking._id}/approve-with-bank-details`, approvalForm);
       setBookings(prev => prev.map(b => b._id === selectedBooking._id ? { ...b, agentBankDetails: { ...approvalForm } } : b));
       setShowApprovalModal(false);
       setSelectedBooking(null);

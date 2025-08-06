@@ -155,7 +155,7 @@ export default function HomepageManagement({ section = 'hero' }) {
         }
 
         const response = await axios.patch(
-          `http://localhost:5000/api/homepage/${sectionType}`,
+          `${import.meta.env.VITE_API_URL}/api/homepage/${sectionType}`,
           formData,
           {
             headers: { 
@@ -180,7 +180,7 @@ export default function HomepageManagement({ section = 'hero' }) {
       } else {
         // For non-FormData updates (text only)
         const response = await axios.patch(
-          `http://localhost:5000/api/homepage/${sectionType}`,
+          `${import.meta.env.VITE_API_URL}/api/homepage/${sectionType}`,
           { content: formData },
           { 
             headers: { 

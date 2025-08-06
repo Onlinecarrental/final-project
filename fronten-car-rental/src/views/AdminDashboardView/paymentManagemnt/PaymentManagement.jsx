@@ -52,7 +52,7 @@ function AdminPaymentForm({ payment, onPaymentSuccess, onPaymentError }) {
 
             if (paymentIntent.status === 'succeeded') {
                 // Confirm admin payment to agent
-                await axios.post(`http://localhost:5000/api/payments/${payment._id}/admin-pay-agent-stripe`, {
+                await axios.post(`${import.meta.env.VITE_API_URL}/api/payments/${payment._id}/admin-pay-agent-stripe`, {
                     paymentIntentId,
                     paymentMethod: 'Stripe',
                     transactionId: paymentIntent.id,
@@ -148,7 +148,7 @@ export default function PaymentManagement() {
     const handlePaymentSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post(`http://localhost:5000/api/payments/${selectedPayment._id}/admin-pay-agent`, paymentForm);
+            await axios.post(`${import.meta.env.VITE_API_URL}/api/payments/${selectedPayment._id}/admin-pay-agent`, paymentForm);
             setPayments(prev => prev.map(p => 
                 p._id === selectedPayment._id 
                     ? { ...p, adminPaymentDetails: { ...paymentForm, paymentDate: new Date() }, status: 'completed' }
@@ -308,7 +308,7 @@ export default function PaymentManagement() {
                                         className="text-xs mt-1"
                                         onClick={async () => {
                                             if (window.confirm('Are you sure you want to delete this booking and all related records?')) {
-                                              await axios.delete(`http://localhost:5000/api/bookings/${payment.booking?._id || payment.booking}`);
+                                              await axios.delete(`${import.meta.env.VITE_API_URL}/api/bookings/${payment.booking?._id || payment.booking}`);
                                               setPayments(prev => prev.filter(p => (p.booking?._id || p.booking) !== (payment.booking?._id || payment.booking)));
                                             }
                                           }}

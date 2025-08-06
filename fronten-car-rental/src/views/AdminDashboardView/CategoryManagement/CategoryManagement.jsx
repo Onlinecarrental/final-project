@@ -51,7 +51,7 @@ export default function CategoryManagement() {
 
     try {
       setLoading(true);
-      const response = await axios.put(`http://localhost:5000/api/categories/${id}`, {
+      const response = await axios.put(`${import.meta.env.VITE_API_URL}/api/categories/${id}`, {
         name: editValue.trim()
       });
 
@@ -75,7 +75,7 @@ export default function CategoryManagement() {
 
     try {
       setLoading(true);
-      const response = await axios.delete(`http://localhost:5000/api/categories/${id}`);
+      const response = await axios.delete(`${import.meta.env.VITE_API_URL}/api/categories/${id}`);
       
       if (response.data.success) {
         setCategories(categories.filter(cat => cat._id !== id));
