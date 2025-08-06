@@ -20,9 +20,8 @@ const paymentRoutes   = require('./routes/paymentRoutes');
 const app = express();
 
 // === LOCAL-FS SETUP ===
-// Skip this block if running inside Netlify Functions
+// Only create/upload directories when NOT running in Netlify Functions
 if (!process.env.NETLIFY) {
-  // Ensure upload directories exist
   const directories = [
     'uploads',
     'uploads/cars',
@@ -40,19 +39,17 @@ if (!process.env.NETLIFY) {
       fs.mkdirSync(dir, { recursive: true });
     }
   });
-
-  // Serve uploads folder in local dev
   app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 }
 
 // === CORS SETUP ===
 const allowedOrigins = [
-  'https://onlinecarrental234.netlify.app',  // your Netlify frontend
-  'http://localhost:5173'                    // local Vite dev
+  'https://onlinecarrental234.netlify.app', // your Netlify frontend
+  'http://localhost:5173'                   // Vite dev server
 ];
 app.use(cors({
   origin: allowedOrigins,
-  credentials: true,
+  credentials: true
 }));
 
 // Body parsing
@@ -76,14 +73,14 @@ app.use('/api/chats',      chatRoutes);
 app.use('/api/bookings',   bookingRoutes);
 app.use('/api/payments',   paymentRoutes);
 
-// 404 for unknown API routes
+// 404 handler for unknown API routes
 app.use((req, res, next) => {
   if (req.url.startsWith('/api/')) {
     return res.status(404).json({
       success: false,
       message: 'API route not found',
       path: req.url,
-      method: req.method,
+      method: req.method
     });
   }
   next();
@@ -97,11 +94,11 @@ app.use((err, req, res, next) => {
       message: err.code === 'LIMIT_FILE_SIZE'
         ? 'File size is too large'
         : 'File upload error',
-      error: err.message,
+      error: err.message
     });
   }
 
-  // Cleanup uploaded files on error (local dev only)
+  // Cleanup uploaded files on error (local only)
   if (req.file) {
     fs.unlink(req.file.path, () => {});
   }
@@ -118,7 +115,7 @@ app.use((err, req, res, next) => {
     stack: process.env.NODE_ENV === 'development' ? err.stack : undefined,
     path: req.path,
     method: req.method,
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   });
 
   res.status(err.status || 500).json({
@@ -126,7 +123,7 @@ app.use((err, req, res, next) => {
     message: err.message || 'Something went wrong!',
     error: process.env.NODE_ENV === 'development'
       ? { stack: err.stack }
-      : {},
+      : {}
   });
 });
 
