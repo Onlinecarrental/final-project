@@ -5,7 +5,7 @@ import './index.css';
 import HomeView from './views/HomeView/homeView';
 import BestCarsView from './views/BestCarsView/bestCarsView';
 import AboutUsView from './views/AboutUsView/aboutUsView';
-import CustomerReviewView from './views/CustomerReviewView/customerReview';
+import CustomerReviewView from './views/customerReviewView/customerReview';
 import ContactUsView from './views/ContactUsView/contactUsView';
 import BlogsView from './views/BlogsView/blogView';
 import DetailCar from './views/BestCarsView/cardetailview';
@@ -30,7 +30,6 @@ import BlogManagement from './views/AdminDashboardView/BlogManagement/BlogManage
 import CustomerBookings from './views/CustomerAddCarView/customerBookings';
 
 
-const isAuthenticated = false;
 const App = () => {
     React.useEffect(() => {
         // Check if user is on login page and has stored data
