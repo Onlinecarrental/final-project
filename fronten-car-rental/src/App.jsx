@@ -13,6 +13,7 @@ import BookingView from './views/BookingFormView/bookingFormView';
 import CustomerChat from './views/CustomerChatView/CustomerChat';
 import AgentChat from './views/AgentsPanelView/agentMsgView/AgentChat';
 import CarRentalLoginScreen from './views/HomeView/mainHompage';
+import CustomerReviewView from './views/CustomerReviewView/CustomerReviewView';
 import Login from './components/login';
 import Signup from './components/signup';
 import MainLayout from './components/mainLayout';
@@ -27,7 +28,6 @@ import AgentContactUsView from './views/AgentsPanelView/agentContactUsView/agent
 import AdminDashboard from './views/AdminDashboardView/adminpanel';
 import BlogManagement from './views/AdminDashboardView/BlogManagement/BlogManagement';
 import CustomerBookings from './views/CustomerAddCarView/customerBookings';
-import CustomerReviewView from './views/customerReviewView/customerReviewView';
 
 
 const App = () => {
