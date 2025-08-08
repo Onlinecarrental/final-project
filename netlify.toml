@@ -9,7 +9,7 @@
 
 [functions]
   directory    = "../backend-car-rental/functions"
-  node_bundler = "esbuild"
+  node_bundler = "zisi"
 
 [[redirects]]
   from = "/api/*"
