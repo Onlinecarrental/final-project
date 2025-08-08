@@ -8,7 +8,7 @@
   NODE_VERSION = "20"
 
 [functions]
-  directory    = "backend-car-rental/functions"
+  directory    = "../backend-car-rental/functions"
   node_bundler = "esbuild"
 
 [[redirects]]
