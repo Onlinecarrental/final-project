@@ -45,16 +45,26 @@ if (!isServerless) {
 }
 
 // === CORS SETUP ===
-const allowedOrigins = [
-  'https://onlinecarrental234.netlify.app', // old Netlify frontend
-  'https://backendonlinecar.netlify.app',   // new site
-  'http://localhost:5173'                   // Vite dev server
+const allowedOriginsList = [
+  'https://backendonlinecar.netlify.app',
+  'http://localhost:5173'
 ];
+const previewRegex = /^https:\/\/[a-z0-9]+--backendonlinecar\.netlify\.app$/i;
+
 app.use(cors({
-  origin: allowedOrigins,
+  origin: (origin, callback) => {
+    // Allow server-to-server or same-origin (no Origin header)
+    if (!origin) return callback(null, true);
+
+    const isAllowed =
+      allowedOriginsList.includes(origin) ||
+      previewRegex.test(origin);
+
+    return callback(null, isAllowed);
+  },
   credentials: true,
-  methods: ['GET','POST','PUT','PATCH','DELETE','OPTIONS'],
-  allowedHeaders: ['Content-Type','Authorization']
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 // Explicitly handle preflight
 app.options('*', cors());
