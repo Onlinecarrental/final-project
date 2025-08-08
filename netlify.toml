@@ -1,15 +1,21 @@
 # netlify.toml
 [build]
-  base    = "fronten-car-rental"
-  command = "npm run build"
-  publish = "dist"
+  # Build from repo root so we can install both front-end and back-end deps
+  command = "npm --prefix fronten-car-rental ci && npm --prefix backend-car-rental ci && npm --prefix fronten-car-rental run build"
+  publish = "fronten-car-rental/dist"
 
 [build.environment]
   NODE_VERSION = "20"
+  NPM_FLAGS = "--silent"
 
 [functions]
-  directory    = "../backend-car-rental/functions"
+  directory    = "backend-car-rental/functions"
   node_bundler = "zisi"
+  # Ensure Mongoose and its MongoDB driver internals are included in the bundle
+  included_files = [
+    "backend-car-rental/node_modules/mongoose/**",
+    "backend-car-rental/node_modules/mongodb/**"
+  ]
 
 [[redirects]]
   from = "/api/*"
