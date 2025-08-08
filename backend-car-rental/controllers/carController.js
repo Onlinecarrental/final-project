@@ -2,6 +2,9 @@ const Car = require('../models/Car');
 const fs = require('fs');
 const path = require('path');
 
+// Detect Netlify Lambda by presence of LAMBDA_TASK_ROOT
+const isServerless = !!process.env.LAMBDA_TASK_ROOT;
+
 const carController = {
   addCar: async (req, res) => {
     try {
@@ -26,11 +29,29 @@ const carController = {
         ...req.body,
         agentId, // Add agentId to car data
         features: JSON.parse(req.body.features || '{}'),
-        coverImage: req.files['coverImage'][0].path.replace(/\\/g, '/'),
-        ...(req.files['image1'] && { image1: req.files['image1'][0].path.replace(/\\/g, '/') }),
-        ...(req.files['image2'] && { image2: req.files['image2'][0].path.replace(/\\/g, '/') }),
-        ...(req.files['image3'] && { image3: req.files['image3'][0].path.replace(/\\/g, '/') }),
-        ...(req.files['image4'] && { image4: req.files['image4'][0].path.replace(/\\/g, '/') })
+        coverImage: isServerless 
+          ? `uploads/cars/placeholder-${Date.now()}.jpg`
+          : req.files['coverImage'][0].path.replace(/\\/g, '/'),
+        ...(req.files['image1'] && { 
+          image1: isServerless 
+            ? `uploads/cars/placeholder-${Date.now()}-1.jpg`
+            : req.files['image1'][0].path.replace(/\\/g, '/') 
+        }),
+        ...(req.files['image2'] && { 
+          image2: isServerless 
+            ? `uploads/cars/placeholder-${Date.now()}-2.jpg`
+            : req.files['image2'][0].path.replace(/\\/g, '/') 
+        }),
+        ...(req.files['image3'] && { 
+          image3: isServerless 
+            ? `uploads/cars/placeholder-${Date.now()}-3.jpg`
+            : req.files['image3'][0].path.replace(/\\/g, '/') 
+        }),
+        ...(req.files['image4'] && { 
+          image4: isServerless 
+            ? `uploads/cars/placeholder-${Date.now()}-4.jpg`
+            : req.files['image4'][0].path.replace(/\\/g, '/') 
+        })
       };
 
       const car = new Car(carData);
@@ -42,8 +63,8 @@ const carController = {
         data: savedCar
       });
     } catch (error) {
-      // Clean up uploaded files if save fails
-      if (req.files) {
+      // Clean up uploaded files if save fails (only in local environment)
+      if (req.files && !isServerless) {
         Object.values(req.files).flat().forEach(file => {
           if (fs.existsSync(file.path)) {
             fs.unlinkSync(file.path);
@@ -115,7 +136,7 @@ const carController = {
         features: JSON.parse(req.body.features || '{}')
       };
 
-      if (req.files) {
+      if (req.files && !isServerless) {
         if (req.files.coverImage) {
           if (existingCar.coverImage) {
             const oldPath = path.join(__dirname, '..', existingCar.coverImage);
@@ -131,6 +152,17 @@ const carController = {
               if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
             }
             updateData[imageKey] = req.files[imageKey][0].path.replace(/\\/g, '/');
+          }
+        });
+      } else if (req.files && isServerless) {
+        // Handle serverless environment with placeholder paths
+        if (req.files.coverImage) {
+          updateData.coverImage = `uploads/cars/placeholder-${Date.now()}.jpg`;
+        }
+
+        ['image1', 'image2', 'image3', 'image4'].forEach((imageKey, index) => {
+          if (req.files[imageKey]) {
+            updateData[imageKey] = `uploads/cars/placeholder-${Date.now()}-${index + 1}.jpg`;
           }
         });
       }
@@ -166,21 +198,23 @@ const carController = {
         });
       }
 
-      // Delete associated images
-      const imagePaths = [
-        car.coverImage,
-        car.image1,
-        car.image2,
-        car.image3,
-        car.image4
-      ].filter(Boolean);
+      // Delete associated images (only in local environment)
+      if (!isServerless) {
+        const imagePaths = [
+          car.coverImage,
+          car.image1,
+          car.image2,
+          car.image3,
+          car.image4
+        ].filter(Boolean);
 
-      imagePaths.forEach(imagePath => {
-        const fullPath = path.join(__dirname, '..', imagePath);
-        if (fs.existsSync(fullPath)) {
-          fs.unlinkSync(fullPath);
-        }
-      });
+        imagePaths.forEach(imagePath => {
+          const fullPath = path.join(__dirname, '..', imagePath);
+          if (fs.existsSync(fullPath)) {
+            fs.unlinkSync(fullPath);
+          }
+        });
+      }
 
       await Car.findByIdAndDelete(req.params.id);
 

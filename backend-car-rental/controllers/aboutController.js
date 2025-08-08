@@ -2,6 +2,9 @@ const about = require('../models/AboutUs');
 const fs = require('fs').promises;
 const path = require('path');
 
+// Detect Netlify Lambda by presence of LAMBDA_TASK_ROOT
+const isServerless = !!process.env.LAMBDA_TASK_ROOT;
+
 const defaultSections = {
   hero: {
     title: 'Welcome to Car Rental',
@@ -157,8 +160,16 @@ const aboutController = {
           });
         }
 
-        // Create image path relative to uploads directory
-        const imagePath = `uploads/about/${req.file.filename}`;
+        // Handle file upload based on environment
+        let imagePath;
+        if (isServerless) {
+          // In serverless environment, we can't save files, so we'll use a placeholder
+          // In a real application, you'd upload to a cloud storage service like AWS S3
+          imagePath = `uploads/about/placeholder-${Date.now()}.jpg`;
+        } else {
+          // In local environment, use the actual filename
+          imagePath = `uploads/about/${req.file.filename}`;
+        }
 
         // Update content with new image path
         // For different section types, handle image path differently
@@ -229,8 +240,8 @@ const aboutController = {
       });
     } catch (error) {
       console.error('Error updating section:', error);
-      // Cleanup uploaded file if there's an error
-      if (req.file) {
+      // Cleanup uploaded file if there's an error (only in local environment)
+      if (req.file && !isServerless) {
         const filePath = path.join(__dirname, '..', 'uploads/about', req.file.filename);
         fs.unlink(filePath).catch(err => console.error('File cleanup failed:', err));
       }

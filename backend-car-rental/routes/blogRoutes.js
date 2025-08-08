@@ -4,20 +4,25 @@ const multer = require('multer');
 const path = require('path');
 const blogController = require('../controllers/blogController');
 
+// Detect Netlify Lambda by presence of LAMBDA_TASK_ROOT
+const isServerless = !!process.env.LAMBDA_TASK_ROOT;
+
 // Configure multer for file uploads
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    // Choose destination based on file type
-    const dest = file.fieldname === 'authorImage' 
-      ? 'uploads/authors' 
-      : 'uploads/blogs';
-    cb(null, dest);
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, uniqueSuffix + path.extname(file.originalname));
-  }
-});
+const storage = isServerless
+  ? multer.memoryStorage()
+  : multer.diskStorage({
+      destination: (req, file, cb) => {
+        // Choose destination based on file type
+        const dest = file.fieldname === 'authorImage' 
+          ? 'uploads/authors' 
+          : 'uploads/blogs';
+        cb(null, dest);
+      },
+      filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, uniqueSuffix + path.extname(file.originalname));
+      }
+    });
 
 const upload = multer({
   storage,

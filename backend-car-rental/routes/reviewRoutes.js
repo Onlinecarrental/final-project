@@ -4,16 +4,21 @@ const multer = require('multer');
 const path = require('path');
 const reviewController = require('../controllers/reviewController');
 
+// Detect Netlify Lambda by presence of LAMBDA_TASK_ROOT
+const isServerless = !!process.env.LAMBDA_TASK_ROOT;
+
 // Configure multer storage
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/reviews/profiles');
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, `review-${uniqueSuffix}${path.extname(file.originalname)}`);
-  }
-});
+const storage = isServerless
+  ? multer.memoryStorage()
+  : multer.diskStorage({
+      destination: (req, file, cb) => {
+        cb(null, 'uploads/reviews/profiles');
+      },
+      filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, `review-${uniqueSuffix}${path.extname(file.originalname)}`);
+      }
+    });
 
 const upload = multer({ 
   storage,

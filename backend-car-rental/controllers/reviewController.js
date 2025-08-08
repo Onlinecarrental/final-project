@@ -2,6 +2,9 @@ const Review = require('../models/Review');
 const fs = require('fs').promises;
 const path = require('path');
 
+// Detect Netlify Lambda by presence of LAMBDA_TASK_ROOT
+const isServerless = !!process.env.LAMBDA_TASK_ROOT;
+
 const reviewController = {
   // Get approved reviews for public view
   getApprovedReviews: async (req, res) => {
@@ -32,7 +35,9 @@ const reviewController = {
         rating: parseInt(rating),
         text,
         image: req.file 
-          ? `/uploads/reviews/profiles/${req.file.filename}`
+          ? (isServerless 
+              ? `/uploads/reviews/profiles/placeholder-${Date.now()}.jpg`
+              : `/uploads/reviews/profiles/${req.file.filename}`)
           : '/images/default-avatar.jpg',
         status: 'pending'
       });
@@ -45,8 +50,8 @@ const reviewController = {
         data: review
       });
     } catch (error) {
-      // Clean up uploaded file if there's an error
-      if (req.file) {
+      // Clean up uploaded file if there's an error (only in local environment)
+      if (req.file && !isServerless) {
         await fs.unlink(req.file.path).catch(console.error);
       }
       

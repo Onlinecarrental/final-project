@@ -5,26 +5,33 @@ const path = require('path');
 const fs = require('fs');
 const aboutController = require('../controllers/aboutController');
 
-// Create uploads directory
-const uploadDir = 'uploads/aboutus';
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
+// Detect Netlify Lambda by presence of LAMBDA_TASK_ROOT
+const isServerless = !!process.env.LAMBDA_TASK_ROOT;
+
+// Create uploads directory (only in local environment)
+if (!isServerless) {
+  const uploadDir = 'uploads/about';
+  if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+  }
 }
 
 // Update the storage configuration
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const dir = 'uploads/about';
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
-    }
-    cb(null, dir);
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, `${req.params.sectionType}-${uniqueSuffix}${path.extname(file.originalname)}`);
-  }
-});
+const storage = isServerless
+  ? multer.memoryStorage()
+  : multer.diskStorage({
+      destination: (req, file, cb) => {
+        const dir = 'uploads/about';
+        if (!fs.existsSync(dir)) {
+          fs.mkdirSync(dir, { recursive: true });
+        }
+        cb(null, dir);
+      },
+      filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, `${req.params.sectionType}-${uniqueSuffix}${path.extname(file.originalname)}`);
+      }
+    });
 
 const upload = multer({
   storage,
