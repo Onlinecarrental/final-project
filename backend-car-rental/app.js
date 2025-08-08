@@ -50,7 +50,20 @@ const allowedOriginsList = [
   'http://localhost:5173'
 ];
 const previewRegex = /^https:\/\/[a-z0-9]+--backendonlinecar\.netlify\.app$/i;
+                                                                                               
 
+
+
+
+
+
+
+
+
+
+
+
+//dadda
 app.use(cors({
   origin: (origin, callback) => {
     // Allow server-to-server or same-origin (no Origin header)
