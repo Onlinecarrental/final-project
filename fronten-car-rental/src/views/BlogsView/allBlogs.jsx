@@ -19,7 +19,7 @@ const BlogCard = ({ blog, onImageLoad, onImageError, imageLoadingStates }) => (
         <div className="absolute inset-0 bg-gray-100 animate-pulse" />
       )}
       <img 
-        src={`/.netlify/functions/api/uploads/blogs/${blog.image}`}
+        src={`http://localhost:5000/${blog.image}`}
         alt={blog.title} 
         className="w-full h-52 object-cover"
         onLoad={() => onImageLoad(`blog-${blog._id}`)}
@@ -51,7 +51,7 @@ const BlogCard = ({ blog, onImageLoad, onImageError, imageLoadingStates }) => (
             )}
             <img 
               src={blog.author.image 
-                ? `/.netlify/functions/api/uploads/authors/${blog.author.image}`
+                ? `http://localhost:5000/${blog.author.image}`
                 : "/default-avatar.jpg"
               }
               alt={blog.author.name}
@@ -110,8 +110,8 @@ export default function BlogListPage() {
       setError(null);
       
       const [blogsResponse, categoriesResponse] = await Promise.all([
-        axios.get('/.netlify/functions/api/api/blogs'),
-        axios.get('/.netlify/functions/api/api/categories')
+        axios.get('http://localhost:5000/api/blogs'),
+        axios.get('http://localhost:5000/api/categories')
       ]);
       
       if (blogsResponse.data.success) {
