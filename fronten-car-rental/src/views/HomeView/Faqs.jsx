@@ -25,7 +25,7 @@ export default function Faqs() {
         setLoading(true);
         setError(null);
 
-        const response = await axios.get('http://localhost:5000/api/homepage/faqs');
+        const response = await axios.get('/.netlify/functions/api/api/homepage/faqs');
         
         if (response.data.success && response.data.data?.content) {
           const content = response.data.data.content;

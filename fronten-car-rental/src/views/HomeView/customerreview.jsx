@@ -10,7 +10,7 @@ export default function CustomerTestimonials() {
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/reviews');
+        const response = await axios.get('/.netlify/functions/api/api/reviews');
         if (response.data.success) {
           // Get only approved reviews and limit to 3
           const approvedReviews = response.data.data
@@ -93,7 +93,7 @@ export default function CustomerTestimonials() {
               <div className="flex items-center">
                 <div className="mr-3">
                   <img
-                    src={`http://localhost:5000${testimonial.image}`}
+                    src={`/.netlify/functions/api${testimonial.image}`}
                     alt={testimonial.name}
                     className="w-10 h-10 rounded-full object-cover"
                     onError={(e) => {

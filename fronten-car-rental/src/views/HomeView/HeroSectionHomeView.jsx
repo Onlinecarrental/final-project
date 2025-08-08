@@ -6,7 +6,7 @@ import carimage from '../../assets/car 2 1.svg';
 const getImageUrl = (path) => {
   if (!path) return carimage;
   if (path.startsWith('http')) return path;
-  return `http://localhost:5000/${path.replace(/^\/+/, '')}`;
+  return `/.netlify/functions/api/${path.replace(/^\/+/, '')}`;
 };
 
 export default function HeroSectionHome() {
@@ -24,7 +24,7 @@ export default function HeroSectionHome() {
         setLoading(true);
         setError(null);
 
-        const response = await axios.get('http://localhost:5000/api/homepage/hero');
+        const response = await axios.get('/.netlify/functions/api/api/homepage/hero');
 
         if (response.data.success && response.data.data) {
           const content = response.data.data.content || {};

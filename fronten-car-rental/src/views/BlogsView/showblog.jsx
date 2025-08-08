@@ -21,7 +21,7 @@ const BlogPost = () => {
         throw new Error('Blog ID is missing');
       }
 
-      const response = await axios.get(`http://localhost:5000/api/blogs/${id}`);
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/blogs/${id}`);
       
       if (response.data.success && response.data.data) {
         console.log('Blog data:', response.data.data); // Debug log
@@ -79,7 +79,7 @@ const BlogPost = () => {
             className="w-full h-full bg-cover bg-center blur-sm" // Added blur effect
             style={{
               backgroundImage: `url(${blog.image ? 
-                `http://localhost:5000/${blog.image}` : 
+                `/.netlify/functions/api/uploads/blogs/${blog.image}` : 
                 heroImage
               })`,
             }}
@@ -95,7 +95,7 @@ const BlogPost = () => {
             <div className="flex items-center">
               {blog.author.image ? (
                 <img 
-                  src={`http://localhost:5000/${blog.author.image}`}
+                  src={`/.netlify/functions/api/uploads/authors/${blog.author.image}`}
                   alt={blog.author.name}
                   className="w-12 h-12 rounded-full object-cover border-2 border-white mr-2"
                   onError={(e) => {
@@ -133,7 +133,7 @@ const BlogPost = () => {
             <BaseCard width='w-auto' boxShadow={false} className='border border-gray-200 rounded-xl overflow-hidden' height='h-auto'>
               <div className="relative">
                 <img 
-                  src={`http://localhost:5000/${blog.image}`}
+                  src={`/.netlify/functions/api/uploads/blogs/${blog.image}`}
                   alt={blog.title}
                   className="w-full h-[500px] object-cover"
                   onError={(e) => {
