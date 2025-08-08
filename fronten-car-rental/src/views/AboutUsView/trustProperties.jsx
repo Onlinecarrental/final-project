@@ -34,7 +34,7 @@ export default function TrustProperties() {
       try {
         // Add timestamp to prevent caching
         const timestamp = new Date().getTime();
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/about/trust?timestamp=${timestamp}`, {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/about/trust?timestamp=${timestamp}`, {
           headers: {
             'Cache-Control': 'no-cache',
             'Pragma': 'no-cache',

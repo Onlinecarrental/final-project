@@ -58,6 +58,43 @@ export default function HomepageManagement({ section = 'hero' }) {
   }, []);
 
   const fetchSections = async () => {
+    // Define defaults outside try so catch can also use it
+    const defaultSections = {
+      hero: {
+        title: '',
+        description: '',
+        image: ''
+      },
+      services: {
+        header: {
+          title: 'Our Services & Benefits',
+          description: 'To make renting easy and hassle-free, we provide a variety of services and advantages'
+        },
+        items: []
+      },
+      howItWorks: {
+        header: {
+          title: 'How It Works',
+          description: 'Renting a car has never been easier'
+        },
+        steps: []
+      },
+      whyChoose: {
+        header: {
+          title: 'Why Choose Us',
+          description: 'We offer the best experience'
+        },
+        reasons: []
+      },
+      faqs: {
+        header: {
+          title: 'Frequently Asked Questions',
+          description: 'Find answers to common questions'
+        },
+        faqs: []
+      }
+    };
+
     try {
       setLoading(true);
       setError(null);
@@ -65,73 +102,32 @@ export default function HomepageManagement({ section = 'hero' }) {
       const response = await axios.get(`${import.meta.env.VITE_API_URL}/homepage`);
       console.log('API Response:', response.data);
 
-      // Default sections structure
-      const defaultSections = {
-        hero: {
-          title: '',
-          description: '',
-          image: ''
-        },
-        services: {
-          header: {
-            title: 'Our Services & Benefits',
-            description: 'To make renting easy and hassle-free, we provide a variety of services and advantages'
-          },
-          items: []
-        },
-        howItWorks: {
-          header: {
-            title: 'How It Works',
-            description: 'Renting a car has never been easier'
-          },
-          steps: []
-        },
-        whyChoose: {
-          header: {
-            title: 'Why Choose Us',
-            description: 'We offer the best experience'
-          },
-          reasons: []
-        },
-        faqs: {
-          header: {
-            title: 'Frequently Asked Questions',
-            description: 'Find answers to common questions'
-          },
-          faqs: []
-        }
-      };
+      let formattedData = {};
 
-      if (response.data.success) {
-        let formattedData = {};
-
-        // Handle both array and object responses
-        if (Array.isArray(response.data.data)) {
-          formattedData = response.data.data.reduce((acc, section) => {
-            if (section && section.sectionType && section.content) {
-              acc[section.sectionType] = section.content;
-            }
-            return acc;
-          }, {});
-        } else if (typeof response.data.data === 'object') {
-          // If data is already in object format
-          formattedData = response.data.data;
-        }
-
-        // Merge with defaults, ensuring we keep existing data
-        const finalData = Object.keys(defaultSections).reduce((acc, key) => {
-          acc[key] = {
-            ...defaultSections[key],
-            ...(formattedData[key] || {})
-          };
+      // Handle both array and object responses
+      if (Array.isArray(response.data.data)) {
+        formattedData = response.data.data.reduce((acc, section) => {
+          if (section && section.sectionType && section.content) {
+            acc[section.sectionType] = section.content;
+          }
           return acc;
         }, {});
-
-        console.log('Formatted Data:', finalData);
-        setSections(finalData);
-      } else {
-        throw new Error(response.data.message || 'Failed to fetch sections');
+      } else if (typeof response.data.data === 'object') {
+        // If data is already in object format
+        formattedData = response.data.data;
       }
+
+      // Merge with defaults, ensuring we keep existing data
+      const finalData = Object.keys(defaultSections).reduce((acc, key) => {
+        acc[key] = {
+          ...defaultSections[key],
+          ...(formattedData[key] || {})
+        };
+        return acc;
+      }, {});
+
+      console.log('Formatted Data:', finalData);
+      setSections(finalData);
     } catch (error) {
       console.error('Error fetching sections:', error);
       setError(error.response?.data?.message || error.message);
@@ -155,7 +151,7 @@ export default function HomepageManagement({ section = 'hero' }) {
         }
 
         const response = await axios.patch(
-          `${import.meta.env.VITE_API_URL}/api/homepage/${sectionType}`,
+          `${import.meta.env.VITE_API_URL}/homepage/${sectionType}`,
           formData,
           {
             headers: { 
@@ -180,7 +176,7 @@ export default function HomepageManagement({ section = 'hero' }) {
       } else {
         // For non-FormData updates (text only)
         const response = await axios.patch(
-          `${import.meta.env.VITE_API_URL}/api/homepage/${sectionType}`,
+          `${import.meta.env.VITE_API_URL}/homepage/${sectionType}`,
           { content: formData },
           { 
             headers: { 

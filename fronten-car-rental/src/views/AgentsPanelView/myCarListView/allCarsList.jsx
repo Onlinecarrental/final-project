@@ -238,7 +238,7 @@ const AllCarsList = () => {
   const handleEdit = async (car) => {
     try {
       // First fetch the car details
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/cars/${car._id}`);
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/cars/${car._id}`);
 
       if (response.data.success) {
         // Store car data in localStorage for the form
@@ -261,7 +261,7 @@ const AllCarsList = () => {
 
     try {
       setLoading(true);
-      const response = await axios.delete(`${import.meta.env.VITE_API_URL}/api/cars/${car._id}`);
+      const response = await axios.delete(`${import.meta.env.VITE_API_URL}/cars/${car._id}`);
 
       if (response.data.success) {
         alert('Car deleted successfully!');

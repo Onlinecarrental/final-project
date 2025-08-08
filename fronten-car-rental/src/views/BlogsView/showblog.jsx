@@ -21,7 +21,7 @@ const BlogPost = () => {
         throw new Error('Blog ID is missing');
       }
 
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/blogs/${id}`);
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/blogs/${id}`);
       
       if (response.data.success && response.data.data) {
         console.log('Blog data:', response.data.data); // Debug log

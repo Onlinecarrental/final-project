@@ -17,7 +17,7 @@ export default function HerosectionAboutUs() {
       try {
         // Add timestamp to prevent caching
         const timestamp = new Date().getTime();
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/about/hero?timestamp=${timestamp}`, {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/about/hero?timestamp=${timestamp}`, {
           headers: {
             'Cache-Control': 'no-cache',
             'Pragma': 'no-cache',

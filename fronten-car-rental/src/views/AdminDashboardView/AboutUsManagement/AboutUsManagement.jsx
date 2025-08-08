@@ -115,7 +115,7 @@ export default function AboutUsManagement({ section = 'hero' }) {
       }
 
       const response = await axios.patch(
-        `${import.meta.env.VITE_API_URL}/api/about/${sectionType}`,
+        `${import.meta.env.VITE_API_URL}/about/${sectionType}`,
         requestData,
         { headers }
       );

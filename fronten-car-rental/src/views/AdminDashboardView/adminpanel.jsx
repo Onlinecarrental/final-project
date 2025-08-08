@@ -263,7 +263,7 @@ function MessagesContent() {
     const fetchMessages = async () => {
       setMessageLoading(true);
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/chats/${selectedChat._id}/messages`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/chats/${selectedChat._id}/messages`, {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`
           }
@@ -285,7 +285,7 @@ function MessagesContent() {
     if (!newMessage.trim() || !selectedChat) return;
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/chats/messages`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/chats/messages`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -343,8 +343,8 @@ function MessagesContent() {
 
     if (window.confirm('Are you sure you want to close this chat? This will archive the conversation.')) {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/chats/${selectedChat._id}/close`, {
-          method: 'PUT',
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/chats/${selectedChat._id}/close`, {
+          method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${localStorage.getItem('token')}`

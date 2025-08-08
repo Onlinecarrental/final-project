@@ -54,7 +54,7 @@ export default function AgentContactUsInfo() {
     e.preventDefault();
     if (validateForm()) {
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/contact`, {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/contact`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ ...formData, role: 'agent' })

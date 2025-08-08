@@ -66,7 +66,7 @@ export default function AddCarInfo() {
       if (id) {
         try {
           setIsEditing(true);
-          const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/cars/${id}`);
+          const response = await axios.get(`${import.meta.env.VITE_API_URL}/cars/${id}`);
           
           if (response.data.success) {
             const carData = response.data.data;

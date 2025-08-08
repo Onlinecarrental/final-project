@@ -46,7 +46,7 @@ export default function CarCollection() {
     try {
       // Add timestamp to prevent caching
       const timestamp = new Date().getTime();
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/about/carCollection?timestamp=${timestamp}`, {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/about/carCollection?timestamp=${timestamp}`, {
         headers: {
           'Cache-Control': 'no-cache',
           'Pragma': 'no-cache',

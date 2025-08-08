@@ -46,13 +46,18 @@ if (!isServerless) {
 
 // === CORS SETUP ===
 const allowedOrigins = [
-  'https://onlinecarrental234.netlify.app', // your Netlify frontend
+  'https://onlinecarrental234.netlify.app', // old Netlify frontend
+  'https://backendonlinecar.netlify.app',   // new site
   'http://localhost:5173'                   // Vite dev server
 ];
 app.use(cors({
   origin: allowedOrigins,
-  credentials: true
+  credentials: true,
+  methods: ['GET','POST','PUT','PATCH','DELETE','OPTIONS'],
+  allowedHeaders: ['Content-Type','Authorization']
 }));
+// Explicitly handle preflight
+app.options('*', cors());
 
 // Body parsing
 app.use(express.json());
@@ -121,9 +126,7 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500).json({
     success: false,
     message: err.message || 'Something went wrong!',
-    error: process.env.NODE_ENV === 'development'
-      ? { stack: err.stack }
-      : {}
+    error: process.env.NODE_ENV === 'development' ? { stack: err.stack } : {}
   });
 });
 

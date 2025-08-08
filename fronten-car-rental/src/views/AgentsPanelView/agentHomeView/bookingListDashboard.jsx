@@ -23,7 +23,7 @@ const BookingListDashboard = () => {
         setLoading(true);
         setError("");
         if (!user.uid) return;
-        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/bookings/agent/${user.uid}`);
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/bookings/agent/${user.uid}`);
         setBookings(res.data.data || []);
       } catch (err) {
         setError("Failed to load bookings.");
@@ -36,7 +36,7 @@ const BookingListDashboard = () => {
 
   const handleApprove = async (bookingId) => {
     try {
-      await axios.patch(`${import.meta.env.VITE_API_URL}/api/bookings/${bookingId}/approve`);
+      await axios.patch(`${import.meta.env.VITE_API_URL}/bookings/${bookingId}/approve`);
       setBookings(prev => prev.map(b => b._id === bookingId ? { ...b, status: 'approved' } : b));
     } catch (err) {
       alert('Failed to approve booking.');
@@ -45,7 +45,7 @@ const BookingListDashboard = () => {
 
   const handleDeny = async (bookingId) => {
     try {
-      await axios.patch(`${import.meta.env.VITE_API_URL}/api/bookings/${bookingId}/reject`);
+      await axios.patch(`${import.meta.env.VITE_API_URL}/bookings/${bookingId}/reject`);
       setBookings(prev => prev.map(b => b._id === bookingId ? { ...b, status: 'rejected' } : b));
     } catch (err) {
       alert('Failed to deny booking.');
