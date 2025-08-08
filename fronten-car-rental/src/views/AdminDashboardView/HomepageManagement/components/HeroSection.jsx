@@ -77,7 +77,7 @@ export default function HeroSection({ sections, setSections, editingSection, set
   // Add a new function to validate SSL connection
   const validateConnection = async () => {
     try {
-      await axios.get('/.netlify/functions/api/api/health');
+      await axios.get(`${import.meta.env.VITE_API_URL}/health`);
       return true;
     } catch (error) {
       console.error('Connection validation failed:', error);

@@ -62,7 +62,7 @@ export default function HomepageManagement({ section = 'hero' }) {
       setLoading(true);
       setError(null);
 
-      const response = await axios.get('/.netlify/functions/api/api/homepage');
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/homepage`);
       console.log('API Response:', response.data);
 
       // Default sections structure

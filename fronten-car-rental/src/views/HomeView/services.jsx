@@ -25,7 +25,7 @@ export default function ServicesBenefits() {
       try {
         setLoading(true);
         console.log('Fetching services...');
-        const response = await axios.get('/.netlify/functions/api/api/homepage/services');
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/homepage/services`);
         console.log('Services response:', response.data);
 
         if (response.data.success && response.data.data?.content) {

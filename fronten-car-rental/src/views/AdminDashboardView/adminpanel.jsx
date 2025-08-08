@@ -234,7 +234,7 @@ function MessagesContent() {
   useEffect(() => {
     const fetchChats = async () => {
       try {
-        const url = new URL("/.netlify/functions/api/api/chats/all");
+        const url = new URL(`${import.meta.env.VITE_API_URL}/chats/all`);
         if (showInactive) {
           url.searchParams.append('includeInactive', 'true');
         }

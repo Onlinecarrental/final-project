@@ -81,7 +81,7 @@ export default function AboutUsManagement({ section = 'hero' }) {
       setLoading(true);
       setError(null);
 
-      const response = await axios.get('/.netlify/functions/api/api/about');
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/about`);
 
       if (response.data.success) {
         setSections(prev => ({

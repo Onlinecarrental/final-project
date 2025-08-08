@@ -15,7 +15,7 @@ export default function CategoryManagement() {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get('/.netlify/functions/api/api/categories');
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/categories`);
       if (response.data.success) {
         setCategories(response.data.data);
       }
@@ -30,7 +30,7 @@ export default function CategoryManagement() {
 
     try {
       setLoading(true);
-      const response = await axios.post('/.netlify/functions/api/api/categories', {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/categories`, {
         name: newCategory.trim()
       });
       

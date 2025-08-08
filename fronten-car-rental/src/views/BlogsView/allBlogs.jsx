@@ -110,8 +110,8 @@ export default function BlogListPage() {
       setError(null);
       
       const [blogsResponse, categoriesResponse] = await Promise.all([
-        axios.get('/.netlify/functions/api/api/blogs'),
-        axios.get('/.netlify/functions/api/api/categories')
+        axios.get(`${import.meta.env.VITE_API_URL}/blogs`),
+        axios.get(`${import.meta.env.VITE_API_URL}/categories`)
       ]);
       
       if (blogsResponse.data.success) {

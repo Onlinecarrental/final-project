@@ -20,7 +20,7 @@ const CarListingDashboard = () => {
       setLoading(true);
       setError("");
       if (!user.uid) return;
-      const res = await axios.get('/.netlify/functions/api/api/cars');
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/cars`);
       // Only show available cars for this agent
       const agentCars = (res.data.data || []).filter(car => car.agentId === user.uid && car.status === 'available');
       setCars(agentCars);

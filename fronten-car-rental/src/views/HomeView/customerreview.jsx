@@ -10,7 +10,7 @@ export default function CustomerTestimonials() {
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const response = await axios.get('/.netlify/functions/api/api/reviews');
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/reviews`);
         if (response.data.success) {
           // Get only approved reviews and limit to 3
           const approvedReviews = response.data.data

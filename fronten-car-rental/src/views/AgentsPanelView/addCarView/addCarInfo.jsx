@@ -278,7 +278,7 @@ export default function AddCarInfo() {
       // Make API request based on whether we're adding or editing
       const response = await axios({
         method: isEditing ? 'put' : 'post',
-        url: isEditing ? `${import.meta.env.VITE_API_URL}/api/cars/${id}` : '/.netlify/functions/api/api/cars',
+        url: isEditing ? `${import.meta.env.VITE_API_URL}/cars/${id}` : `${import.meta.env.VITE_API_URL}/cars`,
         data: formDataToSend,
         headers: {
           'Content-Type': 'multipart/form-data'

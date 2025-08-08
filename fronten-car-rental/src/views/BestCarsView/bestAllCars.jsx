@@ -15,7 +15,7 @@ export default function AllBestCars() {
     const fetchCars = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('/.netlify/functions/api/api/cars');
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/cars`);
 
         // Check if response has the correct structure and data is an array
         if (response.data && response.data.data && Array.isArray(response.data.data)) {

@@ -16,7 +16,7 @@ export default function AllCustomerREviews() {
     const fetchReviews = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('/.netlify/functions/api/api/reviews');
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/reviews`);
         if (response.data.success) {
           setTestimonials(response.data.data);
         }
@@ -68,7 +68,7 @@ export default function AllCustomerREviews() {
         }
 
         const response = await axios.post(
-          '/.netlify/functions/api/api/reviews',
+          `${import.meta.env.VITE_API_URL}/reviews`,
           formDataToSend,
           {
             headers: {

@@ -28,7 +28,7 @@ function PaymentForm({ booking, onPaymentSuccess, onPaymentError }) {
 
         try {
             // Create payment intent
-            const paymentIntentResponse = await axios.post('/.netlify/functions/api/api/payments/create-payment-intent', {
+            const paymentIntentResponse = await axios.post(`${import.meta.env.VITE_API_URL}/payments/create-payment-intent`, {
                 bookingId: booking._id,
                 amount: booking.price,
                 currency: 'usd'
@@ -51,7 +51,7 @@ function PaymentForm({ booking, onPaymentSuccess, onPaymentError }) {
 
             if (paymentIntent.status === 'succeeded') {
                 // Confirm payment with backend
-                await axios.post('/.netlify/functions/api/api/payments/confirm-payment', {
+                await axios.post(`${import.meta.env.VITE_API_URL}/payments/confirm-payment`, {
                     paymentIntentId,
                     paymentId
                 });
@@ -151,11 +151,11 @@ export default function CustomerBookings() {
                 const userId = currentUser?.uid || userFromStorage.uid;
                 const agentId = booking.agent;
                 // Create chat if not exists
-                const chatRes = await axios.post('/.netlify/functions/api/api/chats', { userId, agentId });
+                const chatRes = await axios.post(`${import.meta.env.VITE_API_URL}/chats`, { userId, agentId });
                 chatId = chatRes.data.data._id;
                 // Send payment confirmation message as customer
                 const paymentMsg = `Payment of $${booking.price} has been successfully processed for your car booking. The booking is now confirmed and ready for pickup.`;
-                await axios.post('/.netlify/functions/api/api/chats/messages', {
+                await axios.post(`${import.meta.env.VITE_API_URL}/chats/messages`, {
                     chatId,
                     senderId: userId,
                     senderRole: 'customer',

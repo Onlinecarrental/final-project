@@ -66,7 +66,7 @@ export default function HowItWork() {
         setLoading(true);
         setError(null);
 
-        const response = await axios.get('/.netlify/functions/api/api/homepage/howItWorks');
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/homepage/howItWorks`);
 
         if (response.data.success && response.data.data?.content) {
           const content = response.data.data.content;

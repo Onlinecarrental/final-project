@@ -139,7 +139,7 @@ const AllCarsList = () => {
       });
 
       // Fetch all cars
-      const response = await axios.get('/.netlify/functions/api/api/cars');
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/cars`);
       console.log('Full API Response:', JSON.stringify(response.data, null, 2));
 
       if (response.data.success) {

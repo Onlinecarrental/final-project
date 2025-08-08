@@ -19,7 +19,7 @@ export default function ReviewManagement() {
 
   const fetchReviews = async () => {
     try {
-      const response = await axios.get('/.netlify/functions/api/api/reviews/all');
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/reviews/all`);
       setReviews(response.data.data);
       setLoading(false);
     } catch (error) {

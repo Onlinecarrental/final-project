@@ -24,7 +24,7 @@ export default function HeroSectionHome() {
         setLoading(true);
         setError(null);
 
-        const response = await axios.get('/.netlify/functions/api/api/homepage/hero');
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/homepage/hero`);
 
         if (response.data.success && response.data.data) {
           const content = response.data.data.content || {};
