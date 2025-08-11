@@ -66,7 +66,8 @@ export default function HowItWork() {
         setLoading(true);
         setError(null);
 
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/homepage/howItWorks`);
+        const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
+        const response = await axios.get(`${API_BASE_URL}/homepage/howItWorks`);
 
         if (response.data.success && response.data.data?.content) {
           const content = response.data.data.content;

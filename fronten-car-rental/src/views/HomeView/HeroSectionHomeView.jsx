@@ -24,7 +24,8 @@ export default function HeroSectionHome() {
         setLoading(true);
         setError(null);
 
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/homepage/hero`);
+        const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
+        const response = await axios.get(`${API_BASE_URL}/homepage/hero`);
 
         if (response.data.success && response.data.data) {
           const content = response.data.data.content || {};

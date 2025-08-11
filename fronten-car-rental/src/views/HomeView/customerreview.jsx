@@ -10,7 +10,8 @@ export default function CustomerTestimonials() {
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/reviews`);
+        const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
+        const response = await axios.get(`${API_BASE_URL}/reviews`);
         if (response.data.success) {
           // Get only approved reviews and limit to 3
           const approvedReviews = response.data.data

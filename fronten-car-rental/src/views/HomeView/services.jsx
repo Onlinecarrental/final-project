@@ -25,7 +25,8 @@ export default function ServicesBenefits() {
       try {
         setLoading(true);
         console.log('Fetching services...');
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/homepage/services`);
+        const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
+        const response = await axios.get(`${API_BASE_URL}/homepage/services`);
         console.log('Services response:', response.data);
 
         if (response.data.success && response.data.data?.content) {

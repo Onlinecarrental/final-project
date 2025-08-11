@@ -54,7 +54,8 @@ export default function ContactInformation() {
     e.preventDefault();
     if (validateForm()) {
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/contact`, {
+        const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
+        const res = await fetch(`${API_BASE_URL}/contact`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ ...formData, role: 'customer' })

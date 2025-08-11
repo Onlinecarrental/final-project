@@ -30,6 +30,8 @@ export default function BookingForm() {
   const [loading, setLoading] = useState(false);
   const [submitError, setSubmitError] = useState('');
 
+  const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
+
   // Validate each step (move price, payment method, payment number to step 2)
   const validateStep = () => {
     const stepErrors = {};
@@ -88,7 +90,7 @@ export default function BookingForm() {
       if (!agentId) throw new Error('No agent assigned to this car.');
 
       // Create chat
-      const chatResponse = await axios.post(`${import.meta.env.VITE_API_URL}/chats`, { userId, agentId });
+      const chatResponse = await axios.post(`${API_BASE_URL}/chats`, { userId, agentId });
       const chatData = chatResponse.data.data;
       // Check participants array
       if (!chatData.participants || chatData.participants.length !== 2 || !chatData.participants.includes(userId) || !chatData.participants.includes(agentId)) {
@@ -104,7 +106,7 @@ export default function BookingForm() {
         senderRole: 'customer',
         text: `New booking: ${formData.carName} ${formData.carModel} from ${formData.dateFrom} to ${formData.dateTo} at ${formData.location}. Customer: ${formData.name} (${formData.email})`
       };
-      await axios.post(`${import.meta.env.VITE_API_URL}/chats/messages`, messageData);
+      await axios.post(`${API_BASE_URL}/chats/messages`, messageData);
       return { success: true, chatId: chatData._id };
     } catch (error) {
       console.error('Error in createChatWithAgent:', error);
@@ -128,7 +130,7 @@ export default function BookingForm() {
           location: formData.location,
           price: Number(formData.price)
         };
-        await axios.post(`${import.meta.env.VITE_API_URL}/bookings`, bookingPayload);
+        await axios.post(`${API_BASE_URL}/bookings`, bookingPayload);
         // 2. Proceed with chat system as before
         const chatResult = await createChatWithAgent();
         setBookingSuccess(true);

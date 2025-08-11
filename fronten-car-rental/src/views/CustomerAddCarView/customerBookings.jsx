@@ -109,6 +109,7 @@ export default function CustomerBookings() {
     const navigate = useNavigate();
     // Get logged-in user from localStorage
     const user = JSON.parse(localStorage.getItem('user')) || {};
+    const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
 
     useEffect(() => {
         const fetchBookings = async () => {
@@ -120,7 +121,7 @@ export default function CustomerBookings() {
                     setLoading(false);
                     return;
                 }
-                const res = await axios.get(`${import.meta.env.VITE_API_URL}/bookings/customer/${user.uid}`);
+                const res = await axios.get(`${API_BASE_URL}/bookings/customer/${user.uid}`);
                 setBookings(res.data.data || []);
             } catch (err) {
                 setError('Failed to load bookings.');
@@ -151,11 +152,11 @@ export default function CustomerBookings() {
                 const userId = currentUser?.uid || userFromStorage.uid;
                 const agentId = booking.agent;
                 // Create chat if not exists
-                const chatRes = await axios.post(`${import.meta.env.VITE_API_URL}/chats`, { userId, agentId });
+                const chatRes = await axios.post(`${API_BASE_URL}/chats`, { userId, agentId });
                 chatId = chatRes.data.data._id;
                 // Send payment confirmation message as customer
                 const paymentMsg = `Payment of $${booking.price} has been successfully processed for your car booking. The booking is now confirmed and ready for pickup.`;
-                await axios.post(`${import.meta.env.VITE_API_URL}/chats/messages`, {
+                await axios.post(`${API_BASE_URL}/chats/messages`, {
                     chatId,
                     senderId: userId,
                     senderRole: 'customer',
@@ -188,7 +189,7 @@ export default function CustomerBookings() {
         const confirmDelete = window.confirm('Are you sure you want to delete this booking? This action cannot be undone.');
         if (!confirmDelete) return;
         try {
-            await axios.delete(`${import.meta.env.VITE_API_URL}/bookings/${bookingId}`);
+            await axios.delete(`${API_BASE_URL}/bookings/${bookingId}`);
             setBookings(prev => prev.filter(b => b._id !== bookingId));
         } catch (err) {
             alert('Failed to delete booking. Please try again.');

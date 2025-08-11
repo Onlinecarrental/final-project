@@ -11,12 +11,14 @@ export default function AllCustomerREviews() {
   const [currentPage, setCurrentPage] = useState(1);
   const reviewsPerPage = 9;
 
+  const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
+
   // Fetch reviews from backend
   useEffect(() => {
     const fetchReviews = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/reviews`);
+        const response = await axios.get(`${API_BASE_URL}/reviews`);
         if (response.data.success) {
           setTestimonials(response.data.data);
         }
@@ -68,7 +70,7 @@ export default function AllCustomerREviews() {
         }
 
         const response = await axios.post(
-          `${import.meta.env.VITE_API_URL}/reviews`,
+          `${API_BASE_URL}/reviews`,
           formDataToSend,
           {
             headers: {
