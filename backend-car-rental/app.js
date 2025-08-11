@@ -45,36 +45,9 @@ if (!isServerless) {
 }
 
 // === CORS SETUP ===
-const allowedOriginsList = [
-  'https://backendonlinecar.netlify.app',
-  'http://localhost:5173'
-];
-const previewRegex = /^https:\/\/[a-z0-9]+--backendonlinecar\.netlify\.app$/i;
-                                                                                               
-
-
-
-
-
-
-
-
-
-
-
-
-//dadda
+// Allow all origins (cors will reflect the request origin). This lets the API work from any domain.
 app.use(cors({
-  origin: (origin, callback) => {
-    // Allow server-to-server or same-origin (no Origin header)
-    if (!origin) return callback(null, true);
-
-    const isAllowed =
-      allowedOriginsList.includes(origin) ||
-      previewRegex.test(origin);
-
-    return callback(null, isAllowed);
-  },
+  origin: true,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
