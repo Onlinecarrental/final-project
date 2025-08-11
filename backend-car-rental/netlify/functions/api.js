@@ -3,6 +3,8 @@ require('dotenv').config();
 const mongoose   = require('mongoose');
 const serverless = require('serverless-http');
 const app        = require('../app');
+const blogRoutes = require('./routes/blogRoutes');
+const categoryRoutes = require('./routes/categoryRoutes');
 
 let conn = null;
 
@@ -12,7 +14,7 @@ const connectToDatabase = async () => {
   console.log('MongoDB connected (Function bootstrap)');
 };
 
-module.exports.handler = async (event, context) => {
-  await connectToDatabase();
-  return serverless(app)(event, context);
-};
+app.use('/api/blogs', blogRoutes);
+app.use('/api/categories', categoryRoutes);
+
+module.exports.handler = serverless(app);
