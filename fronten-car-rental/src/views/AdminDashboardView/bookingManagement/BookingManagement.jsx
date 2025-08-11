@@ -11,7 +11,8 @@ export default function BookingManagement() {
             try {
                 setLoading(true);
                 setError('');
-                const res = await axios.get(`${import.meta.env.VITE_API_URL}/bookings`);
+                const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
+                const res = await axios.get(`${API_BASE_URL}/bookings`);
                 setBookings(res.data.data || []);
             } catch (err) {
                 setError('Failed to load bookings.');

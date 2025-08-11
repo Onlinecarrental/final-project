@@ -7,10 +7,12 @@ import axios from 'axios';
 const getImageUrl = (path) => {
   if (!path) return "../src/assets/AUcar.svg";
   if (path.startsWith('http')) return path;
-  if (path.startsWith('/')) return `${import.meta.env.VITE_API_URL}${path}`;
-  if (path.startsWith('uploads/')) return `${import.meta.env.VITE_API_URL}/${path}`;
+  if (path.startsWith('/')) return `${API_BASE_URL}${path}`;
+  if (path.startsWith('uploads/')) return `${API_BASE_URL}/${path}`;
   return path;
 };
+
+const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
 
 export default function CarCollection() {
   const [carCollectionData, setCarCollectionData] = useState({
@@ -46,7 +48,7 @@ export default function CarCollection() {
     try {
       // Add timestamp to prevent caching
       const timestamp = new Date().getTime();
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/about/carCollection?timestamp=${timestamp}`, {
+      const response = await axios.get(`${API_BASE_URL}/about/carCollection?timestamp=${timestamp}`, {
         headers: {
           'Cache-Control': 'no-cache',
           'Pragma': 'no-cache',

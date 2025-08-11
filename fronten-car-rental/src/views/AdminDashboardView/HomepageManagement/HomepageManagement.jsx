@@ -99,7 +99,8 @@ export default function HomepageManagement({ section = 'hero' }) {
       setLoading(true);
       setError(null);
 
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/homepage`);
+      const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
+      const response = await axios.get(`${API_BASE_URL}/homepage`);
       console.log('API Response:', response.data);
 
       let formattedData = {};
@@ -144,6 +145,7 @@ export default function HomepageManagement({ section = 'hero' }) {
       setError(null);
       console.log(`Updating section: ${sectionType}`, formData);
 
+      const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
       if (formData instanceof FormData) {
         // Log FormData contents for debugging
         for (let pair of formData.entries()) {
@@ -151,7 +153,7 @@ export default function HomepageManagement({ section = 'hero' }) {
         }
 
         const response = await axios.patch(
-          `${import.meta.env.VITE_API_URL}/homepage/${sectionType}`,
+          `${API_BASE_URL}/homepage/${sectionType}`,
           formData,
           {
             headers: { 
@@ -176,7 +178,7 @@ export default function HomepageManagement({ section = 'hero' }) {
       } else {
         // For non-FormData updates (text only)
         const response = await axios.patch(
-          `${import.meta.env.VITE_API_URL}/homepage/${sectionType}`,
+          `${API_BASE_URL}/homepage/${sectionType}`,
           { content: formData },
           { 
             headers: { 

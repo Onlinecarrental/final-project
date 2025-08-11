@@ -10,6 +10,7 @@ function AgentDashboardView() {
   const [carStats, setCarStats] = useState({ total: 0, available: 0 });
   const [bookingCount, setBookingCount] = useState(0);
   const user = JSON.parse(localStorage.getItem('user')) || {};
+  const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
 
   useEffect(() => {
     // Function to format date like "24 Oct, 2021"
@@ -51,13 +52,13 @@ function AgentDashboardView() {
     const fetchStats = async () => {
       try {
         if (!user.uid) return;
-        const carRes = await axios.get(`${import.meta.env.VITE_API_URL}/cars`);
+        const carRes = await axios.get(`${API_BASE_URL}/cars`);
         const agentCars = (carRes.data.data || []).filter(car => car.agentId === user.uid);
         setCarStats({
           total: agentCars.length,
           available: agentCars.filter(car => car.status === 'available').length
         });
-        const bookingRes = await axios.get(`${import.meta.env.VITE_API_URL}/bookings/agent/${user.uid}`);
+        const bookingRes = await axios.get(`${API_BASE_URL}/bookings/agent/${user.uid}`);
         setBookingCount((bookingRes.data.data || []).length);
       } catch (err) {
         setCarStats({ total: 0, available: 0 });

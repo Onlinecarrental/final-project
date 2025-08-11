@@ -11,6 +11,8 @@ const BlogPost = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
+
   const fetchBlog = async () => {
     try {
       setLoading(true);
@@ -21,7 +23,7 @@ const BlogPost = () => {
         throw new Error('Blog ID is missing');
       }
 
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/blogs/${id}`);
+      const response = await axios.get(`${API_BASE_URL}/blogs/${id}`);
       
       if (response.data.success && response.data.data) {
         console.log('Blog data:', response.data.data); // Debug log

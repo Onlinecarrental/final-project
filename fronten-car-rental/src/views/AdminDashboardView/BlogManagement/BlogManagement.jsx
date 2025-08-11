@@ -179,9 +179,10 @@ export default function BlogManagement() {
       };
 
       // Make the API request
+      const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
       const url = isEditing 
-        ? `${import.meta.env.VITE_API_URL}/blogs/${currentBlog._id}`
-        : `${import.meta.env.VITE_API_URL}/blogs`;
+        ? `${API_BASE_URL}/blogs/${currentBlog._id}`
+        : `${API_BASE_URL}/blogs`;
 
       const response = await axios({
         method: isEditing ? 'put' : 'post',
@@ -208,7 +209,8 @@ export default function BlogManagement() {
 
   const fetchBlogs = async () => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/blogs`);
+      const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
+      const response = await axios.get(`${API_BASE_URL}/blogs`);
       if (response.data.success) {
         setBlogs(response.data.data);
       } else {
@@ -222,7 +224,8 @@ export default function BlogManagement() {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/categories`);
+      const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
+      const response = await axios.get(`${API_BASE_URL}/categories`);
       if (response.data.success) {
         setCategories(response.data.data.map(cat => cat.name));
       }
@@ -252,7 +255,8 @@ export default function BlogManagement() {
   const handleDelete = async (blogId) => {
     if (window.confirm('Are you sure you want to delete this blog?')) {
       try {
-        await axios.delete(`${import.meta.env.VITE_API_URL}/blogs/${blogId}`);
+        const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
+        await axios.delete(`${API_BASE_URL}/blogs/${blogId}`);
         fetchBlogs();
       } catch (error) {
         console.error('Error deleting blog:', error);

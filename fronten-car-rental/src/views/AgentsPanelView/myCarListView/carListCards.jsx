@@ -15,6 +15,8 @@ export default function CarListCards() {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
+  const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
+
   const fetchCarStats = async () => {
     try {
       setLoading(true);
@@ -29,7 +31,7 @@ export default function CarListCards() {
       const agentId = userData.uid;
 
       // Fetch all cars using the existing endpoint
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/cars`);
+      const response = await axios.get(`${API_BASE_URL}/cars`);
       
       if (response.data.success) {
         // Filter cars for this agent

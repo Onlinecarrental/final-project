@@ -44,7 +44,8 @@ export default function WhyChoose() {
       try {
         // Add timestamp to prevent caching
         const timestamp = new Date().getTime();
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/about/whyChoose?timestamp=${timestamp}`, {
+        const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
+        const response = await axios.get(`${API_BASE_URL}/about/whyChoose?timestamp=${timestamp}`, {
           headers: {
             'Cache-Control': 'no-cache',
             'Pragma': 'no-cache',

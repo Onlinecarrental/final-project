@@ -104,6 +104,8 @@ const AllCarsList = () => {
   const [statusFilter, setStatusFilter] = useState('all');
   const carsPerPage = 4;
 
+  const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
+
   const fetchCars = async () => {
     try {
       setLoading(true);
@@ -139,7 +141,7 @@ const AllCarsList = () => {
       });
 
       // Fetch all cars
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/cars`);
+      const response = await axios.get(`${API_BASE_URL}/cars`);
       console.log('Full API Response:', JSON.stringify(response.data, null, 2));
 
       if (response.data.success) {
@@ -238,7 +240,7 @@ const AllCarsList = () => {
   const handleEdit = async (car) => {
     try {
       // First fetch the car details
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/cars/${car._id}`);
+      const response = await axios.get(`${API_BASE_URL}/cars/${car._id}`);
 
       if (response.data.success) {
         // Store car data in localStorage for the form
@@ -261,7 +263,7 @@ const AllCarsList = () => {
 
     try {
       setLoading(true);
-      const response = await axios.delete(`${import.meta.env.VITE_API_URL}/cars/${car._id}`);
+      const response = await axios.delete(`${API_BASE_URL}/cars/${car._id}`);
 
       if (response.data.success) {
         alert('Car deleted successfully!');

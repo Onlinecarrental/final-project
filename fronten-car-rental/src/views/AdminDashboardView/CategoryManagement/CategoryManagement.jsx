@@ -15,7 +15,8 @@ export default function CategoryManagement() {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/categories`);
+      const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
+      const response = await axios.get(`${API_BASE_URL}/categories`);
       if (response.data.success) {
         setCategories(response.data.data);
       }
@@ -30,7 +31,8 @@ export default function CategoryManagement() {
 
     try {
       setLoading(true);
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/categories`, {
+      const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
+      const response = await axios.post(`${API_BASE_URL}/categories`, {
         name: newCategory.trim()
       });
       
@@ -51,7 +53,8 @@ export default function CategoryManagement() {
 
     try {
       setLoading(true);
-      const response = await axios.put(`${import.meta.env.VITE_API_URL}/categories/${id}`, {
+      const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
+      const response = await axios.put(`${API_BASE_URL}/categories/${id}`, {
         name: editValue.trim()
       });
 
@@ -75,7 +78,8 @@ export default function CategoryManagement() {
 
     try {
       setLoading(true);
-      const response = await axios.delete(`${import.meta.env.VITE_API_URL}/categories/${id}`);
+      const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
+      const response = await axios.delete(`${API_BASE_URL}/categories/${id}`);
       
       if (response.data.success) {
         setCategories(categories.filter(cat => cat._id !== id));

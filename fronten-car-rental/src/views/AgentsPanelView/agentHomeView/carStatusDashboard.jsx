@@ -4,6 +4,7 @@ import { PieChart, Pie, Cell } from "recharts";
 import axios from "axios";
 
 const COLORS = ["#000000", "#5F38F3"];
+const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
 
 function CarStatusDashboard() {
   const [data, setData] = useState([
@@ -17,7 +18,7 @@ function CarStatusDashboard() {
     const fetchCars = async () => {
       try {
         if (!user.uid) return;
-        const res = await axios.get(`${import.meta.env.VITE_API_URL}/cars`);
+        const res = await axios.get(`${API_BASE_URL}/cars`);
         const agentCars = (res.data.data || []).filter(car => car.agentId === user.uid);
         const approved = agentCars.filter(car => car.status === 'rented').length;
         const pending = agentCars.filter(car => car.status === 'pending').length;

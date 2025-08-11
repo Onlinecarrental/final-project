@@ -19,7 +19,8 @@ export default function ReviewManagement() {
 
   const fetchReviews = async () => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/reviews/all`);
+      const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
+      const response = await axios.get(`${API_BASE_URL}/reviews/all`);
       setReviews(response.data.data);
       setLoading(false);
     } catch (error) {
@@ -30,7 +31,8 @@ export default function ReviewManagement() {
 
   const handleStatusUpdate = async (id, status) => {
     try {
-      await axios.patch(`${import.meta.env.VITE_API_URL}/reviews/${id}/status`, { status });
+      const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
+      await axios.patch(`${API_BASE_URL}/reviews/${id}/status`, { status });
       fetchReviews();
     } catch (error) {
       console.error('Error updating review:', error);
@@ -48,8 +50,9 @@ export default function ReviewManagement() {
 
   const handleUpdate = async (id) => {
     try {
+      const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
       const response = await axios.patch(
-        `${import.meta.env.VITE_API_URL}/reviews/${id}`,
+        `${API_BASE_URL}/reviews/${id}`,
         editForm
       );
 
@@ -69,7 +72,8 @@ export default function ReviewManagement() {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this review? This action cannot be undone.')) {
       try {
-        const response = await axios.delete(`${import.meta.env.VITE_API_URL}/reviews/${id}`);
+        const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
+        const response = await axios.delete(`${API_BASE_URL}/reviews/${id}`);
         
         if (response.data.success) {
           setReviews(reviews.filter(review => review._id !== id));

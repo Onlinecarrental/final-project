@@ -15,12 +15,14 @@ const CarListingDashboard = () => {
   const user = JSON.parse(localStorage.getItem('user')) || {};
   const navigate = useNavigate();
 
+  const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
+
   const fetchCars = async () => {
     try {
       setLoading(true);
       setError("");
       if (!user.uid) return;
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/cars`);
+      const res = await axios.get(`${API_BASE_URL}/cars`);
       // Only show available cars for this agent
       const agentCars = (res.data.data || []).filter(car => car.agentId === user.uid && car.status === 'available');
       setCars(agentCars);
@@ -39,7 +41,7 @@ const CarListingDashboard = () => {
   const handleEdit = async (car) => {
     try {
       // First fetch the car details
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/cars/${car._id}`);
+      const response = await axios.get(`${API_BASE_URL}/cars/${car._id}`);
       if (response.data.success) {
         localStorage.setItem('editCarData', JSON.stringify(response.data.data));
         navigate(`/agent/addcar/${car._id}`);
@@ -57,7 +59,7 @@ const CarListingDashboard = () => {
     }
     try {
       setLoading(true);
-      const response = await axios.delete(`${import.meta.env.VITE_API_URL}/cars/${car._id}`);
+      const response = await axios.delete(`${API_BASE_URL}/cars/${car._id}`);
       if (response.data.success) {
         alert('Car deleted successfully!');
         await fetchCars();

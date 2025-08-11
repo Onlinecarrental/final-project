@@ -16,6 +16,7 @@ const BookingListDashboard = () => {
   const [error, setError] = useState("");
   const user = JSON.parse(localStorage.getItem('user')) || {};
   const navigate = useNavigate();
+  const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
 
   useEffect(() => {
     const fetchBookings = async () => {
@@ -23,7 +24,7 @@ const BookingListDashboard = () => {
         setLoading(true);
         setError("");
         if (!user.uid) return;
-        const res = await axios.get(`${import.meta.env.VITE_API_URL}/bookings/agent/${user.uid}`);
+        const res = await axios.get(`${API_BASE_URL}/bookings/agent/${user.uid}`);
         setBookings(res.data.data || []);
       } catch (err) {
         setError("Failed to load bookings.");
@@ -36,7 +37,7 @@ const BookingListDashboard = () => {
 
   const handleApprove = async (bookingId) => {
     try {
-      await axios.patch(`${import.meta.env.VITE_API_URL}/bookings/${bookingId}/approve`);
+      await axios.patch(`${API_BASE_URL}/bookings/${bookingId}/approve`);
       setBookings(prev => prev.map(b => b._id === bookingId ? { ...b, status: 'approved' } : b));
     } catch (err) {
       alert('Failed to approve booking.');
@@ -45,7 +46,7 @@ const BookingListDashboard = () => {
 
   const handleDeny = async (bookingId) => {
     try {
-      await axios.patch(`${import.meta.env.VITE_API_URL}/bookings/${bookingId}/reject`);
+      await axios.patch(`${API_BASE_URL}/bookings/${bookingId}/reject`);
       setBookings(prev => prev.map(b => b._id === bookingId ? { ...b, status: 'rejected' } : b));
     } catch (err) {
       alert('Failed to deny booking.');

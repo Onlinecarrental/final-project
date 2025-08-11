@@ -81,7 +81,8 @@ export default function AboutUsManagement({ section = 'hero' }) {
       setLoading(true);
       setError(null);
 
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/about`);
+      const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
+      const response = await axios.get(`${API_BASE_URL}/about`);
 
       if (response.data.success) {
         setSections(prev => ({
@@ -114,8 +115,9 @@ export default function AboutUsManagement({ section = 'hero' }) {
         headers['Content-Type'] = 'application/json';
       }
 
+      const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
       const response = await axios.patch(
-        `${import.meta.env.VITE_API_URL}/about/${sectionType}`,
+        `${API_BASE_URL}/about/${sectionType}`,
         requestData,
         { headers }
       );

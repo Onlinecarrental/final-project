@@ -109,9 +109,10 @@ export default function BlogListPage() {
       setLoading(true);
       setError(null);
       
+      const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
       const [blogsResponse, categoriesResponse] = await Promise.all([
-        axios.get(`${import.meta.env.VITE_API_URL}/blogs`),
-        axios.get(`${import.meta.env.VITE_API_URL}/categories`)
+        axios.get(`${API_BASE_URL}/blogs`),
+        axios.get(`${API_BASE_URL}/categories`)
       ]);
       
       if (blogsResponse.data.success) {

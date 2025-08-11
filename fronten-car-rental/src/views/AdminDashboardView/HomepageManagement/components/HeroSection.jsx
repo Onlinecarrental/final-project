@@ -77,7 +77,8 @@ export default function HeroSection({ sections, setSections, editingSection, set
   // Add a new function to validate SSL connection
   const validateConnection = async () => {
     try {
-      await axios.get(`${import.meta.env.VITE_API_URL}/health`);
+      const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
+      await axios.get(`${API_BASE_URL}/health`);
       return true;
     } catch (error) {
       console.error('Connection validation failed:', error);
