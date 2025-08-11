@@ -73,28 +73,33 @@ export default function BlogManagement() {
     setFormData(prev => ({ ...prev, content }));
   };
 
-  const handleImageChange = (e) => {
-    try {
-      const file = e.target.files[0];
-      if (!file) return;
-
-      // Validate file size (5MB max)
-      validateFileSize(file, 5 * 1024 * 1024);
-
-      // Validate file type
-      validateFileType(file, ['image/jpeg', 'image/png', 'image/gif']);
-
-      // Create a preview URL
-      const previewUrl = URL.createObjectURL(file);
-      
-      setFormData(prev => ({ 
-        ...prev, 
-        image: file,
-        imagePreview: previewUrl // Add preview URL
-      }));
-    } catch (error) {
-      e.target.value = ''; // Reset input
-      alert(error.message);
+  const handleImageUpload = async (e, imageType) => {
+    const file = e.target.files[0];
+    if (file) {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+      try {
+        const res = await fetch(CLOUDINARY_UPLOAD_URL, {
+          method: 'POST',
+          body: formData
+        });
+        const data = await res.json();
+        if (data.secure_url) {
+          setFormData(prev => ({
+            ...prev,
+            [imageType]: data.secure_url
+          }));
+          setImagePreviews(prev => ({
+            ...prev,
+            [imageType]: data.secure_url
+          }));
+        } else {
+          alert('Failed to upload image to Cloudinary');
+        }
+      } catch (err) {
+        alert('Image upload error: ' + err.message);
+      }
     }
   };
 
@@ -397,7 +402,7 @@ export default function BlogManagement() {
                   <input
                     type="file"
                     accept="image/jpeg,image/png,image/gif"
-                    onChange={handleImageChange}
+                    onChange={handleImageUpload}
                     className="border p-2 rounded w-full"
                     required={!isEditing}
                   />

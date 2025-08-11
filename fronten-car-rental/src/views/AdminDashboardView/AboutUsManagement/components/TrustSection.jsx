@@ -33,6 +33,41 @@ export default function TrustSection({ sections, setSections, editingSection, se
   const fileInputRef = useRef(null);
   const bannerImageRef = useRef(null);
 
+  const CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1/dlinqw87p/image/upload";
+  const CLOUDINARY_UPLOAD_PRESET = "YOUR_UPLOAD_PRESET"; // Replace with your actual preset
+
+  const handleImageUpload = async (e, imageType) => {
+    const file = e.target.files[0];
+    if (file) {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+      try {
+        const res = await fetch(CLOUDINARY_UPLOAD_URL, {
+          method: 'POST',
+          body: formData
+        });
+        const data = await res.json();
+        if (data.secure_url) {
+          setSections(prev => ({
+            ...prev,
+            trust: {
+              ...prev.trust,
+              [imageType]: data.secure_url
+            }
+          }));
+          setUpdateStatus({
+            success: `${imageType} updated successfully!`
+          });
+        } else {
+          alert('Failed to upload image to Cloudinary');
+        }
+      } catch (err) {
+        alert('Image upload error: ' + err.message);
+      }
+    }
+  };
+
   // Add handleHeaderSave function
   const handleHeaderSave = async () => {
     try {
@@ -323,7 +358,7 @@ export default function TrustSection({ sections, setSections, editingSection, se
               <input
                 type="file"
                 ref={fileInputRef}
-                onChange={handleImageChange}
+                onChange={(e) => handleImageUpload(e, 'image')}
                 className="hidden"
                 accept="image/*"
               />
@@ -392,7 +427,7 @@ export default function TrustSection({ sections, setSections, editingSection, se
             <input
               type="file"
               ref={bannerImageRef}
-              onChange={handleBannerImageChange}
+              onChange={(e) => handleImageUpload(e, 'bannerImage')}
               className="hidden"
               accept="image/*"
             />

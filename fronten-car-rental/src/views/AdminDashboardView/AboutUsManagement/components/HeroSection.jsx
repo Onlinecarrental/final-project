@@ -44,6 +44,38 @@ export default function HeroSection({ sections, setSections, editingSection, set
     }
   };
 
+  const CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1/dlinqw87p/image/upload";
+  const CLOUDINARY_UPLOAD_PRESET = "YOUR_UPLOAD_PRESET"; // Replace with your actual preset
+
+  const handleImageUpload = async (e, imageType) => {
+    const file = e.target.files[0];
+    if (file) {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+      try {
+        const res = await fetch(CLOUDINARY_UPLOAD_URL, {
+          method: 'POST',
+          body: formData
+        });
+        const data = await res.json();
+        if (data.secure_url) {
+          setSections(prev => ({
+            ...prev,
+            hero: {
+              ...hero,
+              [imageType]: data.secure_url
+            }
+          }));
+        } else {
+          alert('Failed to upload image to Cloudinary');
+        }
+      } catch (err) {
+        alert('Image upload error: ' + err.message);
+      }
+    }
+  };
+
   return (
     <div className="bg-white rounded-lg shadow p-4 mb-6">
       <div className="flex justify-between items-center mb-4">
@@ -110,7 +142,7 @@ export default function HeroSection({ sections, setSections, editingSection, set
             <input
               type="file"
               ref={imageInputRef}
-              onChange={handleImageChange}
+              onChange={(e) => handleImageUpload(e, 'image')}
               className="hidden"
               accept="image/*"
             />

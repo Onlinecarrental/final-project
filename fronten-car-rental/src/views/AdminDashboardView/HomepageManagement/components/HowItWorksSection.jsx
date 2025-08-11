@@ -80,57 +80,36 @@ const defaultData = {
   image: null
 };
 
-// Replace the existing handleImageUpload function with this updated version
-const handleImageUpload = async (file, sections, setSections, handleUpdate, setUpdateStatus, fileInputRef) => {
-  try {
-    if (!file) return;
+const CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1/dlinqw87p/image/upload";
+const CLOUDINARY_UPLOAD_PRESET = "YOUR_UPLOAD_PRESET"; // Replace with your actual preset
 
-    setUpdateStatus({ loading: true, error: null, success: null });
-
+const handleImageUpload = async (e, imageType) => {
+  const file = e.target.files[0];
+  if (file) {
     const formData = new FormData();
-    formData.append('image', file);
-
-    // Add current content
-    const content = {
-      header: sections.howItWorks?.header || defaultData.header,
-      steps: sections.howItWorks?.steps || [],
-    };
-
-    formData.append('content', JSON.stringify(content));
-
-    const result = await handleUpdate('howItWorks', formData);
-
-    if (result?.success) {
-      console.log('Upload successful:', result.data.content);
-      
-      // Update sections with new data including image path
-      setSections(prev => ({
-        ...prev,
-        howItWorks: {
-          ...prev.howItWorks,
-          ...result.data.content
-        }
-      }));
-
-      setUpdateStatus({
-        loading: false,
-        error: null,
-        success: 'Image uploaded successfully!'
+    formData.append('file', file);
+    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+    try {
+      const res = await fetch(CLOUDINARY_UPLOAD_URL, {
+        method: 'POST',
+        body: formData
       });
-
-      if (fileInputRef?.current) {
-        fileInputRef.current.value = '';
+      const data = await res.json();
+      if (data.secure_url) {
+        setFormData(prev => ({
+          ...prev,
+          [imageType]: data.secure_url
+        }));
+        setImagePreviews(prev => ({
+          ...prev,
+          [imageType]: data.secure_url
+        }));
+      } else {
+        alert('Failed to upload image to Cloudinary');
       }
-    } else {
-      throw new Error('Upload failed');
+    } catch (err) {
+      alert('Image upload error: ' + err.message);
     }
-  } catch (error) {
-    console.error('Image upload error:', error);
-    setUpdateStatus({
-      loading: false,
-      error: error.message,
-      success: null
-    });
   }
 };
 
@@ -515,7 +494,7 @@ export default function HowItWorksSection({ sections, setSections, editingSectio
               onChange={(e) => {
                 const file = e.target.files[0];
                 if (file) {
-                  handleImageUpload(file, sections, setSections, handleUpdate, setUpdateStatus, fileInputRef);
+                  handleImageUpload(e, 'image');
                 }
               }}
               className="hidden"

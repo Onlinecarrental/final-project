@@ -139,30 +139,46 @@ export default function AddCarInfo() {
     }));
   };
 
+  const CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1/dlinqw87p/image/upload";
+  const CLOUDINARY_UPLOAD_PRESET = "YOUR_UPLOAD_PRESET"; // Replace with your actual preset
+
   // Handle image upload
-  const handleImageUpload = (e, imageType) => {
+  const handleImageUpload = async (e, imageType) => {
     const file = e.target.files[0];
     if (file) {
       if (!file.type.startsWith('image/')) {
         alert('Please upload an image file');
         return;
       }
-
       if (file.size > 5 * 1024 * 1024) {
         alert('Image size should be less than 5MB');
         return;
       }
-
-      setFormData(prev => ({
-        ...prev,
-        [imageType]: file
-      }));
-
-      const previewUrl = URL.createObjectURL(file);
-      setImagePreviews(prev => ({
-        ...prev,
-        [imageType]: previewUrl
-      }));
+      // Upload to Cloudinary
+      const formDataCloud = new FormData();
+      formDataCloud.append('file', file);
+      formDataCloud.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+      try {
+        const res = await fetch(CLOUDINARY_UPLOAD_URL, {
+          method: 'POST',
+          body: formDataCloud
+        });
+        const data = await res.json();
+        if (data.secure_url) {
+          setFormData(prev => ({
+            ...prev,
+            [imageType]: data.secure_url
+          }));
+          setImagePreviews(prev => ({
+            ...prev,
+            [imageType]: data.secure_url
+          }));
+        } else {
+          alert('Failed to upload image to Cloudinary');
+        }
+      } catch (err) {
+        alert('Image upload error: ' + err.message);
+      }
     }
   };
 

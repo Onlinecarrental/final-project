@@ -86,41 +86,43 @@ export default function HeroSection({ sections, setSections, editingSection, set
     }
   };
 
-  // Fix the template literal in the alert
-  const handleImageChange = (e) => {
+  const CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1/dlinqw87p/image/upload";
+  const CLOUDINARY_UPLOAD_PRESET = "YOUR_UPLOAD_PRESET"; // Replace with your actual preset
+
+  const handleImageUpload = async (e, imageType) => {
     const file = e.target.files[0];
-    if (!file) return;
-
-    // Validate file type
-    if (!file.type.startsWith('image/')) {
-      alert('Please upload an image file');
-      return;
-    }
-
-    // Validate file size (5MB limit)
-    const maxSize = 5 * 1024 * 1024;
-    if (file.size > maxSize) {
-      alert('File size should be less than 5MB');
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onerror = () => {
-      alert('Error reading file');
-    };
-
-    reader.onloadend = () => {
-      setSections(prev => ({
-        ...prev,
-        hero: {
-          ...prev.hero,
-          imageFile: file,
-          imagePreview: reader.result
+    if (file) {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+      try {
+        const res = await fetch(CLOUDINARY_UPLOAD_URL, {
+          method: 'POST',
+          body: formData
+        });
+        const data = await res.json();
+        if (data.secure_url) {
+          setSections(prev => ({
+            ...prev,
+            hero: {
+              ...prev.hero,
+              [imageType]: data.secure_url
+            }
+          }));
+          setSections(prev => ({
+            ...prev,
+            hero: {
+              ...prev.hero,
+              imagePreview: data.secure_url
+            }
+          }));
+        } else {
+          alert('Failed to upload image to Cloudinary');
         }
-      }));
-    };
-
-    reader.readAsDataURL(file);
+      } catch (err) {
+        alert('Image upload error: ' + err.message);
+      }
+    }
   };
 
   return (
@@ -164,7 +166,7 @@ export default function HeroSection({ sections, setSections, editingSection, set
               <input
                 type="file"
                 ref={fileInputRef}
-                onChange={handleImageChange}
+                onChange={(e) => handleImageUpload(e, 'image')}
                 accept="image/*"
                 className="hidden"
               />

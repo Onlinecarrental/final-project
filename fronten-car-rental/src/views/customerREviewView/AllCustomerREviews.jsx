@@ -12,6 +12,8 @@ export default function AllCustomerREviews() {
   const reviewsPerPage = 9;
 
   const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
+  const CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1/dlinqw87p/image/upload";
+  const CLOUDINARY_UPLOAD_PRESET = "YOUR_UPLOAD_PRESET"; // Replace with your actual preset
 
   // Fetch reviews from backend
   useEffect(() => {
@@ -109,6 +111,36 @@ export default function AllCustomerREviews() {
       });
     };
 
+    const handleImageUpload = async (e, imageType) => {
+      const file = e.target.files[0];
+      if (file) {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+        try {
+          const res = await fetch(CLOUDINARY_UPLOAD_URL, {
+            method: 'POST',
+            body: formData
+          });
+          const data = await res.json();
+          if (data.secure_url) {
+            setFormData(prev => ({
+              ...prev,
+              [imageType]: data.secure_url
+            }));
+            // setImagePreviews(prev => ({ // This line was not in the new_code, so it's removed.
+            //   ...prev,
+            //   [imageType]: data.secure_url
+            // }));
+          } else {
+            alert('Failed to upload image to Cloudinary');
+          }
+        } catch (err) {
+          alert('Image upload error: ' + err.message);
+        }
+      }
+    };
+
     return (
       <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
         <BaseCard width="w-full max-w-md" height="h-auto" className="relative">
@@ -170,21 +202,12 @@ export default function AllCustomerREviews() {
               <input
                 type="file"
                 accept="image/*"
-                onChange={(e) => {
-                  const file = e.target.files[0];
-                  if (file) {
-                    setFormData(prev => ({
-                      ...prev,
-                      image: file,
-                      imagePreview: URL.createObjectURL(file)
-                    }));
-                  }
-                }}
+                onChange={(e) => handleImageUpload(e, 'image')}
                 className="w-full"
               />
-              {formData.imagePreview && (
+              {formData.image && (
                 <img
-                  src={formData.imagePreview}
+                  src={formData.image}
                   alt="Preview"
                   className="mt-2 w-20 h-20 rounded-full object-cover"
                 />
