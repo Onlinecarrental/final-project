@@ -275,10 +275,11 @@ export default function AddCarInfo() {
         }
       });
 
+      const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
       // Make API request based on whether we're adding or editing
       const response = await axios({
         method: isEditing ? 'put' : 'post',
-        url: isEditing ? `${https://backend-car-rental-production.up.railway.app/api/cars/${id}` : `${https://backend-car-rental-production.up.railway.app/api/cars}`,
+        url: isEditing ? `${API_BASE_URL}/cars/${id}` : `${API_BASE_URL}/cars`,
         data: formDataToSend,
         headers: {
           'Content-Type': 'multipart/form-data'
