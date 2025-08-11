@@ -1,28 +1,12 @@
 # netlify.toml
 [build]
-  base = "backend-car-rental"
-  # Netlify site base is configured to `backend-car-rental`, so use paths relative to that base
-  command = "npm ci && npm --prefix ../fronten-car-rental ci && npm --prefix ../fronten-car-rental run build"
-  publish = "../fronten-car-rental/dist"
+  base = "fronten-car-rental"
+  command = "npm ci && npm run build"
+  publish = "dist"
 
 [build.environment]
   NODE_VERSION = "20"
   NPM_FLAGS = "--silent"
-
-[functions]
-  # With base set to `backend-car-rental`, functions are at `functions`
-  directory    = "functions"
-  node_bundler = "zisi"
-  # Ensure Mongoose and its MongoDB driver internals are included in the bundle
-  included_files = [
-    "node_modules/mongoose/**",
-    "node_modules/mongodb/**"
-  ]
-
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/api/:splat"
-  status = 200
 
 # Handle SPA routing
 [[redirects]]
