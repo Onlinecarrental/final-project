@@ -15,7 +15,8 @@ export default function AllBestCars() {
     const fetchCars = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/cars`);
+        const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
+        const response = await axios.get(`${API_BASE_URL}/cars`);
 
         // Check if response has the correct structure and data is an array
         if (response.data && response.data.data && Array.isArray(response.data.data)) {
@@ -95,7 +96,7 @@ export default function AllBestCars() {
           <BaseCard width='w-[380px]' padding='p-[8px]' height='h-full' key={car._id}>
             <div className="relative h-48 overflow-hidden">
               <img
-                src={`/.netlify/functions/api/${car.coverImage}`}
+                src={`${API_BASE_URL}/${car.coverImage}`}
                 alt={car.name}
                 className="w-full h-full rounded-[15px] object-cover"
               />
