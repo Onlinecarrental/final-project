@@ -24,15 +24,15 @@ const connectToDatabase = async () => {
 };
 
 
-app.use('/api/blogs', blogRoutes);
-app.use('/api/categories', categoryRoutes);
-app.use('/api/cars', carRoutes);
-app.use('/api/contact', contactRoutes);
-app.use('/api/reviews', reviewRoutes);
-app.use('/api/homepage', homepageRoutes);
-app.use('/api/about', aboutRoutes);
-app.use('/api/chats', chatRoutes);
-app.use('/api/bookings', bookingRoutes);
-app.use('/api/payments', paymentRoutes);
+app.use('/blogs', blogRoutes);
+app.use('/categories', categoryRoutes);
+app.use('/cars', carRoutes);
+app.use('/contact', contactRoutes);
+app.use('/reviews', reviewRoutes);
+app.use('/homepage', homepageRoutes);
+app.use('/about', aboutRoutes);
+app.use('/chats', chatRoutes);
+app.use('/bookings', bookingRoutes);
+app.use('/payments', paymentRoutes);
 
 module.exports.handler = serverless(app);
