@@ -60,7 +60,7 @@ export default function AllREviews() {
         formDataToSend.append('text', formData.text.trim());
         
         if (formData.image) {
-          formDataToSend.append('profileImage', formData.image);
+          formDataToSend.append('image', formData.image);
         }
 
         for (let pair of formDataToSend.entries()) {
