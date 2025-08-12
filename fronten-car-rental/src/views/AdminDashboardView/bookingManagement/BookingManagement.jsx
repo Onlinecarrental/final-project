@@ -411,7 +411,7 @@ export default function BlogManagement() {
                 <div>
                   <label className="block text-sm text-gray-600 mb-1">Blog Content</label>
                   <Editor
-                    apiKey='fhl6hkp9ey2qhsq7dxxtedvbfdvafzn51t7e3b3a51g5vt2t'
+                    apiKey='3o5n0gl714tqk3nk5ua2hx7cu51hu7lcvehwn7otso8niq1y'
                     init={{
                       height: 500,
                       plugins: [
