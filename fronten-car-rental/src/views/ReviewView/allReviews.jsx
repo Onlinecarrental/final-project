@@ -16,7 +16,7 @@ export default function AllREviews() {
     const fetchReviews = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('http://localhost:5000/api/reviews');
+        const response = await axios.get('https://backend-car-rental-production.up.railway.app/api/reviews');
         if (response.data.success) {
           setTestimonials(response.data.data);
         }
@@ -68,7 +68,7 @@ export default function AllREviews() {
         }
 
         const response = await axios.post(
-          'http://localhost:5000/api/reviews',
+          'https://backend-car-rental-production.up.railway.app/api/reviews',
           formDataToSend,
           {
             headers: {
@@ -272,7 +272,7 @@ export default function AllREviews() {
               <div className="flex items-center">
                 <div className="mr-3">
                   <img
-                    src={`http://localhost:5000${review.image}`}
+                    src={review.image ? review.image : "/images/default-avatar.jpg"}
                     alt={review.name}
                     className="w-10 h-10 rounded-full object-cover"
                     onError={(e) => {

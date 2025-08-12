@@ -119,7 +119,7 @@ export default function ReviewManagement() {
                   ) : (
                     <div className="flex items-center">
                       <img
-                        src={`/.netlify/functions/api${review.image}`}
+                        src={review.image ? review.image : "/images/default-avatar.jpg"}
                         alt={review.name}
                         className="h-10 w-10 rounded-full"
                         onError={(e) => {
