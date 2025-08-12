@@ -11,15 +11,12 @@ export default function AllCustomerREviews() {
   const [currentPage, setCurrentPage] = useState(1);
   const reviewsPerPage = 9;
 
-  const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
-  const CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1/dlinqw87p/image/upload";
-  
   // Fetch reviews from backend
   useEffect(() => {
     const fetchReviews = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`${API_BASE_URL}/reviews`);
+        const response = await axios.get('http://localhost:5000/api/reviews');
         if (response.data.success) {
           setTestimonials(response.data.data);
         }
@@ -71,7 +68,7 @@ export default function AllCustomerREviews() {
         }
 
         const response = await axios.post(
-          `${API_BASE_URL}/reviews`,
+          'http://localhost:5000/api/reviews',
           formDataToSend,
           {
             headers: {
@@ -108,35 +105,6 @@ export default function AllCustomerREviews() {
         text: formData.text,
         hasImage: !!formData.image
       });
-    };
-
-    const handleImageUpload = async (e, imageType) => {
-      const file = e.target.files[0];
-      if (file) {
-        const formData = new FormData();
-        formData.append('file', file);
-        try {
-          const res = await fetch(CLOUDINARY_UPLOAD_URL, {
-            method: 'POST',
-            body: formData
-          });
-          const data = await res.json();
-          if (data.secure_url) {
-            setFormData(prev => ({
-              ...prev,
-              [imageType]: data.secure_url
-            }));
-            // setImagePreviews(prev => ({ // This line was not in the new_code, so it's removed.
-            //   ...prev,
-            //   [imageType]: data.secure_url
-            // }));
-          } else {
-            alert('Failed to upload image to Cloudinary');
-          }
-        } catch (err) {
-          alert('Image upload error: ' + err.message);
-        }
-      }
     };
 
     return (
@@ -200,12 +168,21 @@ export default function AllCustomerREviews() {
               <input
                 type="file"
                 accept="image/*"
-                onChange={(e) => handleImageUpload(e, 'image')}
+                onChange={(e) => {
+                  const file = e.target.files[0];
+                  if (file) {
+                    setFormData(prev => ({
+                      ...prev,
+                      image: file,
+                      imagePreview: URL.createObjectURL(file)
+                    }));
+                  }
+                }}
                 className="w-full"
               />
-              {formData.image && (
+              {formData.imagePreview && (
                 <img
-                  src={formData.image}
+                  src={formData.imagePreview}
                   alt="Preview"
                   className="mt-2 w-20 h-20 rounded-full object-cover"
                 />
@@ -295,7 +272,7 @@ export default function AllCustomerREviews() {
               <div className="flex items-center">
                 <div className="mr-3">
                   <img
-                    src={`/.netlify/functions/api${review.image}`}
+                    src={`http://localhost:5000${review.image}`}
                     alt={review.name}
                     className="w-10 h-10 rounded-full object-cover"
                     onError={(e) => {
