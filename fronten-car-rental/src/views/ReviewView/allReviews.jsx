@@ -3,6 +3,8 @@ import axios from 'axios';
 import BaseCard from '../../components/card';
 import { Plus, Star } from 'lucide-react';
 
+const API_BASE_URL = 'https://backend-car-rental-production.up.railway.app/api';
+
 export default function AllREviews() {
   const [showForm, setShowForm] = useState(false);
   const [testimonials, setTestimonials] = useState([]);
@@ -16,7 +18,7 @@ export default function AllREviews() {
     const fetchReviews = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('https://backend-car-rental-production.up.railway.app/api/reviews');
+        const response = await axios.get(`${API_BASE_URL}/reviews`);
         if (response.data.success) {
           setTestimonials(response.data.data);
         }
@@ -55,12 +57,12 @@ export default function AllREviews() {
         console.log('Submitting form data:', formData);
 
         const formDataToSend = new FormData();
-        formDataToSend.append('name', formData.name.trim());
+        formDataToSend.append('name', formData.name);
         formDataToSend.append('rating', formData.rating);
-        formDataToSend.append('text', formData.text.trim());
+        formDataToSend.append('text', formData.text);
         
         if (formData.image) {
-          formDataToSend.append('image', formData.image);
+          formDataToSend.append('image', formData.image); // Must be 'image'
         }
 
         for (let pair of formDataToSend.entries()) {
@@ -68,7 +70,7 @@ export default function AllREviews() {
         }
 
         const response = await axios.post(
-          'https://backend-car-rental-production.up.railway.app/api/reviews',
+          `${API_BASE_URL}/reviews`,
           formDataToSend,
           {
             headers: {
@@ -274,10 +276,8 @@ export default function AllREviews() {
                   <img
                     src={review.image ? review.image : "/images/default-avatar.jpg"}
                     alt={review.name}
-                    className="w-10 h-10 rounded-full object-cover"
-                    onError={(e) => {
-                      e.target.src = '/images/default-avatar.jpg';
-                    }}
+                    className="h-10 w-10 rounded-full"
+                    onError={(e) => { e.target.src = '/images/default-avatar.jpg'; }}
                   />
                 </div>
                 <div className="flex flex-col">
