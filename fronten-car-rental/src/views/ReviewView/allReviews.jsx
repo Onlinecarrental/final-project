@@ -3,7 +3,7 @@ import axios from 'axios';
 import BaseCard from '../../components/card';
 import { Plus, Star } from 'lucide-react';
 
-export default function AllCustomerREviews() {
+export default function AllREviews() {
   const [showForm, setShowForm] = useState(false);
   const [testimonials, setTestimonials] = useState([]);
   const [loading, setLoading] = useState(true);
