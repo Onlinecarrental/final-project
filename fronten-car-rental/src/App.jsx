@@ -13,7 +13,7 @@ import BookingView from './views/BookingFormView/bookingFormView';
 import CustomerChat from './views/CustomerChatView/CustomerChat';
 import AgentChat from './views/AgentsPanelView/agentMsgView/AgentChat';
 import CarRentalLoginScreen from './views/HomeView/mainHompage';
- import CustomerReviewView from './views/customerReviewView/customerReviewView';
+import CustomerReviewView from './views/customerReviewView/customerReviewView';
 import Login from './components/login';
 import Signup from './components/signup';
 import MainLayout from './components/mainLayout';
