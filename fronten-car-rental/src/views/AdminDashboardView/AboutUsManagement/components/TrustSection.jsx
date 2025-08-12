@@ -34,14 +34,12 @@ export default function TrustSection({ sections, setSections, editingSection, se
   const bannerImageRef = useRef(null);
 
   const CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1/dlinqw87p/image/upload";
-  const CLOUDINARY_UPLOAD_PRESET = "YOUR_UPLOAD_PRESET"; // Replace with your actual preset
-
+ 
   const handleImageUpload = async (e, imageType) => {
     const file = e.target.files[0];
     if (file) {
       const formData = new FormData();
       formData.append('file', file);
-      formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
       try {
         const res = await fetch(CLOUDINARY_UPLOAD_URL, {
           method: 'POST',

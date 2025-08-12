@@ -73,33 +73,24 @@ export default function BlogManagement() {
     setFormData(prev => ({ ...prev, content }));
   };
 
-  const handleImageUpload = async (e, imageType) => {
+  const handleImageUpload = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-      try {
-        const res = await fetch(CLOUDINARY_UPLOAD_URL, {
-          method: 'POST',
-          body: formData
-        });
-        const data = await res.json();
-        if (data.secure_url) {
-          setFormData(prev => ({
-            ...prev,
-            [imageType]: data.secure_url
-          }));
-          setImagePreviews(prev => ({
-            ...prev,
-            [imageType]: data.secure_url
-          }));
-        } else {
-          alert('Failed to upload image to Cloudinary');
-        }
-      } catch (err) {
-        alert('Image upload error: ' + err.message);
-      }
+    if (!file) return;
+
+    // Validate file size (2MB max)
+    try {
+      validateFileSize(file, 2 * 1024 * 1024);
+      validateFileType(file, ['image/jpeg', 'image/png', 'image/gif']);
+      const previewUrl = URL.createObjectURL(file);
+
+      setFormData(prev => ({
+        ...prev,
+        image: file,
+        imagePreview: previewUrl
+      }));
+    } catch (error) {
+      e.target.value = '';
+      alert(error.message);
     }
   };
 
