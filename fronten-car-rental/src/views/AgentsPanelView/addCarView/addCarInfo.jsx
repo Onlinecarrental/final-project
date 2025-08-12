@@ -139,10 +139,8 @@ export default function AddCarInfo() {
     }));
   };
 
-  const CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1/dlinqw87p/image/upload";
-  
   // Handle image upload
-  const handleImageUpload = async (e, imageType) => {
+  const handleImageUpload = (e, imageType) => {
     const file = e.target.files[0];
     if (file) {
       if (!file.type.startsWith('image/')) {
@@ -153,30 +151,14 @@ export default function AddCarInfo() {
         alert('Image size should be less than 5MB');
         return;
       }
-      // Upload to Cloudinary
-      const formDataCloud = new FormData();
-      formDataCloud.append('file', file);
-      try {
-        const res = await fetch(CLOUDINARY_UPLOAD_URL, {
-          method: 'POST',
-          body: formDataCloud
-        });
-        const data = await res.json();
-        if (data.secure_url) {
-          setFormData(prev => ({
-            ...prev,
-            [imageType]: data.secure_url
-          }));
-          setImagePreviews(prev => ({
-            ...prev,
-            [imageType]: data.secure_url
-          }));
-        } else {
-          alert('Failed to upload image to Cloudinary');
-        }
-      } catch (err) {
-        alert('Image upload error: ' + err.message);
-      }
+      setFormData(prev => ({
+        ...prev,
+        [imageType]: file // Store the file object, not a URL
+      }));
+      setImagePreviews(prev => ({
+        ...prev,
+        [imageType]: URL.createObjectURL(file) // For preview only
+      }));
     }
   };
 

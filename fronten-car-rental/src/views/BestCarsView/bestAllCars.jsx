@@ -95,7 +95,7 @@ export default function AllBestCars() {
           <BaseCard width='w-[380px]' padding='p-[8px]' height='h-full' key={car._id}>
             <div className="relative h-48 overflow-hidden">
               <img
-                src={`http://localhost:5000/${car.coverImage}`}
+                src={car.coverImage ? car.coverImage : "/default-car.jpg"}
                 alt={car.name}
                 className="w-full h-full rounded-[15px] object-cover"
               />
