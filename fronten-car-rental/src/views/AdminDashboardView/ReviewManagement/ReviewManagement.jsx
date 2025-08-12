@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Trash2, Star, Edit, Save, RotateCcw } from 'lucide-react'; // Update imports
+import { Trash2, Star, Edit, Save, RotateCcw } from 'lucide-react';
 
 export default function ReviewManagement() {
   const [reviews, setReviews] = useState([]);
@@ -29,16 +29,6 @@ export default function ReviewManagement() {
     }
   };
 
-  const handleStatusUpdate = async (id, status) => {
-    try {
-      const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
-      await axios.patch(`${API_BASE_URL}/reviews/${id}/status`, { status });
-      fetchReviews();
-    } catch (error) {
-      console.error('Error updating review:', error);
-    }
-  };
-
   const handleEdit = (review) => {
     setEditingId(review._id);
     setEditForm({
@@ -57,7 +47,7 @@ export default function ReviewManagement() {
       );
 
       if (response.data.success) {
-        setReviews(reviews.map(review => 
+        setReviews(reviews.map(review =>
           review._id === id ? { ...review, ...editForm } : review
         ));
         setEditingId(null);
@@ -74,7 +64,7 @@ export default function ReviewManagement() {
       try {
         const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
         const response = await axios.delete(`${API_BASE_URL}/reviews/${id}`);
-        
+
         if (response.data.success) {
           setReviews(reviews.filter(review => review._id !== id));
           alert('Review deleted successfully!');
@@ -92,7 +82,6 @@ export default function ReviewManagement() {
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-6">Review Management</h1>
-      
       <div className="bg-white rounded-lg shadow overflow-hidden">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
@@ -100,7 +89,6 @@ export default function ReviewManagement() {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Customer</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Rating</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Review</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
             </tr>
@@ -162,15 +150,6 @@ export default function ReviewManagement() {
                   ) : (
                     <p className="text-sm text-gray-900 line-clamp-2">{review.text}</p>
                   )}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                    review.status === 'approved' ? 'bg-green-100 text-green-800' :
-                    review.status === 'rejected' ? 'bg-red-100 text-red-800' :
-                    'bg-yellow-100 text-yellow-800'
-                  }`}>
-                    {review.status}
-                  </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {new Date(review.createdAt).toLocaleDateString()}
