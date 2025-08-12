@@ -94,7 +94,7 @@ export default function CustomerTestimonials() {
               <div className="flex items-center">
                 <div className="mr-3">
                   <img
-                    src={`/.netlify/functions/api${testimonial.image}`}
+                    src={testimonial.image ? testimonial.image : "/images/default-avatar.jpg"}
                     alt={testimonial.name}
                     className="w-10 h-10 rounded-full object-cover"
                     onError={(e) => {
