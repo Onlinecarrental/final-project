@@ -5,7 +5,6 @@ import {
   User,
   BarChart2,
   Users,
-  Settings,
   LogOut,
   ChevronDown,
   Activity,
@@ -221,313 +220,9 @@ function ProductsContent() {
   );
 }
 
-function MessagesContent() {
-  const [chats, setChats] = useState([]);
-  const [selectedChat, setSelectedChat] = useState(null);
-  const [messages, setMessages] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [messageLoading, setMessageLoading] = useState(false);
-  const [newMessage, setNewMessage] = useState('');
-  const [showInactive, setShowInactive] = useState(false);
 
-  // Fetch all chats
-  useEffect(() => {
-    const fetchChats = async () => {
-      try {
-        const url = new URL(`${API_BASE_URL}/chats/all`);
-        if (showInactive) {
-          url.searchParams.append('includeInactive', 'true');
-        }
 
-        const response = await fetch(url, {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          }
-        });
-        const data = await response.json();
-        setChats(data.data || []);
-      } catch (error) {
-        console.error('Error fetching chats:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
 
-    fetchChats();
-  }, [showInactive]);
-
-  // Fetch messages for selected chat
-  useEffect(() => {
-    if (!selectedChat) return;
-
-    const fetchMessages = async () => {
-      setMessageLoading(true);
-      try {
-        const response = await fetch(`${API_BASE_URL}/chats/${selectedChat._id}/messages`, {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          }
-        });
-        const data = await response.json();
-        setMessages(data.data || []);
-      } catch (error) {
-        console.error('Error fetching messages:', error);
-      } finally {
-        setMessageLoading(false);
-      }
-    };
-
-    fetchMessages();
-  }, [selectedChat]);
-
-  const handleSendMessage = async (e) => {
-    e.preventDefault();
-    if (!newMessage.trim() || !selectedChat) return;
-
-    try {
-      const response = await fetch(`${API_BASE_URL}/chats/messages`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify({
-          chatId: selectedChat._id,
-          senderId: 'admin',
-          sender: 'admin',
-          text: newMessage,
-          user: {
-            name: 'Admin',
-            _id: 'admin'
-          }
-        })
-      });
-
-      if (response.ok) {
-        const newMsg = await response.json();
-
-        // Update messages in the current view
-        setMessages(prev => [...prev, newMsg.data]);
-        setNewMessage('');
-
-        // Update the chat in the chats list with the new last message
-        setChats(prevChats =>
-          prevChats.map(chat =>
-            chat._id === selectedChat._id
-              ? {
-                ...chat,
-                lastMessage: {
-                  text: newMessage,
-                  timestamp: new Date(),
-                  sender: 'admin'
-                },
-                updatedAt: new Date().toISOString()
-              }
-              : chat
-          )
-        );
-
-        // Move the updated chat to the top of the list
-        setChats(prevChats => [
-          ...prevChats.filter(c => c._id === selectedChat._id),
-          ...prevChats.filter(c => c._id !== selectedChat._id)
-        ]);
-      }
-    } catch (error) {
-      console.error('Error sending message:', error);
-    }
-  };
-
-  const handleCloseChat = async () => {
-    if (!selectedChat) return;
-
-    if (window.confirm('Are you sure you want to close this chat? This will archive the conversation.')) {
-      try {
-        const response = await fetch(`${API_BASE_URL}/chats/${selectedChat._id}/close`, {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          },
-          body: JSON.stringify({
-            userId: selectedChat.userId?._id
-          })
-        });
-
-        if (response.ok) {
-          // Remove the chat from the list
-          setChats(prevChats => prevChats.filter(chat => chat._id !== selectedChat._id));
-          setSelectedChat(null);
-          setMessages([]);
-        }
-      } catch (error) {
-        console.error('Error closing chat:', error);
-      }
-    }
-  };
-
-  return (
-    <div className="flex flex-col h-full">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Chat Management</h1>
-        <div className="flex items-center space-x-4">
-          <label className="flex items-center space-x-2 cursor-pointer">
-            <span className="text-sm font-medium text-gray-700">Show Inactive Chats</span>
-            <div className="relative">
-              <input
-                type="checkbox"
-                className="sr-only"
-                checked={showInactive}
-                onChange={() => setShowInactive(!showInactive)}
-              />
-              <div className={`w-12 h-6 rounded-full shadow-inner transition-colors duration-200 ${showInactive ? 'bg-blue-500' : 'bg-gray-300'
-                }`}></div>
-              <div className={`absolute left-1 top-1 w-4 h-4 bg-white rounded-full shadow-md transform transition-transform duration-200 ${showInactive ? 'translate-x-6' : 'translate-x-0'
-                }`}></div>
-            </div>
-          </label>
-        </div>
-      </div>
-
-      <div className="flex-1 flex gap-6 h-[calc(100vh-200px)]">
-        {/* Chat List */}
-        <div className="w-1/3 bg-white rounded-lg shadow p-4 overflow-y-auto">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold">
-              {showInactive ? 'All Chats' : 'Active Chats'}
-            </h2>
-            <span className="text-sm text-gray-500">{chats.length} {chats.length === 1 ? 'chat' : 'chats'}</span>
-          </div>
-          {loading ? (
-            <p>Loading chats...</p>
-          ) : chats.length === 0 ? (
-            <p className="text-gray-500">No active chats</p>
-          ) : (
-            <div className="space-y-2">
-              {chats.map(chat => (
-                <div
-                  key={chat._id}
-                  onClick={() => setSelectedChat(chat)}
-                  className={`p-3 rounded-lg cursor-pointer hover:bg-gray-100 ${selectedChat?._id === chat._id ? 'bg-blue-50 border-l-4 border-blue-500' : ''
-                    }`}
-                >
-                  <div className="font-medium">
-                    {chat.userId?.name || 'Customer'}
-                    {chat.agentId && ` ↔ ${chat.agentId.name}`}
-                  </div>
-                  <div className="text-sm text-gray-600 truncate">
-                    {chat.lastMessage?.text || 'No messages yet'}
-                  </div>
-                  <div className="text-xs text-gray-400">
-                    {chat.updatedAt ? new Date(chat.updatedAt).toLocaleString() : ''}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Chat Messages */}
-        <div className="flex-1 flex flex-col bg-white rounded-lg shadow overflow-hidden">
-          {selectedChat ? (
-            <>
-              <div className="p-4 border-b bg-gray-50 flex justify-between items-center">
-                <div>
-                  <h2 className="text-lg font-semibold">
-                    {selectedChat.userId?.name || 'Customer'}
-                    {selectedChat.agentId && ` ↔ ${selectedChat.agentId.name}`}
-                  </h2>
-                  <p className="text-sm text-gray-500">
-                    Booking: {selectedChat.bookingDetails?.carName || 'N/A'}
-                  </p>
-                </div>
-                <button
-                  onClick={handleCloseChat}
-                  className="px-3 py-1 text-sm bg-red-100 text-red-600 rounded-md hover:bg-red-200 transition-colors"
-                  title="Close Chat"
-                >
-                  Close Chat
-                </button>
-              </div>
-
-              <div className="flex-1 p-4 overflow-y-auto">
-                {messageLoading ? (
-                  <div className="flex justify-center items-center h-full">
-                    <p>Loading messages...</p>
-                  </div>
-                ) : messages.length === 0 ? (
-                  <div className="flex justify-center items-center h-full text-gray-500">
-                    No messages in this chat yet
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    {messages.map((message) => (
-                      <div
-                        key={message._id}
-                        className={`flex ${message.sender === 'admin' ? 'justify-end' : 'justify-start'
-                          }`}
-                      >
-                        <div
-                          className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${message.sender === 'admin'
-                            ? 'bg-blue-500 text-white'
-                            : message.sender === 'agent'
-                              ? 'bg-green-100'
-                              : 'bg-gray-100'
-                            }`}
-                        >
-                          <div className="font-medium text-xs text-gray-600 mb-1">
-                            {message.user?.name || message.sender}
-                          </div>
-                          <div>{message.text}</div>
-                          <div className="text-right text-xs mt-1 opacity-70">
-                            {new Date(message.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              <form onSubmit={handleSendMessage} className="p-4 border-t">
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={newMessage}
-                    onChange={(e) => setNewMessage(e.target.value)}
-                    placeholder="Type a message..."
-                    className="flex-1 border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                  <button
-                    type="submit"
-                    className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                  >
-                    Send
-                  </button>
-                </div>
-              </form>
-            </>
-          ) : (
-            <div className="flex justify-center items-center h-full text-gray-500">
-              Select a chat to view messages
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function SettingsContent() {
-  return (
-    <div>
-      <h1 className="text-2xl font-bold mb-6">Settings</h1>
-      <div className="bg-white rounded-lg shadow p-5">
-        <p className="text-gray-600">This is the settings panel.</p>
-      </div>
-    </div>
-  );
-}
 
 // Add BlogContent component after other content components
 function BlogContent() {
@@ -650,8 +345,7 @@ export default function AdminDashboard() {
         return <DashboardContent />;
       case 'bookings':
         return <BookingManagement />;
-      case 'messages':
-        return <MessagesContent />;
+     
       case 'blogs':
         return <BlogContent />;
       case 'categories':
@@ -734,14 +428,7 @@ export default function AdminDashboard() {
             isActive={activeTab === 'blogs'}
             onClick={() => setActiveTab('blogs')}
           />
-          <SidebarItem
-            icon={<MessageSquare size={20} />}
-            text="Messages"
-            isOpen={sidebarOpen}
-            isActive={activeTab === 'messages'}
-            onClick={() => setActiveTab('messages')}
-            badge="5"
-          />
+        
           <SidebarItem
             icon={<Folder size={20} />}
             text="Categories"
@@ -763,13 +450,7 @@ export default function AdminDashboard() {
             isActive={activeTab === 'payments'}
             onClick={() => setActiveTab('payments')}
           />
-          <SidebarItem
-            icon={<Settings size={20} />}
-            text="Settings"
-            isOpen={sidebarOpen}
-            isActive={activeTab === 'settings'}
-            onClick={() => setActiveTab('settings')}
-          />
+          
           <SidebarItem
             icon={<MessageSquare size={20} />}
             text="Admin Chat"
