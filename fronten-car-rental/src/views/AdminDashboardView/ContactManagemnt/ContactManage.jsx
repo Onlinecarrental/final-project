@@ -41,6 +41,24 @@ export default function ContactManagement() {
     setLoading(false);
   };
 
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this contact?")) return;
+    try {
+      const res = await fetch(`${API_BASE_URL}/contact/${id}`, {
+        method: "DELETE"
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error);
+      } else {
+        alert("Contact deleted!");
+        setContacts(contacts.filter(c => c._id !== id));
+      }
+    } catch (err) {
+      alert("Failed: " + err.message);
+    }
+  };
+
   return (
     <div className="p-8">
       <h1 className="text-3xl font-bold mb-6">Contact Management</h1>
@@ -54,6 +72,13 @@ export default function ContactManagement() {
               <p><b>Message:</b> {contact.message}</p>
               <p><b>Status:</b> {contact.replied ? "Replied" : "Pending"}</p>
               {contact.replied && <p><b>Reply:</b> {contact.replyContent}</p>}
+              <Button
+                title="Delete"
+                onClick={() => handleDelete(contact._id)}
+                width="100px"
+                height="35px"
+                style={{ backgroundColor: "#dc2626", color: "#fff", marginTop: "10px" }}
+              />
               {!contact.replied && (
                 <div className="mt-4">
                   <textarea
