@@ -71,7 +71,7 @@ const CarBrandsGrid = () => {
     <div className= "w-full">
 
       {/* rent by Brands */}
-      
+      <div>rent by Brands</div>
     <div className="grid grid-cols-2 max-w-[900px]  mx-auto md:grid-cols-3 lg:grid-cols-6 gap-4">
       {carBrands.map((brand) => (
         <BaseCard
@@ -96,7 +96,7 @@ const CarBrandsGrid = () => {
     </div>
 
       {/* rent by body type */}
-
+<div>rent by body type</div>
     <div className="grid grid-cols-2 max-w-[900px] mt-20 mx-auto md:grid-cols-3 lg:grid-cols-6 gap-4">
       {bodyType.map((brand) => (
         <BaseCard

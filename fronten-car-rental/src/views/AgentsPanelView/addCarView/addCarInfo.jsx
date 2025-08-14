@@ -327,6 +327,14 @@ export default function AddCarInfo() {
     }
   };
 
+  // Car Brands and Body Types
+  const carBrands = [
+    "Toyota", "BMW", "Mercedes-Benz", "Honda", "Suzuki", "Nissan", "KIA", "Ford", "Tesla", "Hyundai", "Audi", "Peugeot"
+  ];
+  const carBodyTypes = [
+    "SUV", "Crossover", "Wagon", "Family MPV", "Sport Coupe", "Compact", "Coupe", "Sedan", "Limousine", "Convertible", "Off-Road"
+  ];
+
   // Update the form title based on mode
   return (
     <form onSubmit={handleSubmit} className="max-w-7xl mx-auto">
@@ -483,15 +491,23 @@ export default function AddCarInfo() {
           {/* Categories Field */}
           <div>
             <label htmlFor="categories" className="block text-xl font-medium mb-1">Categories</label>
-            <input
-              type="text"
+            <select
               id="categories"
               name="categories"
               value={formData.categories}
               onChange={handleChange}
-              placeholder="Enter Car Categories"
-              className="w-full p-3 bg-gray rounded text-black placeholder-white"
-            />
+              className="w-full p-3 bg-gray rounded text-black"
+            >
+              <option value="">Select Brand</option>
+              {carBrands.map(brand => (
+                <option key={brand} value={brand}>{brand}</option>
+              ))}
+              <option disabled>──────────</option>
+              <option value="">Select Body Type</option>
+              {carBodyTypes.map(type => (
+                <option key={type} value={type}>{type}</option>
+              ))}
+            </select>
           </div>
 
           {/* Transmission Field */}
@@ -550,8 +566,8 @@ export default function AddCarInfo() {
             />
           </div>
 
-          {/* Weekly Rate Field */}
-          <div>
+          {/* REMOVE Weekly Rate Field */}
+          {/* <div>
             <label htmlFor="weeklyRate" className="block text-xl font-medium mb-1">Weekly Fare</label>
             <input
               type="text"
@@ -562,7 +578,7 @@ export default function AddCarInfo() {
               placeholder="Enter Weekly Fare"
               className="w-full p-3 bg-gray rounded text-black placeholder-white"
             />
-          </div>
+          </div> */}
         </div>
       </div>
 
