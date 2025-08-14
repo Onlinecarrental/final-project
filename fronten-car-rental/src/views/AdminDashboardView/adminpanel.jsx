@@ -26,6 +26,7 @@ import AboutUsManagement from './AboutUsManagement/AboutUsManagement';
 import AdminChat from './AdminChat';
 import BookingManagement from './bookingManagement/BookingManagement';
 import PaymentManagement from './paymentManagemnt/PaymentManagement';
+import ContactManagement from "./ContactManagemnt/ContactManage";
 
 function SidebarItem({ icon, text, isOpen, isActive, onClick, badge }) {
   return (
@@ -358,6 +359,8 @@ export default function AdminDashboard() {
         return <AdminChat />;
       case 'payments':
         return <PaymentManagement />;
+      case 'contactmanagement':
+        return <ContactManagement />;
       default:
         return <DashboardContent />;
     }
@@ -457,6 +460,13 @@ export default function AdminDashboard() {
             isOpen={sidebarOpen}
             isActive={activeTab === 'adminchat'}
             onClick={() => setActiveTab('adminchat')}
+          />
+          <SidebarItem
+            icon={<MessageSquare size={20} />}
+            text="Contact Management"
+            isOpen={sidebarOpen}
+            isActive={activeTab === 'contactmanagement'}
+            onClick={() => setActiveTab('contactmanagement')}
           />
           <div className="mt-auto pt-5">
             <SidebarItem
