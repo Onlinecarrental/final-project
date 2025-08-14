@@ -18,7 +18,7 @@ export default function CarDetailCard() {
         setError(null);
         
         console.log('Fetching car details for ID:', id);
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/cars/${id}`);
+        const response = await axios.get(`https://backend-car-rental-production.up.railway.app/api/cars/${id}`);
         
         // Log the full response structure
         console.log('Full response:', {
@@ -97,10 +97,11 @@ export default function CarDetailCard() {
         {/* Images Section */}
         <div>
           <img
-            src={`/.netlify/functions/api/${car.coverImage}`}
+            src={car.coverImage || "/default-car.jpg"}
             alt={car.name}
             className="w-full h-[400px] object-cover rounded-lg"
           />
+
           <div className="mt-4">
             <Swiper spaceBetween={10} slidesPerView={4}>
               {[car.image1, car.image2, car.image3, car.image4]
@@ -108,7 +109,7 @@ export default function CarDetailCard() {
                 .map((image, idx) => (
                   <SwiperSlide key={idx}>
                     <img
-                      src={`/.netlify/functions/api/${image}`}
+                      src={image || "/default-car.jpg"}
                       alt={`View ${idx + 1}`}
                       className="w-full h-24 object-cover rounded-lg cursor-pointer"
                     />
@@ -123,6 +124,7 @@ export default function CarDetailCard() {
           <h1 className="text-3xl font-bold">{car.name}</h1>
           
           <div className="grid grid-cols-2 gap-4">
+            <div>Brand: {car.brand}</div>
             <div>Model: {car.model}</div>
             <div>Year: {car.year}</div>
             <div>Color: {car.color}</div>
@@ -133,7 +135,6 @@ export default function CarDetailCard() {
 
           <div className="bg-gray-100 p-4 rounded-lg">
             <h2 className="text-2xl font-bold">${car.dailyRate}/day</h2>
-            <p className="text-gray-600">Weekly Rate: ${car.weeklyRate}</p>
           </div>
 
           {car.features && (
