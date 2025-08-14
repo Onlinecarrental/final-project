@@ -222,7 +222,9 @@ export default function AddCarInfo() {
       const requiredFields = [
         "name",
         "model",
+        "brand",
         "year",
+
         "licenseNo",
         "color",
         "seats",
@@ -426,12 +428,12 @@ export default function AddCarInfo() {
  
          {/* Brand Field */}
           <div>
-            <label htmlFor="model" className="block text-lg font-medium mb-1">
+            <label htmlFor="brand" className="block text-lg font-medium mb-1">
               Brand
             </label>
             <select
-              id="model"
-              name="model"
+              id="brand"
+              name="brand"
               value={formData.brand}
               onChange={handleChange}
               className="w-full p-3 bg-gray rounded text-black"
