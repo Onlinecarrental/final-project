@@ -60,7 +60,7 @@ export default function HerosectionCar() {
 
     if (!window.google || !window.google.maps) {
       const script = document.createElement('script');
-      script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyA-yFdLVn5LA8iu81C2seW5nt6OHiAk5x0&libraries=places`;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyA-yFdLVn5LA8iu81C2seW5nt6OHiAk5x0&libraries=places&loading=async&v=weekly`;
       script.async = true;
       script.defer = true;
       script.onload = initAutocomplete;
