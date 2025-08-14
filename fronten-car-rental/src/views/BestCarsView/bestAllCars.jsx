@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useMemo } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+
 import axios from 'axios';
 import BaseCard from '../../components/card';
 
 export default function AllBestCars() {
   const navigate = useNavigate();
+  const locationHook = useLocation();
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -46,8 +48,28 @@ export default function AllBestCars() {
     </div>
   );
 
-  // Only show available cars
-  const availableCars = cars.filter(car => car.status === 'available');
+  // Parse query params for filtering
+  const query = useMemo(() => new URLSearchParams(locationHook.search), [locationHook.search]);
+  const filterBrand = query.get('brand')?.trim().toLowerCase() || '';
+  const filterCategory = query.get('categories')?.trim().toLowerCase() || '';
+  const filterCity = query.get('city')?.trim().toLowerCase() || '';
+  const sortPrice = query.get('price') === 'desc' ? 'desc' : 'asc';
+
+  // Only show available cars then filter by query params
+  const availableCars = useMemo(() => {
+    let list = cars.filter(car => car.status === 'available');
+    if (filterBrand) list = list.filter(c => (c.brand || '').toLowerCase() === filterBrand);
+    if (filterCategory) list = list.filter(c => (c.categories || '').toLowerCase() === filterCategory);
+    if (filterCity) list = list.filter(c => (c.city || '').toLowerCase().includes(filterCity));
+    // sort by dailyRate numeric
+    list = list.slice().sort((a,b) => {
+      const an = parseFloat(a.dailyRate) || 0;
+      const bn = parseFloat(b.dailyRate) || 0;
+      return sortPrice === 'desc' ? bn - an : an - bn;
+    });
+    return list;
+  }, [cars, filterBrand, filterCategory, filterCity, sortPrice]);
+
   const indexOfLastCar = currentPage * carsPerPage;
   const indexOfFirstCar = indexOfLastCar - carsPerPage;
   const currentCars = availableCars.slice(indexOfFirstCar, indexOfLastCar);

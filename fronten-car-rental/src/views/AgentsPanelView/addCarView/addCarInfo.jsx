@@ -17,6 +17,7 @@ export default function AddCarInfo() {
     year: "",
     licenseNo: "",
     color: "",
+    city: "",
     seats: "",
 
     // Features & Pricing
@@ -81,6 +82,7 @@ export default function AddCarInfo() {
               year: carData.year || "",
               licenseNo: carData.licenseNo || "",
               color: carData.color || "",
+              city: carData.city || "",
               seats: carData.seats || "",
               categories: carData.categories || "",
               transmission: carData.transmission || "",
@@ -225,6 +227,7 @@ export default function AddCarInfo() {
 
         "licenseNo",
         "color",
+        "city",
         "seats",
         "categories",
         "transmission",
@@ -505,6 +508,22 @@ export default function AddCarInfo() {
               value={formData.color}
               onChange={handleChange}
               placeholder="Enter Color"
+              className="w-full p-3 bg-gray rounded text-black placeholder-white"
+            />
+          </div>
+
+          {/* City Field */}
+          <div>
+            <label htmlFor="city" className="block text-lg font-medium mb-1">
+              City
+            </label>
+            <input
+              type="text"
+              id="city"
+              name="city"
+              value={formData.city}
+              onChange={handleChange}
+              placeholder="Enter City"
               className="w-full p-3 bg-gray rounded text-black placeholder-white"
             />
           </div>
