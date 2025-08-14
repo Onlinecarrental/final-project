@@ -690,19 +690,8 @@ export default function AddCarInfo() {
             />
           </div>
 
-          {/* REMOVE Weekly Rate Field */}
-          {/* <div>
-            <label htmlFor="weeklyRate" className="block text-xl font-medium mb-1">Weekly Fare</label>
-            <input
-              type="text"
-              id="weeklyRate"
-              name="weeklyRate"
-              value={formData.weeklyRate}
-              onChange={handleChange}
-              placeholder="Enter Weekly Fare"
-              className="w-full p-3 bg-gray rounded text-black placeholder-white"
-            />
-          </div> */}
+
+      
         </div>
       </div>
 
