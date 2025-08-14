@@ -25,8 +25,7 @@ export default function AddCarInfo() {
     fuelType: "",
     offRoader: "",
     dailyRate: "",
-    weeklyRate: "",
-
+ 
     // Images
     coverImage: null,
     image1: null,
@@ -88,7 +87,6 @@ export default function AddCarInfo() {
               fuelType: carData.fuelType || "",
               offRoader: carData.offRoader || "",
               dailyRate: carData.dailyRate || "",
-              weeklyRate: carData.weeklyRate || "",
               coverImage: null,
               image1: null,
               image2: null,
@@ -233,7 +231,7 @@ export default function AddCarInfo() {
         "fuelType",
         "offRoader",
         "dailyRate",
-        "weeklyRate",
+        
       ];
 
       const missingFields = requiredFields.filter((field) => !formData[field]);
