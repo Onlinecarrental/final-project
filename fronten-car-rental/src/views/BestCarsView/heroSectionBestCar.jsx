@@ -12,6 +12,9 @@ export default function HerosectionCar() {
   const [submitted, setSubmitted] = useState(false);
   const navigate = useNavigate();
   const locationInputRef = useRef(null);
+  const [suggestions, setSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const debounceRef = useRef(null);
 
   const handleSearch = () => {
     setSubmitted(true);
@@ -37,41 +40,33 @@ export default function HerosectionCar() {
     navigate(`/home/best-cars?${params.toString()}`);
   };
 
-  // Load Google Places Autocomplete (restricted to Pakistan)
+  // Geoapify autocomplete for Pakistan (no Google Maps)
   useEffect(() => {
-    const initAutocomplete = () => {
-      if (window.google && window.google.maps && window.google.maps.places) {
-        const input = locationInputRef.current;
-        if (!input) return;
-        const autocomplete = new window.google.maps.places.Autocomplete(input, {
-          types: ['(cities)'],
-          componentRestrictions: { country: 'pk' }
-        });
-        autocomplete.addListener('place_changed', () => {
-          const place = autocomplete.getPlace();
-          if (place && place.formatted_address) {
-            setLocation(place.formatted_address);
-          } else if (place && place.name) {
-            setLocation(place.name);
-          }
-        });
+    const fetchSuggestions = async () => {
+      const query = location.trim();
+      if (query.length < 2) {
+        setSuggestions([]);
+        return;
+      }
+      try {
+        const url = `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(query)}&limit=5&filter=countrycode:pk&apiKey=e2a3beb764264a55af57def094daddf0`;
+        const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+        const data = await res.json();
+        const items = (data.features || []).map(f => ({
+          id: f.properties.place_id || `${f.properties.lat},${f.properties.lon}`,
+          label: f.properties.formatted || f.properties.city || f.properties.name,
+        })).filter(x => !!x.label);
+        setSuggestions(items);
+      } catch (e) {
+        console.error('Geoapify autocomplete error:', e);
+        setSuggestions([]);
       }
     };
 
-    if (!window.google || !window.google.maps) {
-      const script = document.createElement('script');
-      script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyA-yFdLVn5LA8iu81C2seW5nt6OHiAk5x0&libraries=places&loading=async&v=weekly`;
-      script.async = true;
-      script.defer = true;
-      script.onload = initAutocomplete;
-      document.body.appendChild(script);
-      return () => {
-        document.body.removeChild(script);
-      };
-    } else {
-      initAutocomplete();
-    }
-  }, []);
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(fetchSuggestions, 300);
+    return () => debounceRef.current && clearTimeout(debounceRef.current);
+  }, [location]);
 
   return (
     <div className="relative w-full h-[500px] overflow-hidden">
@@ -150,8 +145,38 @@ export default function HerosectionCar() {
                 <div className="flex-1 min-w-[250px] relative z-[1px]">
                 <div className="text-sm text-start text-gray-600 mb-1">Location</div>
                 <label htmlFor="location">Location</label>
-                <input ref={locationInputRef} type="text" id="location" name="location" value={location} onChange={(e) => setLocation(e.target.value)} className="w-full p-2 rounded bg-white" />
-           
+                <input
+                  ref={locationInputRef}
+                  type="text"
+                  id="location"
+                  name="location"
+                  value={location}
+                  onChange={(e) => {
+                    setLocation(e.target.value);
+                    setShowSuggestions(true);
+                  }}
+                  onFocus={() => setShowSuggestions(true)}
+                  className="w-full p-2 rounded bg-white"
+                  autoComplete="off"
+                />
+                {showSuggestions && suggestions.length > 0 && (
+                  <div className="absolute left-0 right-0 mt-1 bg-white border rounded shadow z-20 max-h-60 overflow-auto">
+                    {suggestions.map(s => (
+                      <div
+                        key={s.id}
+                        className="p-2 hover:bg-gray-100 cursor-pointer text-left"
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          setLocation(s.label);
+                          setShowSuggestions(false);
+                          setSuggestions([]);
+                        }}
+                      >
+                        {s.label}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
 
