@@ -69,6 +69,9 @@ const CarBrandsGrid = () => {
     navigate(`/home/best-cars?categories=${encodeURIComponent(bodyType.toLowerCase())}`);
   };
   
+
+
+
   return (
     <div className="flex flex-col gap-4">
 
@@ -88,7 +91,7 @@ const CarBrandsGrid = () => {
             width='w-full'
             height='h-full'
             bgColor='bg-gray'
-            className="rounded-lg hover:bg-gray-100 transition-colors h-full"
+            className="rounded-lg hover:bg-gray-100 transition-colors p-0"
           >
             <div className="flex flex-col items-center justify-center p-4 h-full">
               <img 
@@ -117,7 +120,7 @@ const CarBrandsGrid = () => {
             width='w-full'
             height='h-full'
             bgColor='bg-gray'
-            className="rounded-lg hover:bg-gray-100 transition-colors h-full"
+            className="rounded-lg hover:bg-gray-100 transition-colors p-0"
           >
             <div className="flex flex-col items-center justify-center p-4 h-full">
               <img 
