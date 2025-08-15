@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react';
 import BaseCard from '../../components/card';
 import Button from '../../components/button';
 
-export default function CarRentalForm() {
-  const [pickupLocation, setPickupLocation] = useState('');
-  const [dropoffLocation, setDropoffLocation] = useState('');
-  const [pickupDate, setPickupDate] = useState('');
-  const [dropoffDate, setDropoffDate] = useState('');
+export default function HeroSectionCarForm() {
+  const [carModel, setCarModel] = useState('');
+  const [bodyType, setBodyType] = useState('');
+  const [location, setLocation] = useState('');
+  const [priceSort, setPriceSort] = useState('');
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -20,22 +20,17 @@ export default function CarRentalForm() {
   const validateForm = () => {
     const newErrors = {};
 
-    if (!pickupLocation.trim()) {
-      newErrors.pickupLocation = 'Pickup location is required';
+    if (!carModel.trim()) {
+      newErrors.carModel = 'Car model is required';
     }
-
-    if (!dropoffLocation.trim()) {
-      newErrors.dropoffLocation = 'Drop-off location is required';
+    if (!bodyType.trim()) {
+      newErrors.bodyType = 'Body type is required';
     }
-
-    if (!pickupDate) {
-      newErrors.pickupDate = 'Pickup date is required';
+    if (!location.trim()) {
+      newErrors.location = 'Location is required';
     }
-
-    if (!dropoffDate) {
-      newErrors.dropoffDate = 'Drop-off date is required';
-    } else if (pickupDate && dropoffDate && new Date(dropoffDate) < new Date(pickupDate)) {
-      newErrors.dropoffDate = 'Drop-off date must be after pickup date';
+    if (!priceSort) {
+      newErrors.priceSort = 'Please select a price sort option';
     }
 
     setErrors(newErrors);
@@ -51,77 +46,78 @@ export default function CarRentalForm() {
   const handleSubmit = () => {
     setMessage('✅ Form submitted successfully!');
     console.log('Form submitted:', {
-      pickupLocation,
-      dropoffLocation,
-      pickupDate,
-      dropoffDate,
+      carModel,
+      bodyType,
+      location,
+      priceSort,
     });
-   
-   
     setIsSubmitting(false);
   };
 
-   
   return (
     <div className="w-full flex justify-center relative bottom-16 items-center">
       <BaseCard width="max-w-[1280px]" height="auto" padding="24px">
         <div className="grid grid-cols-1 md:grid-cols-5 p-7 gap-4">
-          {/* Drop-off Location */}
+          {/* Car Model */}
           <div className="flex flex-col">
-            <label className="mb-2 text-sm font-medium text-gray-700">Drop-off Location</label>
+            <label className="mb-2 text-sm font-medium text-gray-700">Car Model</label>
             <input
               type="text"
               className={`pl-4 w-full py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
-                errors.dropoffLocation ? 'border-red-500' : 'border-gray-300'
+                errors.carModel ? 'border-red-500' : 'border-gray-300'
               }`}
-              placeholder="Search a location"
-              value={dropoffLocation}
-              onChange={(e) => setDropoffLocation(e.target.value)}
+              placeholder="Enter car model"
+              value={carModel}
+              onChange={(e) => setCarModel(e.target.value)}
             />
-            {errors.dropoffLocation && <p className="mt-1 text-xs text-red-500">{errors.dropoffLocation}</p>}
+            {errors.carModel && <p className="mt-1 text-xs text-red-500">{errors.carModel}</p>}
           </div>
 
-          {/* Pick-up Location */}
+          {/* Body Type */}
           <div className="flex flex-col">
-            <label className="mb-2 text-sm font-medium text-gray-700">Pick-up Location</label>
+            <label className="mb-2 text-sm font-medium text-gray-700">Body Type</label>
             <input
               type="text"
               className={`pl-4 w-full py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
-                errors.pickupLocation ? 'border-red-500' : 'border-gray-300'
+                errors.bodyType ? 'border-red-500' : 'border-gray-300'
               }`}
-              placeholder="Search a location"
-              value={pickupLocation}
-              onChange={(e) => setPickupLocation(e.target.value)}
+              placeholder="Enter body type"
+              value={bodyType}
+              onChange={(e) => setBodyType(e.target.value)}
             />
-            {errors.pickupLocation && <p className="mt-1 text-xs text-red-500">{errors.pickupLocation}</p>}
+            {errors.bodyType && <p className="mt-1 text-xs text-red-500">{errors.bodyType}</p>}
           </div>
 
-          {/* Pick-up Date */}
+          {/* Location */}
           <div className="flex flex-col">
-            <label className="mb-2 text-sm font-medium text-gray-700">Pick-up date</label>
+            <label className="mb-2 text-sm font-medium text-gray-700">Location</label>
             <input
-              type="date"
-              className={`w-full py-2 px-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
-                errors.pickupDate ? 'border-red-500' : 'border-gray-300'
+              type="text"
+              className={`pl-4 w-full py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+                errors.location ? 'border-red-500' : 'border-gray-300'
               }`}
-              value={pickupDate}
-              onChange={(e) => setPickupDate(e.target.value)}
+              placeholder="Enter location"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
             />
-            {errors.pickupDate && <p className="mt-1 text-xs text-red-500">{errors.pickupDate}</p>}
+            {errors.location && <p className="mt-1 text-xs text-red-500">{errors.location}</p>}
           </div>
 
-          {/* Drop-off Date */}
+          {/* Price Sort */}
           <div className="flex flex-col">
-            <label className="mb-2 text-sm font-medium text-gray-700">Drop-off date</label>
-            <input
-              type="date"
+            <label className="mb-2 text-sm font-medium text-gray-700">Price Sort</label>
+            <select
               className={`w-full py-2 px-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
-                errors.dropoffDate ? 'border-red-500' : 'border-gray-300'
+                errors.priceSort ? 'border-red-500' : 'border-gray-300'
               }`}
-              value={dropoffDate}
-              onChange={(e) => setDropoffDate(e.target.value)}
-            />
-            {errors.dropoffDate && <p className="mt-1 text-xs text-red-500">{errors.dropoffDate}</p>}
+              value={priceSort}
+              onChange={(e) => setPriceSort(e.target.value)}
+            >
+              <option value="">Select</option>
+              <option value="lowToHigh">Low to High</option>
+              <option value="highToLow">High to Low</option>
+            </select>
+            {errors.priceSort && <p className="mt-1 text-xs text-red-500">{errors.priceSort}</p>}
           </div>
 
           {/* Submit Button */}
@@ -145,9 +141,6 @@ export default function CarRentalForm() {
             />
           </div>
         </div>
-
-        {/* Message Display */}
-        
       </BaseCard>
     </div>
   );

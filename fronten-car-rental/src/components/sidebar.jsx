@@ -38,7 +38,7 @@ function Sidebar() {
         <div className="bg-white rounded-full p-2 mr-2">
           <img src="../src/assets/LOGO.png" alt="AA Car Rental Logo" className="w-12 h-12 " />
         </div>
-        <span className="text-lg font-bold">AA Car Rental</span>
+        <span className="text-lg font-bold">Online Car Rental</span>
       </div>
 
       {/* Navigation Menu */}

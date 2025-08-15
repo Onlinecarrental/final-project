@@ -26,7 +26,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between max-w-screen-xl mx-auto p-4">
           <Link to="/home" className="text-[20px] font-[400] flex gap-2 items-center font-poppins text-white" onClick={scrollToTop}>
             <img src={logo} alt="car rental logo" className="w-[50px] h-[50px]" />
-            <span>AA Car Rental</span>
+            <span>Online Car Rental</span>
           </Link>
 
           {/* Center Menu (visible on lg and up) */}
