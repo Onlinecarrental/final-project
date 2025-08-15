@@ -50,25 +50,15 @@ export default function HerosectionCar() {
 
   const buildDisplayLabelFromLocationIQ = (item) => {
     const addr = item.address || {};
-    // Address, Block, Town, City, Country
-    const addressLine = [addr.house_number, addr.road].filter(Boolean).join(' ').trim();
-    const block = addr.block || addr.neighbourhood || addr.suburb || addr.hamlet || addr.quarter || '';
-    const town = addr.town || addr.village || '';
-    const city = addr.city || addr.county || '';
-    const country = 'Pakistan';
+    // City-only label: "City, Pakistan"
+    const city = addr.city || addr.town || addr.village || addr.county || '';
+    if (!city) return '';
+    return `${city}, Pakistan`;
+  };
 
-    const parts = [];
-    if (addressLine) parts.push(addressLine);
-    if (block) parts.push(block);
-    if (town) parts.push(town);
-    if (city) parts.push(city);
-    parts.push(country);
-    const deduped = parts.filter((p, i, arr) => p && arr.findIndex(x => x.toLowerCase() === p.toLowerCase()) === i);
-    const cleaned = deduped
-      .map(p => p.replace(/\b(District|Division|Province|State)\b/gi, '').replace(/\s+/g, ' ').trim())
-      .filter(Boolean)
-      .filter(p => !/^punjab$/i.test(p) && !/^sindh$/i.test(p) && !/^khyber pakhtunkhwa$/i.test(p) && !/^balochistan$/i.test(p) && !/^azad kashmir$/i.test(p));
-    return cleaned.join(', ');
+  const extractCityNameFromLocationIQ = (item) => {
+    const addr = item.address || {};
+    return addr.city || addr.town || addr.village || addr.county || '';
   };
 
   const handleSearch = () => {
@@ -107,15 +97,22 @@ export default function HerosectionCar() {
         return;
       }
       try {
-        // LocationIQ Autocomplete (Pakistan only) - accepts addresses, blocks, towns, cities
-        const url = `https://api.locationiq.com/v1/autocomplete?key=pk.41bdd2ef6f73572085513083abde96b4&q=${encodeURIComponent(query)}&limit=7&countrycodes=pk&normalizecity=1&dedupe=1&addressdetails=1`;
+        // LocationIQ Autocomplete (Pakistan only) - CITIES ONLY
+        const url = `https://api.locationiq.com/v1/autocomplete?key=pk.41bdd2ef6f73572085513083abde96b4&q=${encodeURIComponent(query)}&limit=7&countrycodes=pk&normalizecity=1&dedupe=1&addressdetails=1&tag=place:city`;
         const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
         const data = await res.json();
-        const items = (Array.isArray(data) ? data : []).map(item => ({
-          id: item.place_id || `${item.lat},${item.lon}`,
-          label: buildDisplayLabelFromLocationIQ(item),
-          raw: item,
-        })).filter(x => !!x.label);
+        const items = (Array.isArray(data) ? data : [])
+          .map(item => {
+            const cityName = extractCityNameFromLocationIQ(item);
+            const label = buildDisplayLabelFromLocationIQ(item);
+            return {
+              id: item.place_id || `${item.lat},${item.lon}`,
+              label,
+              cityName,
+              raw: item,
+            };
+          })
+          .filter(x => !!x.label && !!x.cityName);
         setSuggestions(items);
       } catch (e) {
         console.error('LocationIQ autocomplete error:', e);

@@ -45,14 +45,8 @@ export default function AllBestCars() {
     .trim();
 
   const extractCityFromQuery = (q) => {
-    const raw = (q || '').toLowerCase();
-    const parts = raw.split(',').map(s => s.trim()).filter(Boolean);
-    const blacklist = ['district','division','province','state','country','pakistan','india','punjab','sindh','kpk','balochistan','azad kashmir','pb','pk'];
-    for (const p of parts) {
-      if (p.length >= 3 && blacklist.every(w => !p.includes(w))) return normalize(p);
-    }
-    const fallback = parts.find(p => p.length >= 3) || raw;
-    return normalize(fallback);
+    // We now pass only the city via query (?city=<city>), so just normalize it.
+    return normalize(q);
   };
 
   // Parse query params for filtering
