@@ -35,11 +35,31 @@ export default function AllBestCars() {
 
     fetchCars();
   }, []);
+
+  // Helpers to normalize and extract city from a long location string
+  const normalize = (str) => (str || '')
+    .toLowerCase()
+    .replace(/\b(district|division|province|state|city|tehsil)\b/g, '')
+    .replace(/[^a-z\s]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  const extractCityFromQuery = (q) => {
+    const raw = (q || '').toLowerCase();
+    const parts = raw.split(',').map(s => s.trim()).filter(Boolean);
+    const blacklist = ['district','division','province','state','country','pakistan','india','punjab','sindh','kpk','balochistan','azad kashmir','pb','pk'];
+    for (const p of parts) {
+      if (p.length >= 3 && blacklist.every(w => !p.includes(w))) return normalize(p);
+    }
+    const fallback = parts.find(p => p.length >= 3) || raw;
+    return normalize(fallback);
+  };
+
   // Parse query params for filtering
   const query = useMemo(() => new URLSearchParams(locationHook.search), [locationHook.search]);
   const filterBrand = query.get('brand')?.trim().toLowerCase() || '';
   const filterCategory = query.get('categories')?.trim().toLowerCase() || '';
-  const filterCity = query.get('city')?.trim().toLowerCase() || '';
+  const filterCity = extractCityFromQuery(query.get('city'));
   const sortPrice = query.get('price') === 'desc' ? 'desc' : 'asc';
 
   // Only show available cars then filter by query params
@@ -47,7 +67,12 @@ export default function AllBestCars() {
     let list = cars.filter(car => car.status === 'available');
     if (filterBrand) list = list.filter(c => (c.brand || '').toLowerCase() === filterBrand);
     if (filterCategory) list = list.filter(c => (c.categories || '').toLowerCase() === filterCategory);
-    if (filterCity) list = list.filter(c => (c.city || '').toLowerCase().includes(filterCity));
+    if (filterCity) {
+      list = list.filter(c => {
+        const carCity = normalize(c.city);
+        return carCity.includes(filterCity) || filterCity.includes(carCity);
+      });
+    }
     // sort by dailyRate numeric
     list = list.slice().sort((a,b) => {
       const an = parseFloat(a.dailyRate) || 0;
