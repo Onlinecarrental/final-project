@@ -138,6 +138,7 @@ export default function HeroSectionCarForm() {
               value={carModel}
               onChange={(e) => setCarModel(e.target.value)}
             >
+              <option value="">Select car model</option>
               <option value="Toyota">Toyota</option>
               <option value="Honda">Honda</option>
               <option value="BMW">BMW</option>
@@ -163,6 +164,7 @@ export default function HeroSectionCarForm() {
               value={bodyType}
               onChange={(e) => setBodyType(e.target.value)}
             >
+              <option value="">Select Car type</option>
                <option value="SUV">SUV</option>
               <option value="Crossover">Crossover</option>
               <option value="Wagon">Wagon</option>
