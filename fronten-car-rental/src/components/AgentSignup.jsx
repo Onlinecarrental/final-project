@@ -48,8 +48,11 @@ const AgentSignup = () => {
   // Validation helpers
   const validateEmail = (email) =>
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  const validatePhone = (phone) =>
-    /^\d{11}$/.test(phone);
+  const validatePhone = (phone) => {
+    // Remove any non-digit characters and check if it's 12 digits (92XXXXXXXXXX)
+    const digits = phone.replace(/\D/g, '');
+    return digits.length === 12 && digits.startsWith('92');
+  };
   const validateCnic = (cnic) =>
     /^\d{5}-\d{7}-\d{1}$/.test(cnic);
 
@@ -101,7 +104,7 @@ const AgentSignup = () => {
       return;
     }
     if (!validatePhone(phone)) {
-      setError('Phone number must be exactly 11 digits.');
+      setError('Phone number must be in the format 92XXXXXXXXX (11 digits after +92)');
       setLoading(false);
       return;
     }
