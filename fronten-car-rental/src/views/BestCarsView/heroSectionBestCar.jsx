@@ -16,6 +16,39 @@ export default function HerosectionCar() {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const debounceRef = useRef(null);
 
+  // Helpers: clean labels and extract city token
+  const normalize = (str) => (str || '')
+    .toLowerCase()
+    .replace(/\b(district|division|province|state|city|tehsil)\b/g, '')
+    .replace(/[^a-z\s]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  const extractCityFromInput = (value) => {
+    const raw = (value || '').toLowerCase();
+    const parts = raw.split(',').map(s => s.trim()).filter(Boolean);
+    const blacklist = ['district','division','province','state','country','pakistan','india','punjab','sindh','kpk','balochistan','azad kashmir','pb','pk'];
+    for (const p of parts) {
+      if (p.length >= 3 && blacklist.every(w => !p.includes(w))) return normalize(p);
+    }
+    const fallback = parts.find(p => p.length >= 3) || raw;
+    return normalize(fallback);
+  };
+
+  const buildDisplayLabel = (props) => {
+    const area = props.neighbourhood || props.suburb || props.district || props.name || '';
+    const city = props.city || props.county || '';
+    const parts = [];
+    if (area) parts.push(area);
+    if (city) parts.push(city);
+    parts.push('Pakistan');
+    // Remove duplicates like "Lahore, Lahore"
+    const deduped = parts.filter((p, i, arr) => p && arr.findIndex(x => x.toLowerCase() === p.toLowerCase()) === i);
+    // Remove words like District/Province/State from the final label
+    const cleaned = deduped.map(p => p.replace(/\b(District|Division|Province|State)\b/gi, '').replace(/\s+/g, ' ').trim()).filter(Boolean);
+    return cleaned.join(', ');
+  };
+
   const handleSearch = () => {
     setSubmitted(true);
     // Build query params (brand, categories, city, price)
@@ -35,7 +68,10 @@ export default function HerosectionCar() {
     const params = new URLSearchParams();
     if (carModel) params.set('brand', carModel);
     if (bodyType) params.set('categories', bodyType);
-    if (location) params.set('city', location);
+    if (location) {
+      const cityToken = extractCityFromInput(location);
+      if (cityToken) params.set('city', cityToken);
+    }
     params.set('price', selectedPrice === 'Low to High' ? 'asc' : 'desc');
     navigate(`/home/best-cars?${params.toString()}`);
   };
@@ -54,7 +90,7 @@ export default function HerosectionCar() {
         const data = await res.json();
         const items = (data.features || []).map(f => ({
           id: f.properties.place_id || `${f.properties.lat},${f.properties.lon}`,
-          label: f.properties.formatted || f.properties.city || f.properties.name,
+          label: buildDisplayLabel(f.properties),
         })).filter(x => !!x.label);
         setSuggestions(items);
       } catch (e) {
