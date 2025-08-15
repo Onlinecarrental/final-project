@@ -36,16 +36,31 @@ export default function HerosectionCar() {
   };
 
   const buildDisplayLabel = (props) => {
+    // Generic builder (kept for flexibility if needed)
     const area = props.neighbourhood || props.suburb || props.district || props.name || '';
     const city = props.city || props.county || '';
     const parts = [];
     if (area) parts.push(area);
     if (city) parts.push(city);
     parts.push('Pakistan');
-    // Remove duplicates like "Lahore, Lahore"
     const deduped = parts.filter((p, i, arr) => p && arr.findIndex(x => x.toLowerCase() === p.toLowerCase()) === i);
-    // Remove words like District/Province/State from the final label
     const cleaned = deduped.map(p => p.replace(/\b(District|Division|Province|State)\b/gi, '').replace(/\s+/g, ' ').trim()).filter(Boolean);
+    return cleaned.join(', ');
+  };
+
+  const buildDisplayLabelFromLocationIQ = (item) => {
+    const addr = item.address || {};
+    const area = addr.neighbourhood || addr.suburb || addr.hamlet || addr.quarter || '';
+    const city = addr.city || addr.town || addr.village || addr.county || '';
+    const parts = [];
+    if (area) parts.push(area);
+    if (city) parts.push(city);
+    parts.push('Pakistan');
+    const deduped = parts.filter((p, i, arr) => p && arr.findIndex(x => x.toLowerCase() === p.toLowerCase()) === i);
+    const cleaned = deduped
+      .map(p => p.replace(/\b(District|Division|Province|State)\b/gi, '').replace(/\s+/g, ' ').trim())
+      .filter(Boolean)
+      .filter(p => !/^punjab$/i.test(p) && !/^sindh$/i.test(p) && !/^khyber pakhtunkhwa$/i.test(p) && !/^balochistan$/i.test(p) && !/^azad kashmir$/i.test(p));
     return cleaned.join(', ');
   };
 
@@ -85,16 +100,18 @@ export default function HerosectionCar() {
         return;
       }
       try {
-        const url = `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(query)}&limit=5&filter=countrycode:pk&apiKey=e2a3beb764264a55af57def094daddf0`;
+        // LocationIQ Autocomplete (Pakistan only)
+        const url = `https://api.locationiq.com/v1/autocomplete?key=pk.41bdd2ef6f73572085513083abde96b4&q=${encodeURIComponent(query)}&limit=5&countrycodes=pk&normalizecity=1&tag=place:city,place:town,place:village`;
         const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
         const data = await res.json();
-        const items = (data.features || []).map(f => ({
-          id: f.properties.place_id || `${f.properties.lat},${f.properties.lon}`,
-          label: buildDisplayLabel(f.properties),
+        const items = (Array.isArray(data) ? data : []).map(item => ({
+          id: item.place_id || `${item.lat},${item.lon}`,
+          label: buildDisplayLabelFromLocationIQ(item),
+          raw: item,
         })).filter(x => !!x.label);
         setSuggestions(items);
       } catch (e) {
-        console.error('Geoapify autocomplete error:', e);
+        console.error('LocationIQ autocomplete error:', e);
         setSuggestions([]);
       }
     };
