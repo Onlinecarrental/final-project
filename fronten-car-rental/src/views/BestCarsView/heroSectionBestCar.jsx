@@ -1,16 +1,23 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import heroImage from "../../assets/Bannerimage.jpg";
 import BaseCard from "../../components/card";
 import Button from '../../components/button';
 export default function HerosectionCar() {
-  const [priceOpen, setPriceOpen] = useState(false);
-  const [selectedPrice, setSelectedPrice] = useState("Low to High");
-
-  const [carModel, setCarModel] = useState("");
-  const [location, setLocation] = useState("");
-  const [submitted, setSubmitted] = useState(false);
   const navigate = useNavigate();
+  const locationHook = useLocation();
+  const searchParams = new URLSearchParams(locationHook.search);
+  
+  // Initialize state from URL parameters
+  const [priceOpen, setPriceOpen] = useState(false);
+  const [selectedPrice, setSelectedPrice] = useState(
+    searchParams.get('price') === 'desc' ? 'High to Low' : 'Low to High'
+  );
+  
+  const [carModel, setCarModel] = useState(searchParams.get('brand') || '');
+  const [bodyType, setBodyType] = useState(searchParams.get('categories') || '');
+  const [location, setLocation] = useState(searchParams.get('city') || '');
+  const [submitted, setSubmitted] = useState(false);
   const locationInputRef = useRef(null);
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -71,20 +78,25 @@ export default function HerosectionCar() {
     // Since the UI uses the second select to set 'location' state, we'll add a separate state for body type below for clarity.
   };
 
-  // New state for body type (categories)
-  const [bodyType, setBodyType] = useState("");
-
-  // Re-define handleSearch now that we have bodyType
+  // Handle search with current form values
   const onSearchClick = () => {
     setSubmitted(true);
     const params = new URLSearchParams();
+    
+    // Only add parameters if they have values
     if (carModel) params.set('brand', carModel);
     if (bodyType) params.set('categories', bodyType);
+    
+    // Handle location with city extraction
     if (location) {
       const cityToken = extractCityFromInput(location);
       if (cityToken) params.set('city', cityToken);
     }
+    
+    // Set price sort
     params.set('price', selectedPrice === 'Low to High' ? 'asc' : 'desc');
+    
+    // Navigate with the new search parameters
     navigate(`/home/best-cars?${params.toString()}`);
   };
 

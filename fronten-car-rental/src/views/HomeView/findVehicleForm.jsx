@@ -52,13 +52,21 @@ export default function HeroSectionCarForm() {
   const handleSubmit = () => {
     setSubmitted(true);
     const params = new URLSearchParams();
-    if (carModel) params.set('brand', carModel);
-    if (bodyType) params.set('categories', bodyType);
+    
+    // Only add parameters if they have values
+    if (carModel) params.set('brand', carModel.toLowerCase());
+    if (bodyType) params.set('categories', bodyType.toLowerCase());
+    
+    // Handle location with city extraction
     if (location) {
       const cityToken = extractCityFromInput(location);
       if (cityToken) params.set('city', cityToken);
     }
-    params.set('price', priceSort === 'Low to High' ? 'asc' : 'desc');
+    
+    // Set price sort (default to asc if not specified)
+    params.set('price', priceSort === 'High to Low' ? 'desc' : 'asc');
+    
+    // Navigate to the best-cars page with the query parameters
     navigate(`/home/best-cars?${params.toString()}`);
   };
 
@@ -98,27 +106,14 @@ export default function HeroSectionCarForm() {
     return () => debounceRef.current && clearTimeout(debounceRef.current);
   }, [location]);
 
+  // Form validation - made fields optional to match heroSectionBestCar.jsx
   const validateForm = () => {
     const newErrors = {};
-
-    if (!carModel) {
-      newErrors.carModel = 'Car model is required';
-    }
-    if (!bodyType) {
-      newErrors.bodyType = 'Body type is required';
-    }
-    if (!location.trim()) {
-      newErrors.location = 'Location is required';
-    }
-
     setErrors(newErrors);
     setSubmitted(true);
-
-    if (Object.keys(newErrors).length === 0) {
-      handleSubmit();
-    } else {
-      setIsSubmitting(false);
-    }
+    
+    // All fields are optional in the search
+    handleSubmit();
   };
 
   useEffect(() => {
@@ -141,7 +136,7 @@ export default function HeroSectionCarForm() {
               value={carModel}
               onChange={(e) => setCarModel(e.target.value)}
             >
-              <option value="">All Models</option>
+              <option value="">-- Select --</option>
               <option value="Toyota">Toyota</option>
               <option value="Honda">Honda</option>
               <option value="BMW">BMW</option>
@@ -167,7 +162,7 @@ export default function HeroSectionCarForm() {
               value={bodyType}
               onChange={(e) => setBodyType(e.target.value)}
             >
-              <option value="">All Models</option>
+              <option value="">-- Select --</option>
               <option value="SUV">SUV</option>
               <option value="Crossover">Crossover</option>
               <option value="Wagon">Wagon</option>
@@ -240,7 +235,10 @@ export default function HeroSectionCarForm() {
               title="Find the Vehicle"
               width="auto"
               boxShadow={false}
-              onClick={() => setIsSubmitting(true)}
+              onClick={() => {
+                setIsSubmitting(true);
+                validateForm();
+              }}
               iconRight={
                 <svg
                   className="w-6 h-6"
@@ -249,7 +247,7 @@ export default function HeroSectionCarForm() {
                   strokeWidth="2"
                   viewBox="0 0 24 24"
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M13 18l6-6-6-6" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               }
             />
