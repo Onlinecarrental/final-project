@@ -109,7 +109,7 @@ const CarBrandsGrid = () => {
         height='h-auto'
         bgColor='bg-gray'
           key={brand.id} 
-          onClick={() => handleBrandClick(brand.name)}
+          onClick={() => handleBodyTypeClick(brand.name)}
           className="rounded-lg cursor-pointer"
         >
           <div className="flex   flex-col items-center justify-center h-full ">
