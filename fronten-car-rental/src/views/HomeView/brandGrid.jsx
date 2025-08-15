@@ -50,23 +50,25 @@ const CarBrandsGrid = () => {
     { id: 13, name: 'SUV', logo: suvLogo, path: '/assets/suv.svg' },
     { id: 14, name: 'Crossover', logo: crossoverLogo, path: '/suv/cross' },
     { id: 15, name: 'Wagon', logo: wagonLogo, path: '/cars/mercedes' },
-    { id: 16, name: 'Family MBP', logo: familyMBPLogo, path: '/cars/honda' },
+    { id: 16, name: 'Family MPV', logo: familyMBPLogo, path: '/cars/honda' },
     { id: 17, name: 'Sport Coupe', logo: sportCoupeLogo, path: '/cars/suzuki' },
     { id: 18, name: 'Compact', logo: compactLogo, path: '/cars/nissan' },
-    { id: 19, name: 'Coup', logo: coupLogo, path: '/cars/chevrolet' },
-    { id: 20, name: 'BMW', logo: bMwLogo, path: '/cars/ford ' },
-    { id: 21, name: 'Sedan', logo: sedanLogo , path: '/cars/tesla' },
+    { id: 19, name: 'Coupe', logo: coupLogo, path: '/cars/chevrolet' },
+    { id: 20, name: 'BMW', logo: bMwLogo, path: '/cars/ford' },
+    { id: 21, name: 'Sedan', logo: sedanLogo, path: '/cars/tesla' },
     { id: 22, name: 'Limousine', logo: limousineLogo, path: '/cars/hyundai' },
-    { id: 23, name: 'Convertable', logo: convertableLogo, path: '/cars/audi' },
-    { id: 24, name: 'OFF Road', logo: offroadLogo, path: '/cars/peugeot' }
+    { id: 23, name: 'Convertible', logo: convertableLogo, path: '/cars/audi' },
+    { id: 24, name: 'Off-Road', logo: offroadLogo, path: '/cars/peugeot' }
   ];
 
   const handleBrandClick = (brandName) => {
-    navigate(`/home/best-cars?brand=${encodeURIComponent(brandName.toLowerCase())}`);
+    // Convert brand name to match the exact format in the dropdown options
+    const formattedBrand = brandName.replace(/-/g, ' ');
+    navigate(`/home/best-cars?brand=${encodeURIComponent(formattedBrand)}`);
   };
 
-  const handleBodyTypeClick = (bodyType) => {
-    navigate(`/home/best-cars?categories=${encodeURIComponent(bodyType.toLowerCase())}`);
+  const handleBodyTypeClick = (bodyTypeName) => {
+    navigate(`/home/best-cars?categories=${encodeURIComponent(bodyTypeName)}`);
   };
   
 
