@@ -78,24 +78,28 @@ const CarBrandsGrid = () => {
       <div>rent by Brands</div>
     <div className="grid grid-cols-2 max-w-[900px]  mx-auto md:grid-cols-3 lg:grid-cols-6 gap-4">
       {carBrands.map((brand) => (
-        <BaseCard
-        boxShadow={false}
-        width='w-auto'
-        height='h-auto'
-        bgColor='bg-gray'
-          key={brand.id} 
+        <div 
+          key={brand.id}
           onClick={() => handleBrandClick(brand.name)}
-          className="rounded-lg cursor-pointer"
+          className="cursor-pointer w-full h-full"
         >
-          <div className="flex   flex-col items-center justify-center h-full ">
-            <img 
-              src={brand.logo} 
-              
-              className="w-12 h-12 "
-            />
-            <p className="text-center text-sm font-medium">{brand.name}</p>
-          </div>
-        </BaseCard>
+          <BaseCard
+            boxShadow={false}
+            width='w-full'
+            height='h-full'
+            bgColor='bg-gray'
+            className="rounded-lg hover:bg-gray-100 transition-colors h-full"
+          >
+            <div className="flex flex-col items-center justify-center p-4 h-full">
+              <img 
+                src={brand.logo} 
+                alt={brand.name}
+                className="w-12 h-12 object-contain"
+              />
+              <p className="text-center text-sm font-medium mt-2">{brand.name}</p>
+            </div>
+          </BaseCard>
+        </div>
       ))}
     </div>
 
@@ -103,24 +107,28 @@ const CarBrandsGrid = () => {
 <div>rent by body type</div>
     <div className="grid grid-cols-2 max-w-[900px] mt-20 mx-auto md:grid-cols-3 lg:grid-cols-6 gap-4">
       {bodyType.map((brand) => (
-        <BaseCard
-        boxShadow={false}
-        width='w-auto'
-        height='h-auto'
-        bgColor='bg-gray'
-          key={brand.id} 
+        <div 
+          key={brand.id}
           onClick={() => handleBodyTypeClick(brand.name)}
-          className="rounded-lg cursor-pointer"
+          className="cursor-pointer w-full h-full"
         >
-          <div className="flex   flex-col items-center justify-center h-full ">
-            <img 
-              src={brand.logo} 
-              
-              className="w-12 h-12 "
-            />
-            <p className="text-center text-sm font-medium">{brand.name}</p>
-          </div>
-        </BaseCard>
+          <BaseCard
+            boxShadow={false}
+            width='w-full'
+            height='h-full'
+            bgColor='bg-gray'
+            className="rounded-lg hover:bg-gray-100 transition-colors h-full"
+          >
+            <div className="flex flex-col items-center justify-center p-4 h-full">
+              <img 
+                src={brand.logo} 
+                alt={brand.name}
+                className="w-12 h-12 object-contain"
+              />
+              <p className="text-center text-sm font-medium mt-2">{brand.name}</p>
+            </div>
+          </BaseCard>
+        </div>
           ))}
     </div>
 
