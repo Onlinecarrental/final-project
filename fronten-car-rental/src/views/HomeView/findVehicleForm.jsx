@@ -12,6 +12,7 @@ export default function HeroSectionCarForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   const debounceRef = useRef(null);
   const navigate = useNavigate();
   const locationInputRef = useRef(null);
@@ -49,6 +50,7 @@ export default function HeroSectionCarForm() {
 
   // Handle form submission
   const handleSubmit = () => {
+    setSubmitted(true);
     const params = new URLSearchParams();
     if (carModel) params.set('brand', carModel);
     if (bodyType) params.set('categories', bodyType);
@@ -110,6 +112,7 @@ export default function HeroSectionCarForm() {
     }
 
     setErrors(newErrors);
+    setSubmitted(true);
 
     if (Object.keys(newErrors).length === 0) {
       handleSubmit();
@@ -138,7 +141,7 @@ export default function HeroSectionCarForm() {
               value={carModel}
               onChange={(e) => setCarModel(e.target.value)}
             >
-              <option value="">-- Select --</option>
+              <option value="">All Models</option>
               <option value="Toyota">Toyota</option>
               <option value="Honda">Honda</option>
               <option value="BMW">BMW</option>
@@ -164,7 +167,7 @@ export default function HeroSectionCarForm() {
               value={bodyType}
               onChange={(e) => setBodyType(e.target.value)}
             >
-              <option value="">-- Select --</option>
+              <option value="">All Models</option>
               <option value="SUV">SUV</option>
               <option value="Crossover">Crossover</option>
               <option value="Wagon">Wagon</option>
