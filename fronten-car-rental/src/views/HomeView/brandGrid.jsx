@@ -84,22 +84,22 @@ const CarBrandsGrid = () => {
         <div 
           key={brand.id}
           onClick={() => handleBrandClick(brand.name)}
-          className="cursor-pointer w-full h-full"
+          className="cursor-pointer"
         >
           <BaseCard
             boxShadow={false}
-            width='w-full'
-            height='h-full'
-            bgColor='bg-gray'
-            className="rounded-lg hover:bg-gray-100 transition-colors p-0"
+            width='w-auto'
+        height='h-auto'
+        bgColor='bg-gray'
+           className="rounded-lg"
           >
-            <div className="flex flex-col items-center justify-center p-4 h-full">
+            <div className="flex   flex-col items-center justify-center h-full">
               <img 
                 src={brand.logo} 
                 alt={brand.name}
-                className="w-12 h-12 object-contain"
+                className="w-12 h-12 "
               />
-              <p className="text-center text-sm font-medium mt-2">{brand.name}</p>
+              <p className="text-center text-sm font-medium ">{brand.name}</p>
             </div>
           </BaseCard>
         </div>
@@ -117,18 +117,18 @@ const CarBrandsGrid = () => {
         >
           <BaseCard
             boxShadow={false}
-            width='w-full'
-            height='h-full'
-            bgColor='bg-gray'
-            className="rounded-lg hover:bg-gray-100 transition-colors p-0"
+             width='w-auto'
+        height='h-auto'
+        bgColor='bg-gray'
+            className="rounded-lg "
           >
-            <div className="flex flex-col items-center justify-center p-4 h-full">
+            <div className="flex   flex-col items-center justify-center h-full">
               <img 
                 src={brand.logo} 
                 alt={brand.name}
-                className="w-12 h-12 object-contain"
+                className="w-12 h-12 "
               />
-              <p className="text-center text-sm font-medium mt-2">{brand.name}</p>
+              <p className="text-center text-sm font-medium ">{brand.name}</p>
             </div>
           </BaseCard>
         </div>
