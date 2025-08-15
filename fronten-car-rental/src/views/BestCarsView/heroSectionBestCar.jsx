@@ -145,11 +145,11 @@ export default function HerosectionCar() {
         </p>
 
         {/* Search Bar */}
-        <BaseCard width="w-[1100px]" bgColor="bg-gray" height="h-auto" className="flex gap-16">
-          <div className="w-full bg-gray-200/80 p-4 rounded-md">
-            <div className="flex flex-wrap gap-2">
+        <BaseCard width="max-w-[1280px]" height="auto" padding="24px">
+        <div className="grid grid-cols-1 md:grid-cols-5 p-7 gap-4">
+            <div className="flex flex-col">
               {/* Car Model Dropdown */}
-              <div className="flex-1 min-w-[250px] relative z-[1px]">
+              <div className="flex-1 min-w-[220px] relative z-[1px]">
                 <div className="text-sm text-start text-gray-600 mb-1">Select Car Model</div>
                 <select
                   className="w-full p-2 rounded bg-white"
@@ -175,7 +175,7 @@ export default function HerosectionCar() {
               </div>
 
               {/* Body Type Dropdown */}
-              <div className="flex-1 min-w-[250px] relative z-[1px]">
+              <div className="flex-1 min-w-[220px] relative z-[1px]">
                 <div className="text-sm text-start text-gray-600 mb-1">Select Body Types</div>
                 <select
                   className="w-full p-2 rounded bg-white"
@@ -199,9 +199,9 @@ export default function HerosectionCar() {
                   <p className="text-red-500 text-sm mt-1">Please select a body type</p>
                 )}
               </div>
-                <div className="flex-1 min-w-[250px] relative z-[1px]">
+                <div className="flex-1 min-w-[220px] relative z-[1px]">
                 <div className="text-sm text-start text-gray-600 mb-1">Location</div>
-                <label htmlFor="location">Location</label>
+               
                 <input
                   ref={locationInputRef}
                   type="text"
@@ -238,7 +238,7 @@ export default function HerosectionCar() {
 
 
               {/* Price Filter */}
-              <div className="flex-1 min-w-[250px] relative z-[1px]">
+              <div className="flex-1 min-w-[220px] relative z-[1px]">
                 <div className="text-sm text-start text-gray-600 mb-1">Sort by Price</div>
                 <div
                   className="bg-white p-2 flex items-center justify-between rounded border cursor-pointer"
