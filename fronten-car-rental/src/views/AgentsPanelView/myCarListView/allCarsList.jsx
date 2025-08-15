@@ -4,23 +4,34 @@ import axios from "axios";
 import { FaClock } from "react-icons/fa";
 import Button from "./../../../components/button";
 import BaseCard from "./../../../components/card";
+import mileageIcon from "../../../assets/mileage.svg";
+import transmissionIcon from "../../../assets/transmission.svg";
+import seatingIcon from "../../../assets/seating.svg";
+import fueltypeIcon from "../../../assets/feultype.svg";
 
-const icons = [
-  "./../../src/assets/mileage.svg",
-  "./../../src/assets/transmission.svg",
-  "./../../src/assets/seating.svg",
-  "./../../src/assets/feultype.svg",
-];
+const icons = [mileageIcon, transmissionIcon, seatingIcon, fueltypeIcon];
+
+// Backend base (without trailing slash)
+const BACKEND_BASE = "https://backend-car-rental-production.up.railway.app";
 
 const Card = ({ car, onEdit, onDelete }) => {
   return (
     <BaseCard bgColor="bg-gray" className="w-auto h-auto p-2">
       <img
-        src={`/.netlify/functions/api/${car.coverImage}`}
+        src={(function () {
+          const ci = car.coverImage;
+          if (!ci) return "/default-car.jpg";
+          // Absolute URL
+          if (/^https?:\/\//i.test(ci)) return ci;
+          // Relative path coming from backend, normalize and prefix backend base
+          const path = ci.startsWith("/") ? ci.slice(1) : ci;
+          return `${BACKEND_BASE}/${path}`;
+        })()}
         alt={car.name}
         className="rounded-[10px] w-full h-[180px] object-cover"
         onError={(e) => {
-          e.target.src = "./../../src/assets/default-car.jpg";
+          e.currentTarget.onerror = null; // prevent looping
+          e.currentTarget.src = "/default-car.jpg";
         }}
       />
       <div className="px-3 pt-2">
