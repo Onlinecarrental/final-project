@@ -61,8 +61,12 @@ const CarBrandsGrid = () => {
     { id: 24, name: 'OFF Road', logo: offroadLogo, path: '/cars/peugeot' }
   ];
 
-  const handleCardClick = (path) => {
-    navigate(path);
+  const handleBrandClick = (brandName) => {
+    navigate(`/home/best-cars?brand=${encodeURIComponent(brandName.toLowerCase())}`);
+  };
+
+  const handleBodyTypeClick = (bodyType) => {
+    navigate(`/home/best-cars?categories=${encodeURIComponent(bodyType.toLowerCase())}`);
   };
   
   return (
@@ -80,7 +84,7 @@ const CarBrandsGrid = () => {
         height='h-auto'
         bgColor='bg-gray'
           key={brand.id} 
-          onClick={() => handleCardClick(brand.path)}
+          onClick={() => handleBrandClick(brand.name)}
           className="rounded-lg cursor-pointer"
         >
           <div className="flex   flex-col items-center justify-center h-full ">
@@ -105,7 +109,7 @@ const CarBrandsGrid = () => {
         height='h-auto'
         bgColor='bg-gray'
           key={brand.id} 
-          onClick={() => handleCardClick(brand.path)}
+          onClick={() => handleBrandClick(brand.name)}
           className="rounded-lg cursor-pointer"
         >
           <div className="flex   flex-col items-center justify-center h-full ">
