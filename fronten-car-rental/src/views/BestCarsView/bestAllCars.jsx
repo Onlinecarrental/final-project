@@ -35,19 +35,6 @@ export default function AllBestCars() {
 
     fetchCars();
   }, []);
-
-  if (loading) return (
-    <div className="flex justify-center items-center min-h-[400px]">
-      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-Blue"></div>
-    </div>
-  );
-
-  if (error) return (
-    <div className="text-red-500 text-center py-4">
-      {error}
-    </div>
-  );
-
   // Parse query params for filtering
   const query = useMemo(() => new URLSearchParams(locationHook.search), [locationHook.search]);
   const filterBrand = query.get('brand')?.trim().toLowerCase() || '';
@@ -69,6 +56,20 @@ export default function AllBestCars() {
     });
     return list;
   }, [cars, filterBrand, filterCategory, filterCity, sortPrice]);
+
+  if (loading) return (
+    <div className="flex justify-center items-center min-h-[400px]">
+      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-Blue"></div>
+    </div>
+  );
+
+  if (error) return (
+    <div className="text-red-500 text-center py-4">
+      {error}
+    </div>
+  );
+
+  
 
   const indexOfLastCar = currentPage * carsPerPage;
   const indexOfFirstCar = indexOfLastCar - carsPerPage;
