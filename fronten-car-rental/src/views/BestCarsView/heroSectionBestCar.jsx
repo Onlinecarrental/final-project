@@ -17,6 +17,15 @@ export default function HerosectionCar() {
   const [carModel, setCarModel] = useState(searchParams.get('brand') || '');
   const [bodyType, setBodyType] = useState(searchParams.get('categories') || '');
   const [location, setLocation] = useState(searchParams.get('city') || '');
+  
+  // Update state when URL parameters change
+  useEffect(() => {
+    const params = new URLSearchParams(locationHook.search);
+    setCarModel(params.get('brand') || '');
+    setBodyType(params.get('categories') || '');
+    setLocation(params.get('city') || '');
+    setSelectedPrice(params.get('price') === 'desc' ? 'High to Low' : 'Low to High');
+  }, [locationHook.search]);
   const [submitted, setSubmitted] = useState(false);
   const locationInputRef = useRef(null);
   const [suggestions, setSuggestions] = useState([]);

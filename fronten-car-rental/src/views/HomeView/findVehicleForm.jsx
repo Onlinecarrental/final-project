@@ -54,8 +54,8 @@ export default function HeroSectionCarForm() {
     const params = new URLSearchParams();
     
     // Only add parameters if they have values
-    if (carModel) params.set('brand', carModel.toLowerCase());
-    if (bodyType) params.set('categories', bodyType.toLowerCase());
+    if (carModel && carModel !== '-- Select --') params.set('brand', carModel);
+    if (bodyType && bodyType !== '-- Select --') params.set('categories', bodyType);
     
     // Handle location with city extraction
     if (location) {
@@ -64,7 +64,9 @@ export default function HeroSectionCarForm() {
     }
     
     // Set price sort (default to asc if not specified)
-    params.set('price', priceSort === 'High to Low' ? 'desc' : 'asc');
+    if (priceSort) {
+      params.set('price', priceSort === 'High to Low' ? 'desc' : 'asc');
+    }
     
     // Navigate to the best-cars page with the query parameters
     navigate(`/home/best-cars?${params.toString()}`);
