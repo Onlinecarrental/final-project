@@ -639,7 +639,7 @@ export default function AddCarInfo() {
               htmlFor="transmission"
               className="block text-xl font-medium mb-1"
             >
-              Transmission
+              Car Speed
             </label>
             <input
               type="text"
@@ -647,7 +647,7 @@ export default function AddCarInfo() {
               name="transmission"
               value={formData.transmission}
               onChange={handleChange}
-              placeholder="Enter Car Transmission"
+              placeholder="Enter Car Speed Per Hour"
               className="w-full p-3 bg-gray rounded text-black placeholder-white"
             />
           </div>

@@ -152,7 +152,7 @@ export default function AllBestCars() {
   <p className="text-2xl font-bold">{car.dailyRate} PKR/day</p>
 
   {/* Light Gray Specs Bar with Icons */}
-  <div className="bg-gray-200 rounded-lg p-3 mt-3 flex justify-between text-sm text-black">
+  <div className="bg-gray rounded-lg p-3 mt-3 flex justify-between text-sm text-black">
     {/* Model */}
     <div className="flex flex-col items-center">
       <Cog size={18} />
