@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Users, Fuel, Gauge, Cog } from "lucide-react"; // icons import
 
-import axios from 'axios'; 
+import axios from 'axios';
 import BaseCard from '../../components/card';
 
 export default function AllBestCars() {
@@ -133,61 +134,44 @@ export default function AllBestCars() {
   return (
     <div className="bg-white w-full">
       <div className="flex flex-col md:flex-row gap-4 mt-20 flex-wrap justify-center">
-       {currentCars.map((car) => (
-  <BaseCard
-    width="w-[380px]"
-    padding="p-[8px]"
-    height="h-full"
-    key={car._id}
-  >
-    {/* Car Image */}
-    <div className="relative h-48 overflow-hidden">
-      <img
-        src={car.coverImage ? car.coverImage : "/default-car.jpg"}
-        alt={car.name}
-        className="w-full h-full rounded-[15px] object-cover"
-      />
-    </div>
-
-    {/* Car Details */}
-    <div className="p-4">
-      <Link to={`/home/best-cars/${car._id}`}>
-        <h3 className="text-[20px] font-[600] text-black font-jakarta">
-          {car.name}
-        </h3>
-      </Link>
-
-      <p className="text-[18px] font-bold mt-1">
-        {car.dailyRate} pkr/day
-      </p>
-
-      {/* Grey Specs Bar */}
-      <div className="bg-gray-200 rounded-lg p-2 mt-3 flex justify-between text-sm text-black">
-        <div className="flex flex-col items-center">
-          <span>{car.model || "—"}</span>
-        </div>
-        <div className="flex flex-col items-center">
-          <span>{car.seats || "—"} Seats</span>
-        </div>
-        <div className="flex flex-col items-center">
-          <span>{car.cc || "—"} CC</span>
-        </div>
-        <div className="flex flex-col items-center">
-          <span>{car.fuelType || "—"}</span>
-        </div>
-      </div>
-
-      {/* Rent Now Button */}
-      <button
-        onClick={() => handleRentNow(car)}
-        className="w-full mt-4 bg-Blue text-white py-2 rounded-[10px] hover:bg-blue-600 transition-colors"
-      >
-        Rent Now
-      </button>
-    </div>
-  </BaseCard>
-))}
-
+        {currentCars.map((car) => (
+          <BaseCard width='w-[380px]' padding='p-[8px]' height='h-full' key={car._id}>
+            <div className="relative h-48 overflow-hidden">
+              <img
+                src={car.coverImage ? car.coverImage : "/default-car.jpg"}
+                alt={car.name}
+                className="w-full h-full rounded-[15px] object-cover"
+              />
+            </div>
+            <div className="p-4">
+              <Link to={`/home/best-cars/${car._id}`}>
+                <h3 className="text-[20px] font-[600] text-black font-jakarta">{car.name}</h3>
+              </Link>
+              <div className="mt-2">
+                <p className="text-2xl font-bold">${car.dailyRate}/day</p>
+                <div className="mt-2 grid grid-cols-2 gap-2 text-sm">
+<div><Cog size={18} />
+<div> {car.model}</div>
+                </div>
+                           <div><Users size={18} /> {car.seats}</div>
+                <div><Gauge size={18} /> {car.transmission}</div>
+     
+                <div><Fuel size={18} /> {car.fuelType}</div>
+                </div>
+                    <div>Seats: {car.seats}</div>
+                
+                  <div>Fuel: {car.fuelType}</div>
+                </div>
+                <button
+                  onClick={() => handleRentNow(car)}
+                  className="w-full mt-4 bg-Blue text-white py-2 rounded-md hover:bg-blue-600 transition-colors"
+                >
+                  Rent Now
+                </button>
+              </div>
+            </div>
+          </BaseCard>
+        ))}
       </div>
       {/* Pagination Component */}
       <div className="flex justify-center mt-8 mb-8">
