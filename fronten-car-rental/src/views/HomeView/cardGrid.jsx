@@ -92,7 +92,6 @@ const CarCollection = () => {
       <div className="flex flex-col md:flex-row gap-4 mt-10 flex-wrap justify-center">
         {filteredCars.slice(0, 6).map((car) => (
           <BaseCard width='w-[380px]' padding='p-[8px]' height='h-full' key={car.id} >
-            <div className="relative h-48 overflow-hidden">
               <img 
                 src={car.coverImage || car.image || '/default-car.jpg'} 
                 alt={car.name} 
@@ -124,6 +123,7 @@ const CarCollection = () => {
                   <Battery size={18} className="text-gray-600" />
                   <span className="text-xs mt-1">{car.fuelType || car.specs?.type || 'N/A'}</span>
                 </div>
+                
               </BaseCard>
 <div className='mt-2 ml-[5px]' >
               <Button 
@@ -134,7 +134,11 @@ const CarCollection = () => {
                 height='40px' 
                 onClick={() => navigate('/home/bookingform', { state: { carDetails: car } })}
               />
-              </div>       </div>
+              </div>  
+              
+              
+                   </div>
+              
           </BaseCard>
         ))}
       </div>
