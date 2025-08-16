@@ -5,16 +5,16 @@ import HeadingTitle from '../../components/heading';
 import Button from '../../components/button';
 import { Gauge, Cog, Users, Battery } from 'lucide-react';
 import BaseCard from '../../components/card';
-import interImg from '../../assets/CARD1.jpg'
+
 const bodyTypes = [
-  { id: 'sedan', name: 'Sedan' },
-  { id: 'suv', name: 'SUV' },
-  { id: 'hatchback', name: 'Hatchback' },
-  { id: 'coupe', name: 'Coupe' },
-  { id: 'convertible', name: 'Convertible' },
-  { id: 'minivan', name: 'Minivan' },
-  { id: 'pickup', name: 'Pickup Truck' },
-  { id: 'sports', name: 'Sports Car' }
+  { id: 'sports', name: 'Sports Car' },
+  { id: 'offroad', name: 'Off-Road' },
+  { id: 'family', name: 'Family MPV' },
+  { id: 'bmw', name: 'BMW' },
+  { id: 'honda', name: 'Honda' },
+  { id: 'suv', name: 'SUV' }
+
+
 ];
 
 const CarCollection = () => {
