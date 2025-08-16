@@ -19,8 +19,7 @@ const bodyTypes = [
 
 const CarCollection = () => {
   const navigate = useNavigate();
-  const [selectedBodyType, setSelectedBodyType] = useState('');
-  const [loading, setLoading] = useState(true);
+const [selectedBodyType, setSelectedBodyType] = useState(bodyTypes[0].id);  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [cars, setCars] = useState([]);
 
@@ -49,10 +48,9 @@ const CarCollection = () => {
     setSelectedBodyType(prev => prev === bodyType ? '' : bodyType);
   };
 
-  const filteredCars = selectedBodyType 
-    ? cars.filter(car => car.bodyType?.toLowerCase() === selectedBodyType.toLowerCase())
-    : cars;
-
+ const filteredCars = cars.filter(
+  (car) => car.bodyType?.toLowerCase() === selectedBodyType.toLowerCase()
+);
   if (loading) return (
     <div className="flex justify-center items-center min-h-[400px]">
       <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-Blue"></div>
