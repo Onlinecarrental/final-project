@@ -156,7 +156,7 @@ export default function AllBestCars() {
     {/* Model */}
     <div className="flex flex-col items-center">
       <Cog size={18} />
-      <span>{car.model || "—"}</span>
+      <span>{car.name || "—"}</span>
     </div>
 
     {/* Seats */}
