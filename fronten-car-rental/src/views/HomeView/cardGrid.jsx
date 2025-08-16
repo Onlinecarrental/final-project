@@ -48,9 +48,11 @@ const [selectedBodyType, setSelectedBodyType] = useState(bodyTypes[0].id);  cons
     setSelectedBodyType(prev => prev === bodyType ? '' : bodyType);
   };
 
- const filteredCars = cars.filter(
-  (car) => car.bodyType?.toLowerCase() === selectedBodyType.toLowerCase()
+ // filter cars according to selected tab
+const filteredCars = cars.filter(
+  (car) => car.categories?.toLowerCase() === selectedBodyType.toLowerCase()
 );
+
   if (loading) return (
     <div className="flex justify-center items-center min-h-[400px]">
       <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-Blue"></div>
