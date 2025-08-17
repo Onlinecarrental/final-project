@@ -215,6 +215,7 @@ export default function HerosectionCar() {
     <option value="Limousine">Limousine</option>
     <option value="Convertible">Convertible</option>
     <option value="Off-Road">Off-Road</option>
+     <option value="Hatchback">Hatchback</option>
                 </select>
                 {submitted && !bodyType && (
                   <p className="text-red-500 text-sm mt-1">Please select a body type</p>

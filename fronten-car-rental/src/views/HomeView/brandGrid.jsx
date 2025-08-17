@@ -54,7 +54,7 @@ const CarBrandsGrid = () => {
     { id: 17, name: 'Sport Coupe', logo: sportCoupeLogo, path: '/cars/suzuki' },
     { id: 18, name: 'Compact', logo: compactLogo, path: '/cars/nissan' },
     { id: 19, name: 'Coupe', logo: coupLogo, path: '/cars/chevrolet' },
-    { id: 20, name: 'BMW', logo: bMwLogo, path: '/cars/ford' },
+    { id: 20, name: 'Hatchback', logo: bMwLogo, path: '/cars/ford' },
     { id: 21, name: 'Sedan', logo: sedanLogo, path: '/cars/tesla' },
     { id: 22, name: 'Limousine', logo: limousineLogo, path: '/cars/hyundai' },
     { id: 23, name: 'Convertible', logo: convertableLogo, path: '/cars/audi' },
