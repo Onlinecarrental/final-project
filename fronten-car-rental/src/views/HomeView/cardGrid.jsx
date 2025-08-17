@@ -10,7 +10,7 @@ const bodyTypes = [
   { id: 'sports', name: 'Sports Car' },
   { id: 'offroad', name: 'Off-Road' },
   { id: 'family', name: 'Family MPV' },
-  { id: 'bmw', name: 'BMW' },
+  { id: 'Hatchback', name: 'Hatchback' },
   { id: 'honda', name: 'Honda' },
   { id: 'suv', name: 'SUV' }
 

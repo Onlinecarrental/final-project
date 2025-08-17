@@ -396,6 +396,7 @@ export default function AddCarInfo() {
     "Limousine",
     "Convertible",
     "Off-Road",
+    "Hatchback",
   ];
 
   // Update the form title based on mode
