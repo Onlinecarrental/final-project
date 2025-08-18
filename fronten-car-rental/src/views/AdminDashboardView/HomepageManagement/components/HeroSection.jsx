@@ -3,11 +3,6 @@ import { Edit2, Save, RotateCcw, Upload } from 'lucide-react';
 import axios from 'axios';
 
 // Add this helper function after imports
-const getImageUrl = (path) => {
-  if (!path) return null;
-  if (path.startsWith('http')) return path;
-  return `/.netlify/functions/api/${path.replace(/^\/+/, '')}`;
-};
 
 export default function HeroSection({ sections, setSections, editingSection, setEditingSection, handleUpdate }) {
   const isEditing = editingSection === 'hero';
