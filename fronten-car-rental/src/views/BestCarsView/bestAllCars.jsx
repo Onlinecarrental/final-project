@@ -132,7 +132,7 @@ export default function AllBestCars() {
   };
 
   return (
-    <div className="bg-white w-full">
+    <div className="bg-white max-w-[1200px] mx-auto">
       <div className="flex flex-col md:flex-row gap-4 mt-20 flex-wrap justify-center">
         {currentCars.map((car) => (
           <BaseCard width='w-[380px]' padding='p-[8px]' height='h-full' key={car._id}>

@@ -7,12 +7,12 @@ import { Gauge, Cog, Users, Battery } from 'lucide-react';
 import BaseCard from '../../components/card';
 
 const bodyTypes = [
-  { id: 'sports', name: 'Sports Car' },
-  { id: 'offroad', name: 'Off-Road' },
-  { id: 'family', name: 'Family MPV' },
+  { id: 'Sport Coupe', name: 'Sports Car' },
+  { id: 'Off-Road', name: 'Off-Road' },
+  { id: 'Family MPV', name: 'Family MPV' },
   { id: 'Hatchback', name: 'Hatchback' },
-  { id: 'honda', name: 'Honda' },
-  { id: 'suv', name: 'SUV' }
+  { id: 'Honda', name: 'Honda' },
+  { id: 'SUV', name: 'SUV' }
 
 
 ];
