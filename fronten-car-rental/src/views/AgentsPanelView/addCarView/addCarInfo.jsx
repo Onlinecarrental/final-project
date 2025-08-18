@@ -26,7 +26,7 @@ export default function AddCarInfo() {
     fuelType: "",
     offRoader: "",
     dailyRate: "",
- 
+
     // Images
     coverImage: null,
     image1: null,
@@ -108,21 +108,13 @@ export default function AddCarInfo() {
               }
             );
 
-            // Set image previews
+            // Set image previews with direct Cloudinary URLs
             setImagePreviews({
-              coverImage: `/.netlify/functions/api/${carData.coverImage}`,
-              image1: carData.image1
-                ? `/.netlify/functions/api/${carData.image1}`
-                : null,
-              image2: carData.image2
-                ? `/.netlify/functions/api/${carData.image2}`
-                : null,
-              image3: carData.image3
-                ? `/.netlify/functions/api/${carData.image3}`
-                : null,
-              image4: carData.image4
-                ? `/.netlify/functions/api/${carData.image4}`
-                : null,
+              coverImage: carData.coverImage || null,
+              image1: carData.image1 || null,
+              image2: carData.image2 || null,
+              image3: carData.image3 || null,
+              image4: carData.image4 || null,
             });
           }
         } catch (error) {
@@ -234,7 +226,7 @@ export default function AddCarInfo() {
         "fuelType",
         "offRoader",
         "dailyRate",
-        
+
       ];
 
       const missingFields = requiredFields.filter((field) => !formData[field]);
@@ -427,8 +419,8 @@ export default function AddCarInfo() {
               className="w-full p-3 bg-gray rounded text-black placeholder-white"
             />
           </div>
- 
-         {/* Brand Field */}
+
+          {/* Brand Field */}
           <div>
             <label htmlFor="brand" className="block text-lg font-medium mb-1">
               Brand
@@ -448,7 +440,7 @@ export default function AddCarInfo() {
               ))}
             </select>
           </div>
-{/* Model Field */}
+          {/* Model Field */}
           <div>
             <label htmlFor="model" className="block text-lg font-medium mb-1">Model:</label>
             <input
@@ -711,7 +703,7 @@ export default function AddCarInfo() {
           </div>
 
 
-      
+
         </div>
       </div>
 
@@ -798,9 +790,8 @@ export default function AddCarInfo() {
       {/* Notification Section */}
       {submitStatus.show && (
         <div
-          className={`fixed top-4 right-4 p-4 rounded-lg shadow-lg ${
-            submitStatus.success ? "bg-green-500" : "bg-red-500"
-          } text-white`}
+          className={`fixed top-4 right-4 p-4 rounded-lg shadow-lg ${submitStatus.success ? "bg-green-500" : "bg-red-500"
+            } text-white`}
         >
           <div className="flex items-center">
             {submitStatus.success ? (
