@@ -45,19 +45,19 @@ export default function HeroSection({ sections, setSections, editingSection, set
             ...content
           }
         }));
-        
+
         setEditingSection(null);
-        setUpdateStatus({ 
-          loading: false, 
-          success: 'Hero section updated successfully!' 
+        setUpdateStatus({
+          loading: false,
+          success: 'Hero section updated successfully!'
         });
       } else {
         throw new Error(result?.message || 'Failed to update hero section');
       }
     } catch (error) {
       console.error('Error saving hero section:', error);
-      setUpdateStatus({ 
-        loading: false, 
+      setUpdateStatus({
+        loading: false,
         error: error.message || 'An error occurred while saving'
       });
     }
@@ -82,25 +82,22 @@ export default function HeroSection({ sections, setSections, editingSection, set
 
     setUpdateStatus({ loading: true, error: null });
 
-    try {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-      formData.append('folder', 'car-rental/homepage');
-      formData.append('tags', 'car-rental,hero');
-      
-      // For unsigned uploads, we need to use the API key and timestamp
-      const timestamp = Math.round((new Date).getTime() / 1000);
-      formData.append('timestamp', timestamp);
-      formData.append('api_key', 'dlinqw87p');
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+    formData.append('api_key', 'dlinqw87p'); // Add your Cloudinary API key
+    formData.append('timestamp', (Date.now() / 1000) | 0);
+    formData.append('folder', 'car-rental/homepage');
+    formData.append('tags', 'car-rental,hero');
 
+    try {
       const response = await fetch(CLOUDINARY_UPLOAD_URL, {
         method: 'POST',
         body: formData
       });
 
       const data = await response.json();
-      
+
       if (!response.ok) {
         throw new Error(data.error?.message || 'Upload failed');
       }
@@ -121,7 +118,7 @@ export default function HeroSection({ sections, setSections, editingSection, set
             ...prev,
             hero: updatedHero
           }));
-          setUpdateStatus({ 
+          setUpdateStatus({
             success: 'Image uploaded successfully!',
             loading: false
           });
@@ -133,7 +130,7 @@ export default function HeroSection({ sections, setSections, editingSection, set
       }
     } catch (error) {
       console.error('Image upload error:', error);
-      setUpdateStatus({ 
+      setUpdateStatus({
         error: error.message || 'Failed to upload image. Please try again.',
         loading: false
       });
