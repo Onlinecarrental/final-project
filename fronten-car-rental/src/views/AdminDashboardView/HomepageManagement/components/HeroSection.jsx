@@ -3,13 +3,14 @@ import { Edit2, Save, RotateCcw, Upload } from 'lucide-react';
 
 // Cloudinary configuration
 const CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1/dlinqw87p/image/upload";
-const CLOUDINARY_UPLOAD_PRESET = "ml_default";
+// ⚠️ Change this to your own unsigned preset created in Cloudinary dashboard
+const CLOUDINARY_UPLOAD_PRESET = "car_rental_preset";
 
 export default function HeroSection({ sections, setSections, editingSection, setEditingSection, handleUpdate }) {
   const isEditing = editingSection === 'hero';
   const heroData = sections.hero || {};
   const fileInputRef = useRef(null);
-  const [updateStatus, setUpdateStatus] = useState({ loading: false, error: null });
+  const [updateStatus, setUpdateStatus] = useState({ loading: false, error: null, success: null });
 
   const handleEdit = () => {
     setEditingSection('hero');
@@ -85,8 +86,6 @@ export default function HeroSection({ sections, setSections, editingSection, set
     const formData = new FormData();
     formData.append('file', file);
     formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-    formData.append('api_key', 'dlinqw87p'); // Add your Cloudinary API key
-    formData.append('timestamp', (Date.now() / 1000) | 0);
     formData.append('folder', 'car-rental/homepage');
     formData.append('tags', 'car-rental,hero');
 
@@ -135,9 +134,7 @@ export default function HeroSection({ sections, setSections, editingSection, set
         loading: false
       });
     } finally {
-      if (e.target) {
-        e.target.value = '';
-      }
+      if (e.target) e.target.value = '';
     }
   };
 
@@ -186,7 +183,7 @@ export default function HeroSection({ sections, setSections, editingSection, set
                 accept="image/*"
                 className="hidden"
               />
-              <div className="flex   items-center gap-4">
+              <div className="flex items-center gap-4">
                 <button
                   onClick={() => fileInputRef.current.click()}
                   className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded"
