@@ -20,16 +20,42 @@ const Card = ({ car, onEdit, onDelete }) => {
       <img
         src={(function () {
           const ci = car.coverImage;
-          if (!ci) return "/default-car.jpg";
-          // Absolute URL
-          if (/^https?:\/\//i.test(ci)) return ci;
-          // Relative path coming from backend, normalize and prefix backend base
-          const path = ci.startsWith("/") ? ci.slice(1) : ci;
-          return `${BACKEND_BASE}/${path}`;
+          console.log('Cover Image Data:', { 
+            original: ci, 
+            hasValue: !!ci,
+            isAbsolute: ci && /^https?:\/\//i.test(ci),
+            carId: car._id,
+            carName: car.name
+          });
+          
+          if (!ci) {
+            console.log('No cover image, using default');
+            return "/default-car.jpg";
+          }
+          
+          // If it's already an absolute URL, use it directly
+          if (/^https?:\/\//i.test(ci)) {
+            console.log('Using absolute URL:', ci);
+            return ci;
+          }
+          
+          // Handle relative paths
+          let imagePath = ci;
+          // Remove leading slash if present
+          if (imagePath.startsWith('/')) {
+            imagePath = imagePath.substring(1);
+          }
+          // Remove any path that might be pointing to uploads directory already
+          imagePath = imagePath.replace(/^uploads\//, '');
+          
+          const fullUrl = `${BACKEND_BASE}/uploads/${imagePath}`;
+          console.log('Constructed image URL:', fullUrl);
+          return fullUrl;
         })()}
         alt={car.name}
         className="rounded-[10px] w-full h-[180px] object-cover"
         onError={(e) => {
+          console.error('Image failed to load:', e.target.src);
           e.currentTarget.onerror = null; // prevent looping
           e.currentTarget.src = "/default-car.jpg";
         }}
