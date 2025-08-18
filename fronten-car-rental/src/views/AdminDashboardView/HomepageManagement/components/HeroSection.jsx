@@ -1,10 +1,7 @@
 import { useRef, useState } from 'react';
 import { Edit2, Save, RotateCcw, Upload } from 'lucide-react';
 
-// Cloudinary configuration
-const CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1/dlinqw87p/image/upload";
-// ⚠️ Change this to your own unsigned preset created in Cloudinary dashboard
-const CLOUDINARY_UPLOAD_PRESET = "car_rental_preset";
+// Image upload is handled by backend (which stores to Cloudinary)
 
 export default function HeroSection({ sections, setSections, editingSection, setEditingSection, handleUpdate }) {
   const isEditing = editingSection === 'hero';
@@ -71,68 +68,51 @@ export default function HeroSection({ sections, setSections, editingSection, set
     // Validate file type and size
     const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
     if (!validTypes.includes(file.type)) {
-      setUpdateStatus({ error: 'Please upload a valid image file (JPEG, PNG, GIF, or WebP)' });
+      setUpdateStatus({ loading: false, error: 'Please upload a valid image file (JPEG, PNG, GIF, or WebP)' });
       return;
     }
-
-    // Check file size (5MB limit)
     if (file.size > 5 * 1024 * 1024) {
-      setUpdateStatus({ error: 'Image size should be less than 5MB' });
+      setUpdateStatus({ loading: false, error: 'Image size should be less than 5MB' });
       return;
     }
-
-    setUpdateStatus({ loading: true, error: null });
-
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-    formData.append('folder', 'car-rental/homepage');
-    formData.append('tags', 'car-rental,hero');
 
     try {
-      const response = await fetch(CLOUDINARY_UPLOAD_URL, {
-        method: 'POST',
-        body: formData
-      });
+      setUpdateStatus({ loading: true, error: null, success: null });
 
-      const data = await response.json();
+      // Build multipart form data similar to BlogManagement -> backend handles Cloudinary
+      const formData = new FormData();
+      formData.append('image', file);
+      formData.append('content', JSON.stringify({
+        title: heroData.title || '',
+        description: heroData.description || '',
+        image: heroData.image || null
+      }));
 
-      if (!response.ok) {
-        throw new Error(data.error?.message || 'Upload failed');
-      }
+      const result = await handleUpdate('hero', formData);
 
-      if (data.secure_url) {
-        // Update local state with the new image URL
-        const updatedHero = {
-          ...sections.hero,
-          image: data.secure_url,
-          imagePreview: data.secure_url
+      if (result?.success) {
+        // Expect backend to return updated content incl. hosted image URL
+        const updated = result.data?.content || {
+          title: heroData.title,
+          description: heroData.description,
+          image: result.data?.image || heroData.image
         };
 
-        // Save to backend
-        const result = await handleUpdate('hero', updatedHero);
+        setSections(prev => ({
+          ...prev,
+          hero: {
+            ...prev.hero,
+            ...updated
+          }
+        }));
 
-        if (result?.success) {
-          setSections(prev => ({
-            ...prev,
-            hero: updatedHero
-          }));
-          setUpdateStatus({
-            success: 'Image uploaded successfully!',
-            loading: false
-          });
-        } else {
-          throw new Error('Failed to update hero section with new image');
-        }
+        setUpdateStatus({ loading: false, error: null, success: 'Image uploaded successfully!' });
       } else {
-        throw new Error('Failed to get secure URL from Cloudinary');
+        throw new Error(result?.message || 'Failed to upload image');
       }
     } catch (error) {
       console.error('Image upload error:', error);
-      setUpdateStatus({
-        error: error.message || 'Failed to upload image. Please try again.',
-        loading: false
-      });
+      setUpdateStatus({ loading: false, error: error.message || 'Failed to upload image', success: null });
     } finally {
       if (e.target) e.target.value = '';
     }

@@ -9,36 +9,6 @@ const stepIcons = {
   drive: "M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
 };
 
-// Add IconSelector component
-const IconSelector = ({ selected, onSelect }) => (
-  <div className="grid grid-cols-4 gap-2 mb-4">
-    {Object.entries(stepIcons).map(([iconName, path]) => (
-      <button
-        key={iconName}
-        onClick={() => onSelect(iconName)}
-        className={`p-2 rounded flex flex-col items-center ${selected === iconName ? 'bg-blue-100 ring-2 ring-blue-500' : 'bg-gray-50 hover:bg-gray-100'
-          }`}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-6 w-6 text-blue-600"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d={path}
-          />
-        </svg>
-        <span className="text-xs mt-1 capitalize">{iconName}</span>
-      </button>
-    ))}
-  </div>
-);
-
 // Add validation helpers at the top
 const validateStep = (step) => {
   const errors = [];
@@ -55,8 +25,7 @@ const StatusMessage = ({ status }) => {
   if (!status.error && !status.success) return null;
 
   return (
-    <div className={`p-4 rounded mb-4 ${status.error ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-600'
-      }`}>
+    <div className={`p-4 rounded mb-4 ${status.error ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-600'}`}>
       {status.error || status.success}
     </div>
   );
@@ -78,70 +47,6 @@ const defaultData = {
   },
   steps: [],
   image: null
-};
-
-const CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1/dlinqw87p/image/upload";
-const CLOUDINARY_UPLOAD_PRESET = "upload_preset";
-
-const handleImageUpload = async (e, imageType) => {
-  const file = e.target.files[0];
-  if (file) {
-    if (!file.type.startsWith('image/')) {
-      setUpdateStatus({
-        error: 'Please upload an image file'
-      });
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-
-    try {
-      const res = await fetch(CLOUDINARY_UPLOAD_URL, {
-        method: 'POST',
-        body: formData
-      });
-
-      if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`);
-      }
-
-      const data = await res.json();
-
-      if (data.secure_url) {
-        setSections(prev => ({
-          ...prev,
-          howItWorks: {
-            ...prev.howItWorks,
-            [imageType]: data.secure_url
-          }
-        }));
-
-        // Update the backend
-        const content = {
-          ...sections.howItWorks,
-          [imageType]: data.secure_url
-        };
-
-        const result = await handleUpdate('howItWorks', content);
-
-        if (result?.success) {
-          setUpdateStatus({
-            success: `${imageType} updated successfully!`
-          });
-        } else {
-          throw new Error('Failed to update backend');
-        }
-      } else {
-        throw new Error('No secure URL in response');
-      }
-    } catch (err) {
-      setUpdateStatus({
-        error: `Image upload error: ${err.message}`
-      });
-    }
-  }
 };
 
 export default function HowItWorksSection({ sections, setSections, editingSection, setEditingSection, handleUpdate }) {
@@ -522,15 +427,11 @@ export default function HowItWorksSection({ sections, setSections, editingSectio
             <input
               type="file"
               ref={fileInputRef}
-              onChange={(e) => {
-                const file = e.target.files[0];
-                if (file) {
-                  handleImageUpload(e, 'image');
-                }
-              }}
+              onChange={handleImageChange}
               className="hidden"
               accept="image/*"
             />
+
             <button
               onClick={() => fileInputRef.current?.click()}
               disabled={updateStatus.loading}
