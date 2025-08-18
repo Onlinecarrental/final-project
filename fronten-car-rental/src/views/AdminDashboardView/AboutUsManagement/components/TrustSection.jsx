@@ -34,18 +34,34 @@ export default function TrustSection({ sections, setSections, editingSection, se
   const bannerImageRef = useRef(null);
 
   const CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1/dlinqw87p/image/upload";
+  const CLOUDINARY_UPLOAD_PRESET = "ml_default";
  
   const handleImageUpload = async (e, imageType) => {
     const file = e.target.files[0];
     if (file) {
+      if (!file.type.startsWith('image/')) {
+        setUpdateStatus({
+          error: 'Please upload an image file'
+        });
+        return;
+      }
+
       const formData = new FormData();
       formData.append('file', file);
+      formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
       try {
         const res = await fetch(CLOUDINARY_UPLOAD_URL, {
           method: 'POST',
           body: formData
         });
+
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+
         const data = await res.json();
+        
         if (data.secure_url) {
           setSections(prev => ({
             ...prev,
@@ -54,14 +70,29 @@ export default function TrustSection({ sections, setSections, editingSection, se
               [imageType]: data.secure_url
             }
           }));
-          setUpdateStatus({
-            success: `${imageType} updated successfully!`
-          });
+
+          // Update the backend
+          const content = {
+            ...sections.trust,
+            [imageType]: data.secure_url
+          };
+
+          const result = await handleUpdate('trust', content);
+
+          if (result?.success) {
+            setUpdateStatus({
+              success: `${imageType} updated successfully!`
+            });
+          } else {
+            throw new Error('Failed to update backend');
+          }
         } else {
-          alert('Failed to upload image to Cloudinary');
+          throw new Error('No secure URL in response');
         }
       } catch (err) {
-        alert('Image upload error: ' + err.message);
+        setUpdateStatus({
+          error: `Image upload error: ${err.message}`
+        });
       }
     }
   };
@@ -118,25 +149,44 @@ export default function TrustSection({ sections, setSections, editingSection, se
       }
 
       const formData = new FormData();
-      formData.append('image', file);
-      formData.append('content', JSON.stringify({
-        ...sections.trust,
-        section: 'trust'
-      }));
+      formData.append('file', file);
+      formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
 
-      const result = await handleUpdate('trust', formData);
+      const res = await fetch(CLOUDINARY_UPLOAD_URL, {
+        method: 'POST',
+        body: formData
+      });
 
-      if (result?.success) {
-        setSections(prev => ({
-          ...prev,
-          trust: {
-            ...prev.trust,
-            image: result.data.content.image
-          }
-        }));
-        setUpdateStatus({
-          success: 'Image updated successfully!'
-        });
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+
+      const data = await res.json();
+
+      if (data.secure_url) {
+        const content = {
+          ...sections.trust,
+          image: data.secure_url
+        };
+
+        const result = await handleUpdate('trust', content);
+
+        if (result?.success) {
+          setSections(prev => ({
+            ...prev,
+            trust: {
+              ...prev.trust,
+              image: data.secure_url
+            }
+          }));
+          setUpdateStatus({
+            success: 'Image updated successfully!'
+          });
+        } else {
+          throw new Error('Failed to update backend');
+        }
+      } else {
+        throw new Error('No secure URL in response');
       }
     } catch (error) {
       setUpdateStatus({
@@ -158,25 +208,44 @@ export default function TrustSection({ sections, setSections, editingSection, se
       }
 
       const formData = new FormData();
-      formData.append('image', file);
-      formData.append('bannerImage', 'true');
-      formData.append('content', JSON.stringify({
-        ...sections.trust
-      }));
+      formData.append('file', file);
+      formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
 
-      const result = await handleUpdate('trust', formData);
+      const res = await fetch(CLOUDINARY_UPLOAD_URL, {
+        method: 'POST',
+        body: formData
+      });
 
-      if (result?.success) {
-        setSections(prev => ({
-          ...prev,
-          trust: {
-            ...prev.trust,
-            bannerImage: result.data.content.bannerImage
-          }
-        }));
-        setUpdateStatus({
-          success: 'Banner image updated successfully!'
-        });
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+
+      const data = await res.json();
+
+      if (data.secure_url) {
+        const content = {
+          ...sections.trust,
+          bannerImage: data.secure_url
+        };
+
+        const result = await handleUpdate('trust', content);
+
+        if (result?.success) {
+          setSections(prev => ({
+            ...prev,
+            trust: {
+              ...prev.trust,
+              bannerImage: data.secure_url
+            }
+          }));
+          setUpdateStatus({
+            success: 'Banner image updated successfully!'
+          });
+        } else {
+          throw new Error('Failed to update backend');
+        }
+      } else {
+        throw new Error('No secure URL in response');
       }
     } catch (error) {
       setUpdateStatus({

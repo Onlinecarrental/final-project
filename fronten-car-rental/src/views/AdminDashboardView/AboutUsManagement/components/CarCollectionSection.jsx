@@ -474,53 +474,40 @@ export default function CarCollectionSection({ sections, setSections, editingSec
     });
   };
 
-  // Add handleDecorationImageChange function
-  const handleDecorationImageChange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    if (!file.type.startsWith('image/')) {
-      setUpdateStatus({
-        error: 'Please upload an image file'
-      });
-      return;
-    }
-
-    setSections(prev => {
-      const currentDecoration = prev.carCollection?.decoration || defaultDecoration;
-
-      return {
-        ...prev,
-        carCollection: {
-          ...prev.carCollection,
-          decoration: {
-            ...currentDecoration,
-            imageFile: file,
-            image: URL.createObjectURL(file)
-          }
-        }
-      };
-    });
-  };
-
   // Get decoration safely
   const decoration = sections?.carCollection?.decoration || defaultDecoration;
   const features = decoration?.features || [];
   const cars = sections?.carCollection?.cars || [];
 
   const CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1/dlinqw87p/image/upload";
-  
+  const CLOUDINARY_UPLOAD_PRESET = "ml_default";
+
   const handleImageUpload = async (e, imageType) => {
     const file = e.target.files[0];
     if (file) {
+      if (!file.type.startsWith('image/')) {
+        setUpdateStatus({
+          error: 'Please upload an image file'
+        });
+        return;
+      }
+
       const formData = new FormData();
       formData.append('file', file);
-     try {
+      formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+      try {
         const res = await fetch(CLOUDINARY_UPLOAD_URL, {
           method: 'POST',
           body: formData
         });
+
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+
         const data = await res.json();
+        
         if (data.secure_url) {
           setSections(prev => ({
             ...prev,
@@ -529,15 +516,154 @@ export default function CarCollectionSection({ sections, setSections, editingSec
               [imageType]: data.secure_url
             }
           }));
-          setUpdateStatus({
-            success: `${imageType} updated successfully!`
-          });
+
+          // Update the backend
+          const content = {
+            ...sections.carCollection,
+            [imageType]: data.secure_url
+          };
+
+          const result = await handleUpdate('carCollection', content);
+
+          if (result?.success) {
+            setUpdateStatus({
+              success: `${imageType} updated successfully!`
+            });
+          } else {
+            throw new Error('Failed to update backend');
+          }
         } else {
-          alert('Failed to upload image to Cloudinary');
+          throw new Error('No secure URL in response');
         }
       } catch (err) {
-        alert('Image upload error: ' + err.message);
+        setUpdateStatus({
+          error: `Image upload error: ${err.message}`
+        });
       }
+    }
+  };
+
+  const handleDecorationImageChange = async (e) => {
+    try {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      if (!file.type.startsWith('image/')) {
+        setUpdateStatus({
+          error: 'Please upload an image file'
+        });
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+      const res = await fetch(CLOUDINARY_UPLOAD_URL, {
+        method: 'POST',
+        body: formData
+      });
+
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+
+      const data = await res.json();
+
+      if (data.secure_url) {
+        const content = {
+          ...sections.carCollection,
+          decoration: {
+            ...sections.carCollection.decoration,
+            image: data.secure_url
+          }
+        };
+
+        const result = await handleUpdate('carCollection', content);
+
+        if (result?.success) {
+          setSections(prev => ({
+            ...prev,
+            carCollection: {
+              ...prev.carCollection,
+              decoration: {
+                ...prev.carCollection.decoration,
+                image: data.secure_url
+              }
+            }
+          }));
+          setUpdateStatus({
+            success: 'Decoration image updated successfully!'
+          });
+        } else {
+          throw new Error('Failed to update backend');
+        }
+      } else {
+        throw new Error('No secure URL in response');
+      }
+    } catch (error) {
+      setUpdateStatus({
+        error: error.message
+      });
+    }
+  };
+
+  const handleBannerImageChange = async (e) => {
+    try {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      if (!file.type.startsWith('image/')) {
+        setUpdateStatus({
+          error: 'Please upload an image file'
+        });
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+      const res = await fetch(CLOUDINARY_UPLOAD_URL, {
+        method: 'POST',
+        body: formData
+      });
+
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+
+      const data = await res.json();
+
+      if (data.secure_url) {
+        const content = {
+          ...sections.carCollection,
+          bannerImage: data.secure_url
+        };
+
+        const result = await handleUpdate('carCollection', content);
+
+        if (result?.success) {
+          setSections(prev => ({
+            ...prev,
+            carCollection: {
+              ...prev.carCollection,
+              bannerImage: data.secure_url
+            }
+          }));
+          setUpdateStatus({
+            success: 'Banner image updated successfully!'
+          });
+        } else {
+          throw new Error('Failed to update backend');
+        }
+      } else {
+        throw new Error('No secure URL in response');
+      }
+    } catch (error) {
+      setUpdateStatus({
+        error: error.message
+      });
     }
   };
 

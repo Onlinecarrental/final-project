@@ -87,7 +87,8 @@ const handleImageUpload = async (e, imageType) => {
   if (file) {
     const formData = new FormData();
     formData.append('file', file);
-   try {
+    formData.append('upload_preset', 'ml_default');
+    try {
       const res = await fetch(CLOUDINARY_UPLOAD_URL, {
         method: 'POST',
         body: formData
