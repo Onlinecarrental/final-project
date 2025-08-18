@@ -1,6 +1,10 @@
 import { useRef, useState } from 'react';
 import { Edit2, Save, RotateCcw, Upload } from 'lucide-react';
 
+// Cloudinary configuration
+const CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1/dlinqw87p/image/upload";
+const CLOUDINARY_UPLOAD_PRESET = "ml_default";
+
 export default function HeroSection({ sections, setSections, editingSection, setEditingSection, handleUpdate }) {
   const isEditing = editingSection === 'hero';
   const heroData = sections.hero || {};
@@ -14,9 +18,6 @@ export default function HeroSection({ sections, setSections, editingSection, set
   const handleCancel = () => {
     setEditingSection(null);
   };
-
-  const CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1/dlinqw87p/image/upload";
-  const CLOUDINARY_UPLOAD_PRESET = "ml_default";
 
   const handleSave = async () => {
     try {
@@ -41,7 +42,7 @@ export default function HeroSection({ sections, setSections, editingSection, set
           ...prev,
           hero: {
             ...prev.hero,
-            ...result.data.content
+            ...content
           }
         }));
         
@@ -67,8 +68,9 @@ export default function HeroSection({ sections, setSections, editingSection, set
     if (!file) return;
 
     // Validate file type and size
-    if (!file.type.startsWith('image/')) {
-      setUpdateStatus({ error: 'Please upload a valid image file (JPEG, PNG, GIF, etc.)' });
+    const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+    if (!validTypes.includes(file.type)) {
+      setUpdateStatus({ error: 'Please upload a valid image file (JPEG, PNG, GIF, or WebP)' });
       return;
     }
 
@@ -83,41 +85,46 @@ export default function HeroSection({ sections, setSections, editingSection, set
     const formData = new FormData();
     formData.append('file', file);
     formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-    formData.append('folder', 'car-rental'); // Optional: organize uploads in a folder
+    formData.append('folder', 'car-rental/homepage');
+    formData.append('tags', 'car-rental,hero');
 
     try {
-      console.log('Uploading to Cloudinary...', {
-        url: CLOUDINARY_UPLOAD_URL,
-        preset: CLOUDINARY_UPLOAD_PRESET,
-        file: { name: file.name, type: file.type, size: file.size }
+      const response = await fetch(CLOUDINARY_UPLOAD_URL, {
+        method: 'POST',
+        body: formData
       });
 
-      const res = await fetch(CLOUDINARY_UPLOAD_URL, {
-        method: 'POST',
-        body: formData,
-        // Don't set Content-Type header, let the browser set it with the correct boundary
-      });
-      
-      const data = await res.json();
-      console.log('Cloudinary response:', data);
-      
-      if (!res.ok) {
-        throw new Error(data.message || 'Upload failed');
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error?.message || 'Upload failed');
       }
-      
+
       if (data.secure_url) {
         // Update local state with the new image URL
-        setSections(prev => ({
-          ...prev,
-          hero: {
-            ...prev.hero,
-            image: data.secure_url,
-            imagePreview: data.secure_url
-          }
-        }));
-        setUpdateStatus({ success: 'Image uploaded successfully!' });
+        const updatedHero = {
+          ...sections.hero,
+          image: data.secure_url,
+          imagePreview: data.secure_url
+        };
+
+        // Save to backend
+        const result = await handleUpdate('hero', updatedHero);
+
+        if (result?.success) {
+          setSections(prev => ({
+            ...prev,
+            hero: updatedHero
+          }));
+          setUpdateStatus({ 
+            success: 'Image uploaded successfully!',
+            loading: false
+          });
+        } else {
+          throw new Error('Failed to update hero section with new image');
+        }
       } else {
-        throw new Error(data.error?.message || 'Failed to get secure URL from Cloudinary');
+        throw new Error('Failed to get secure URL from Cloudinary');
       }
     } catch (error) {
       console.error('Image upload error:', error);
@@ -126,7 +133,6 @@ export default function HeroSection({ sections, setSections, editingSection, set
         loading: false
       });
     } finally {
-      // Reset file input
       if (e.target) {
         e.target.value = '';
       }

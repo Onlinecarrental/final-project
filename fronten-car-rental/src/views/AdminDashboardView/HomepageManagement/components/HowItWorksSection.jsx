@@ -1,6 +1,10 @@
 import React, { useState, useRef } from 'react';
 import { Edit2, Save, RotateCcw, Plus, Trash, Upload, Image as ImageIcon } from 'lucide-react';
 
+// Cloudinary configuration
+const CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1/dlinqw87p/image/upload";
+const CLOUDINARY_UPLOAD_PRESET = "ml_default";
+
 // Add stepIcons constant at the top
 const stepIcons = {
   search: "M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z",
@@ -72,58 +76,79 @@ const defaultData = {
   image: null
 };
 
-const CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1/dlinqw87p/image/upload";
-const CLOUDINARY_UPLOAD_PRESET = "ml_default";
-
-const handleImageUpload = async (e, imageType) => {
+const handleImageUpload = async (e) => {
   const file = e.target.files[0];
   if (!file) return;
 
-  if (!file.type.startsWith('image/')) {
-    setUpdateStatus({ error: 'Please upload a valid image file' });
+  // Validate file type and size
+  const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+  if (!validTypes.includes(file.type)) {
+    setUpdateStatus({ error: 'Please upload a valid image file (JPEG, PNG, GIF, or WebP)' });
     return;
   }
+
+  // Check file size (5MB limit)
+  if (file.size > 5 * 1024 * 1024) {
+    setUpdateStatus({ error: 'Image size should be less than 5MB' });
+    return;
+  }
+
+  setUpdateStatus({ loading: true, error: null });
 
   const formData = new FormData();
   formData.append('file', file);
   formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+  formData.append('folder', 'car-rental/how-it-works');
+  formData.append('tags', 'car-rental,how-it-works');
 
   try {
-    const res = await fetch(CLOUDINARY_UPLOAD_URL, {
+    const response = await fetch(CLOUDINARY_UPLOAD_URL, {
       method: 'POST',
       body: formData
     });
-    
-    const data = await res.json();
-    
-    if (data.secure_url) {
-      // Update local state
-      setSections(prev => ({
-        ...prev,
-        howItWorks: {
-          ...prev.howItWorks,
-          [imageType]: data.secure_url,
-          imagePreview: data.secure_url
-        }
-      }));
 
-      // Update backend
-      const result = await handleUpdate('howItWorks', {
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error?.message || 'Upload failed');
+    }
+
+    if (data.secure_url) {
+      // Update local state with the new image URL
+      const updatedSection = {
         ...sections.howItWorks,
-        [imageType]: data.secure_url
-      });
+        image: data.secure_url,
+        imagePreview: data.secure_url
+      };
+
+      // Save to backend
+      const result = await handleUpdate('howItWorks', updatedSection);
 
       if (result?.success) {
-        setUpdateStatus({ success: 'Image uploaded successfully!' });
+        setSections(prev => ({
+          ...prev,
+          howItWorks: updatedSection
+        }));
+        setUpdateStatus({ 
+          success: 'Image uploaded successfully!',
+          loading: false
+        });
       } else {
-        throw new Error(result?.message || 'Failed to update');
+        throw new Error('Failed to update section with new image');
       }
     } else {
-      throw new Error('Failed to upload image to Cloudinary');
+      throw new Error('Failed to get secure URL from Cloudinary');
     }
   } catch (error) {
     console.error('Image upload error:', error);
-    setUpdateStatus({ error: error.message });
+    setUpdateStatus({ 
+      error: error.message || 'Failed to upload image. Please try again.',
+      loading: false
+    });
+  } finally {
+    if (e.target) {
+      e.target.value = '';
+    }
   }
 };
 
@@ -201,7 +226,6 @@ export default function HowItWorksSection({ sections, setSections, editingSectio
     }
   };
 
-  // Update the handleImageChange function to use Cloudinary directly
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -504,12 +528,7 @@ export default function HowItWorksSection({ sections, setSections, editingSectio
             <input
               type="file"
               ref={fileInputRef}
-              onChange={(e) => {
-                const file = e.target.files[0];
-                if (file) {
-                  handleImageUpload(e, 'image');
-                }
-              }}
+              onChange={handleImageUpload}
               className="hidden"
               accept="image/*"
             />
