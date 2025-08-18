@@ -93,7 +93,7 @@ export default function HeroSection({ sections, setSections, editingSection, set
     if (file) {
       const formData = new FormData();
       formData.append('file', file);
-      formData.append('upload_preset', 'upload_preset');
+      formData.append('upload_preset', 'ml_default');
       try {
         const res = await fetch(CLOUDINARY_UPLOAD_URL, {
           method: 'POST',

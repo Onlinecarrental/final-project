@@ -208,14 +208,14 @@ export default function HeroSection({ sections, setSections, editingSection, set
             <label className="block text-sm font-medium mb-1">Title</label>
             <input
               type="text"
-              value={hero.header?.title || ''}
+              value={sections.hero?.header?.title || ''}
               onChange={(e) => {
                 setSections(prev => ({
                   ...prev,
                   hero: {
-                    ...hero,
+                    ...prev.hero,
                     header: {
-                      ...hero.header,
+                      ...prev.hero?.header,
                       title: e.target.value
                     }
                   }
@@ -229,14 +229,14 @@ export default function HeroSection({ sections, setSections, editingSection, set
           <div>
             <label className="block text-sm font-medium mb-1">Description</label>
             <textarea
-              value={hero.header?.description || ''}
+              value={sections.hero?.header?.description || ''}
               onChange={(e) => {
                 setSections(prev => ({
                   ...prev,
                   hero: {
-                    ...hero,
+                    ...prev.hero,
                     header: {
-                      ...hero.header,
+                      ...prev.hero?.header,
                       description: e.target.value
                     }
                   }
@@ -252,23 +252,23 @@ export default function HeroSection({ sections, setSections, editingSection, set
             <label className="block text-sm font-medium mb-1">Image</label>
             <input
               type="file"
-              ref={imageInputRef}
+              ref={fileInputRef}
               onChange={(e) => handleImageUpload(e, 'image')}
               className="hidden"
               accept="image/*"
             />
             <div className="flex gap-2 mb-2">
               <button
-                onClick={() => imageInputRef.current?.click()}
+                onClick={() => fileInputRef.current?.click()}
                 className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
               >
                 <Upload size={18} />
                 <span>Upload Image</span>
               </button>
             </div>
-            {hero.image && (
+            {sections.hero?.image && (
               <img
-                src={hero.image}
+                src={sections.hero.image}
                 alt="Hero"
                 className="mt-2 max-w-xs rounded shadow"
               />
@@ -277,7 +277,7 @@ export default function HeroSection({ sections, setSections, editingSection, set
 
           <div className="flex gap-2">
             <button
-              onClick={handleSave}
+              onClick={handleHeaderSave}
               className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
             >
               <Save size={18} />
@@ -294,12 +294,12 @@ export default function HeroSection({ sections, setSections, editingSection, set
         </div>
       ) : (
         <div>
-          <h4 className="font-medium">{hero.header?.title}</h4>
-          <p className="text-gray-600 mt-1">{hero.header?.description}</p>
-          {hero.image && (
+          <h4 className="font-medium">{sections.hero?.header?.title}</h4>
+          <p className="text-gray-600 mt-1">{sections.hero?.header?.description}</p>
+          {sections.hero?.image && (
             <div className="mt-4">
               <img
-                src={hero.image}
+                src={sections.hero.image}
                 alt="Hero"
                 className="max-w-xs rounded shadow"
               />
