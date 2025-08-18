@@ -84,6 +84,7 @@ const CarCollection = () => {
             hoverBgColor="hover:bg-[#000000]"
             hoverTextColor="hover:text-white"
             width="180px"
+            className='text-white'
             onClick={() => handleBodyTypeClick(type.id)}
           />
         ))}
