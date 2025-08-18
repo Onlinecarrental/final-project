@@ -149,7 +149,7 @@ export default function CarCollectionSection({ sections, setSections, editingSec
     try {
       setUpdateStatus({ loading: true, error: null, success: null });
 
-      const decoration = sections.carCollection.decoration || defaultDecoration;
+      const  decoration = sections.carCollection.decoration || defaultDecoration;
       const validationErrors = validateDecoration(decoration);
       if (validationErrors.length > 0) {
         throw new Error(validationErrors.join('\n'));

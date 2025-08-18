@@ -66,8 +66,15 @@ export default function HeroSection({ sections, setSections, editingSection, set
     const file = e.target.files[0];
     if (!file) return;
 
+    // Validate file type and size
     if (!file.type.startsWith('image/')) {
-      setUpdateStatus({ error: 'Please upload a valid image file' });
+      setUpdateStatus({ error: 'Please upload a valid image file (JPEG, PNG, GIF, etc.)' });
+      return;
+    }
+
+    // Check file size (5MB limit)
+    if (file.size > 5 * 1024 * 1024) {
+      setUpdateStatus({ error: 'Image size should be less than 5MB' });
       return;
     }
 
@@ -76,14 +83,27 @@ export default function HeroSection({ sections, setSections, editingSection, set
     const formData = new FormData();
     formData.append('file', file);
     formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+    formData.append('folder', 'car-rental'); // Optional: organize uploads in a folder
 
     try {
+      console.log('Uploading to Cloudinary...', {
+        url: CLOUDINARY_UPLOAD_URL,
+        preset: CLOUDINARY_UPLOAD_PRESET,
+        file: { name: file.name, type: file.type, size: file.size }
+      });
+
       const res = await fetch(CLOUDINARY_UPLOAD_URL, {
         method: 'POST',
-        body: formData
+        body: formData,
+        // Don't set Content-Type header, let the browser set it with the correct boundary
       });
       
       const data = await res.json();
+      console.log('Cloudinary response:', data);
+      
+      if (!res.ok) {
+        throw new Error(data.message || 'Upload failed');
+      }
       
       if (data.secure_url) {
         // Update local state with the new image URL
@@ -95,15 +115,21 @@ export default function HeroSection({ sections, setSections, editingSection, set
             imagePreview: data.secure_url
           }
         }));
+        setUpdateStatus({ success: 'Image uploaded successfully!' });
       } else {
-        throw new Error('Failed to upload image to Cloudinary');
+        throw new Error(data.error?.message || 'Failed to get secure URL from Cloudinary');
       }
     } catch (error) {
       console.error('Image upload error:', error);
       setUpdateStatus({ 
-        error: error.message || 'Failed to upload image',
+        error: error.message || 'Failed to upload image. Please try again.',
         loading: false
       });
+    } finally {
+      // Reset file input
+      if (e.target) {
+        e.target.value = '';
+      }
     }
   };
 
@@ -152,7 +178,7 @@ export default function HeroSection({ sections, setSections, editingSection, set
                 accept="image/*"
                 className="hidden"
               />
-              <div className="flex items-center gap-4">
+              <div className="flex   items-center gap-4">
                 <button
                   onClick={() => fileInputRef.current.click()}
                   className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded"
