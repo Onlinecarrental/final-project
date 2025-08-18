@@ -75,26 +75,7 @@ const defaultData = {
   steps: [],
   image: null
 };
-
-const handleImageUpload = async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-
-  // Validate file type and size
-  const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
-  if (!validTypes.includes(file.type)) {
-    setUpdateStatus({ error: 'Please upload a valid image file (JPEG, PNG, GIF, or WebP)' });
-    return;
-  }
-
-  // Check file size (5MB limit)
-  if (file.size > 5 * 1024 * 1024) {
-    setUpdateStatus({ error: 'Image size should be less than 5MB' });
-    return;
-  }
-
-  setUpdateStatus({ loading: true, error: null });
-
+const uploadImageToCloudinary = async (file, sections, setSections, handleUpdate) => {
   const formData = new FormData();
   formData.append('file', file);
   formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
@@ -116,12 +97,11 @@ const handleImageUpload = async (e) => {
     if (data.secure_url) {
       // Update local state with the new image URL
       const updatedSection = {
-        ...sections.howItWorks,
+        ...(sections.howItWorks || {}),
         image: data.secure_url,
         imagePreview: data.secure_url
       };
 
-      // Save to backend
       const result = await handleUpdate('howItWorks', updatedSection);
 
       if (result?.success) {
@@ -129,47 +109,97 @@ const handleImageUpload = async (e) => {
           ...prev,
           howItWorks: updatedSection
         }));
-        setUpdateStatus({ 
-          success: 'Image uploaded successfully!',
+        return { 
+          success: true,
+          message: 'Image uploaded successfully!',
           loading: false
-        });
+        };
       } else {
         throw new Error('Failed to update section with new image');
       }
     } else {
-      throw new Error('Failed to get secure URL from Cloudinary');
+      throw new Error('No secure URL returned from Cloudinary');
     }
   } catch (error) {
     console.error('Image upload error:', error);
-    setUpdateStatus({ 
+    return { 
       error: error.message || 'Failed to upload image. Please try again.',
       loading: false
-    });
-  } finally {
-    if (e.target) {
-      e.target.value = '';
-    }
+    };
   }
 };
 
 export default function HowItWorksSection({ sections, setSections, editingSection, setEditingSection, handleUpdate }) {
-  const [updateStatus, setUpdateStatus] = useState({
-    loading: false,
-    error: null,
-    success: null
-  });
-
-  // Define fileInputRef at component level
+  const [updateStatus, setUpdateStatus] = useState({ loading: false, error: null, success: null });
   const fileInputRef = useRef(null);
+  
+  // Initialize local data with sections data or defaults
+  const [localData, setLocalData] = useState(() => ({
+    header: sections?.howItWorks?.header || defaultData.header,
+    steps: sections?.howItWorks?.steps || defaultData.steps,
+    image: sections?.howItWorks?.image || null,
+    imagePreview: sections?.howItWorks?.image || null
+  }));
 
-  // Ensure sectionData has all required properties with nullish coalescing
-  const sectionData = {
-    header: {
-      title: sections?.howItWorks?.header?.title ?? defaultData.header.title,
-      description: sections?.howItWorks?.header?.description ?? defaultData.header.description
-    },
-    image: sections?.howItWorks?.image ?? defaultData.image,
-    steps: sections?.howItWorks?.steps ?? defaultData.steps
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Validate file type and size
+    const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+    if (!validTypes.includes(file.type)) {
+      setUpdateStatus({ error: 'Please upload a valid image file (JPEG, PNG, GIF, or WebP)' });
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      setUpdateStatus({ error: 'Image size should be less than 5MB' });
+      return;
+    }
+
+    setUpdateStatus({ loading: true, error: null, success: null });
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+    formData.append('folder', 'car-rental/how-it-works');
+    formData.append('tags', 'car-rental,how-it-works');
+    formData.append('api_key', 'dlinqw87p');
+    formData.append('timestamp', (Date.now() / 1000) | 0);
+
+    try {
+      const response = await fetch(CLOUDINARY_UPLOAD_URL, {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error?.message || 'Upload failed');
+      }
+
+      if (data.secure_url) {
+        setLocalData(prev => ({
+          ...prev,
+          image: data.secure_url,
+          imagePreview: data.secure_url
+        }));
+        setUpdateStatus({ success: 'Image uploaded successfully!', loading: false });
+      } else {
+        throw new Error('Failed to get secure URL from Cloudinary');
+      }
+    } catch (error) {
+      console.error('Image upload error:', error);
+      setUpdateStatus({ 
+        error: error.message || 'Failed to upload image. Please try again.',
+        loading: false 
+      });
+    } finally {
+      if (e.target) {
+        e.target.value = '';
+      }
+    }
   };
 
   const isEditingHeader = editingSection === 'howItWorks-header';
@@ -245,6 +275,9 @@ export default function HowItWorksSection({ sections, setSections, editingSectio
     const formData = new FormData();
     formData.append('file', file);
     formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+    formData.append('api_key', 'dlinqw87p'); // Add your Cloudinary API key
+    formData.append('timestamp', (Date.now() / 1000) | 0);
+    formData.append('folder', 'car-rental/homepage');
 
     try {
       const res = await fetch(CLOUDINARY_UPLOAD_URL, {

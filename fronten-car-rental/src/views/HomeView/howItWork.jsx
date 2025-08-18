@@ -44,15 +44,13 @@ const defaultData = {
   imagePath: null // Add this for storing server image path
 };
 
-// Update the getImageUrl function
+// Get image URL - prioritize Cloudinary URLs, fallback to default
 const getImageUrl = (path) => {
   if (!path) return defaultJeep;
+  // Return the path as is if it's already a full URL (Cloudinary or other)
   if (path.startsWith('http')) return path;
-  // Handle the uploads/homepage path specifically
-  if (path.includes('uploads/homepage')) {
-    return `/.netlify/functions/api/${path}`;
-  }
-  return `/.netlify/functions/api/uploads/homepage/${path}`;
+  // For any other cases, return the default image
+  return defaultJeep;
 };
 
 export default function HowItWork() {

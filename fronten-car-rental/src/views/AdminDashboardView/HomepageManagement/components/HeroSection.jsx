@@ -82,20 +82,25 @@ export default function HeroSection({ sections, setSections, editingSection, set
 
     setUpdateStatus({ loading: true, error: null });
 
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-    formData.append('folder', 'car-rental/homepage');
-    formData.append('tags', 'car-rental,hero');
-
     try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+      formData.append('folder', 'car-rental/homepage');
+      formData.append('tags', 'car-rental,hero');
+      
+      // For unsigned uploads, we need to use the API key and timestamp
+      const timestamp = Math.round((new Date).getTime() / 1000);
+      formData.append('timestamp', timestamp);
+      formData.append('api_key', 'dlinqw87p');
+
       const response = await fetch(CLOUDINARY_UPLOAD_URL, {
         method: 'POST',
         body: formData
       });
 
       const data = await response.json();
-
+      
       if (!response.ok) {
         throw new Error(data.error?.message || 'Upload failed');
       }
