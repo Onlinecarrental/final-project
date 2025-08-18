@@ -62,14 +62,6 @@ const StatusMessage = ({ status }) => {
   );
 };
 
-// Update the getImageUrl helper function
-const getImageUrl = (path) => {
-  if (!path) return null;
-  if (path.startsWith('http')) return path;
-  if (path.startsWith('/')) return `/.netlify/functions/api${path}`;
-  return `/.netlify/functions/api/${path}`;
-};
-
 // Move defaultData before any function that uses it
 const defaultData = {
   header: {
@@ -81,66 +73,57 @@ const defaultData = {
 };
 
 const CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1/dlinqw87p/image/upload";
-const CLOUDINARY_UPLOAD_PRESET = "upload_preset";
+const CLOUDINARY_UPLOAD_PRESET = "ml_default";
 
 const handleImageUpload = async (e, imageType) => {
   const file = e.target.files[0];
-  if (file) {
-    if (!file.type.startsWith('image/')) {
-      setUpdateStatus({
-        error: 'Please upload an image file'
-      });
-      return;
-    }
+  if (!file) return;
 
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+  if (!file.type.startsWith('image/')) {
+    setUpdateStatus({ error: 'Please upload a valid image file' });
+    return;
+  }
 
-    try {
-      const res = await fetch(CLOUDINARY_UPLOAD_URL, {
-        method: 'POST',
-        body: formData
-      });
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
 
-      if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`);
-      }
-
-      const data = await res.json();
-      
-      if (data.secure_url) {
-        setSections(prev => ({
-          ...prev,
-          howItWorks: {
-            ...prev.howItWorks,
-            [imageType]: data.secure_url
-          }
-        }));
-
-        // Update the backend
-        const content = {
-          ...sections.howItWorks,
-          [imageType]: data.secure_url
-        };
-
-        const result = await handleUpdate('howItWorks', content);
-
-        if (result?.success) {
-          setUpdateStatus({
-            success: `${imageType} updated successfully!`
-          });
-        } else {
-          throw new Error('Failed to update backend');
+  try {
+    const res = await fetch(CLOUDINARY_UPLOAD_URL, {
+      method: 'POST',
+      body: formData
+    });
+    
+    const data = await res.json();
+    
+    if (data.secure_url) {
+      // Update local state
+      setSections(prev => ({
+        ...prev,
+        howItWorks: {
+          ...prev.howItWorks,
+          [imageType]: data.secure_url,
+          imagePreview: data.secure_url
         }
-      } else {
-        throw new Error('No secure URL in response');
-      }
-    } catch (err) {
-      setUpdateStatus({
-        error: `Image upload error: ${err.message}`
+      }));
+
+      // Update backend
+      const result = await handleUpdate('howItWorks', {
+        ...sections.howItWorks,
+        [imageType]: data.secure_url
       });
+
+      if (result?.success) {
+        setUpdateStatus({ success: 'Image uploaded successfully!' });
+      } else {
+        throw new Error(result?.message || 'Failed to update');
+      }
+    } else {
+      throw new Error('Failed to upload image to Cloudinary');
     }
+  } catch (error) {
+    console.error('Image upload error:', error);
+    setUpdateStatus({ error: error.message });
   }
 };
 
@@ -218,79 +201,78 @@ export default function HowItWorksSection({ sections, setSections, editingSectio
     }
   };
 
-  // Update the handleImageChange function
+  // Update the handleImageChange function to use Cloudinary directly
   const handleImageChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      setUpdateStatus({ error: 'Please upload a valid image file' });
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) { // 5MB limit
+      setUpdateStatus({ error: 'Image must be less than 5MB' });
+      return;
+    }
+
+    setUpdateStatus({ loading: true, error: null, success: null });
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
     try {
-      const file = e.target.files[0];
-      if (!file) return;
-
-      // Validate file
-      if (!file.type.startsWith('image/')) {
-        setUpdateStatus({
-          loading: false,
-          error: 'Please upload an image file',
-          success: null
-        });
-        return;
-      }
-
-      if (file.size > 5 * 1024 * 1024) { // 5MB limit
-        setUpdateStatus({
-          loading: false,
-          error: 'Image must be less than 5MB',
-          success: null
-        });
-        return;
-      }
-
-      setUpdateStatus({ loading: true, error: null, success: null });
-
-      const formData = new FormData();
-      formData.append('image', file);
-      formData.append('content', JSON.stringify({
-        header: sectionData.header,
-        steps: sectionData.steps,
-        image: sectionData.image
-      }));
-
-      const result = await handleUpdate('howItWorks', formData);
-
-      if (result.success) {
-        // Update sections with the complete content including image
-        setSections(prev => ({
-          ...prev,
+      const res = await fetch(CLOUDINARY_UPLOAD_URL, {
+        method: 'POST',
+        body: formData
+      });
+      
+      const data = await res.json();
+      
+      if (data.secure_url) {
+        // Update local state with the new image URL
+        const updatedSections = {
+          ...sections,
           howItWorks: {
-            ...prev.howItWorks,
-            ...result.data.content, // This includes all section data
-            image: result.data.content.image // Explicitly set image
+            ...sections.howItWorks,
+            image: data.secure_url
           }
-        }));
+        };
 
-        console.log('Updated section data:', result.data.content); // Debug log
-
-        setUpdateStatus({
-          loading: false,
-          error: null,
-          success: 'Image uploaded successfully!'
+        // Update the backend with the new image URL
+        const result = await handleUpdate('howItWorks', {
+          ...sections.howItWorks,
+          image: data.secure_url
         });
 
-        if (fileInputRef.current) {
-          fileInputRef.current.value = '';
+        if (result?.success) {
+          setSections(updatedSections);
+          setUpdateStatus({ 
+            success: 'Image uploaded successfully!',
+            loading: false
+          });
+        } else {
+          throw new Error(result?.message || 'Failed to update image');
         }
       } else {
-        throw new Error(result.message || 'Failed to upload image');
+        throw new Error('Failed to upload image to Cloudinary');
       }
     } catch (error) {
       console.error('Image upload error:', error);
-      setUpdateStatus({
-        loading: false,
-        error: error.message || 'Failed to upload image'
+      setUpdateStatus({ 
+        error: error.message || 'Failed to upload image',
+        loading: false
       });
+    }
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
     }
   };
 
-  // Add this debug log in the render section
-  console.log('Current image URL:', getImageUrl(sectionData.image));
+  // Log the current image URL for debugging
+  console.log('Current image URL:', sectionData.image);
 
   // Update the handleImageDelete function
   const handleImageDelete = async () => {

@@ -1,8 +1,5 @@
 import { useRef, useState } from 'react';
 import { Edit2, Save, RotateCcw, Upload } from 'lucide-react';
-import axios from 'axios';
-
-// Add this helper function after imports
 
 export default function HeroSection({ sections, setSections, editingSection, setEditingSection, handleUpdate }) {
   const isEditing = editingSection === 'hero';
@@ -18,7 +15,9 @@ export default function HeroSection({ sections, setSections, editingSection, set
     setEditingSection(null);
   };
 
-  // Update the handleSave function
+  const CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1/dlinqw87p/image/upload";
+  const CLOUDINARY_UPLOAD_PRESET = "ml_default";
+
   const handleSave = async () => {
     try {
       setUpdateStatus({ loading: true, error: null });
@@ -32,90 +31,79 @@ export default function HeroSection({ sections, setSections, editingSection, set
       const content = {
         title: heroData.title.trim(),
         description: heroData.description.trim(),
-        image: heroData.image // Keep existing image if not updating
+        image: heroData.image
       };
 
-      let result;
-
-      if (heroData.imageFile) {
-        const formData = new FormData();
-        formData.append('image', heroData.imageFile);
-        formData.append('content', JSON.stringify(content));
-        result = await handleUpdate('hero', formData);
-      } else {
-        result = await handleUpdate('hero', content);
-      }
+      const result = await handleUpdate('hero', content);
 
       if (result?.success) {
-        // Update local state with new image path
         setSections(prev => ({
           ...prev,
           hero: {
             ...prev.hero,
-            ...result.data.content,
-            imageFile: null,
-            imagePreview: null
+            ...result.data.content
           }
         }));
         
         setEditingSection(null);
-        alert('Hero section updated successfully!');
+        setUpdateStatus({ 
+          loading: false, 
+          success: 'Hero section updated successfully!' 
+        });
       } else {
-        throw new Error(result?.message || 'Failed to update');
+        throw new Error(result?.message || 'Failed to update hero section');
       }
     } catch (error) {
       console.error('Error saving hero section:', error);
-      setUpdateStatus({ loading: false, error: error.message });
+      setUpdateStatus({ 
+        loading: false, 
+        error: error.message || 'An error occurred while saving'
+      });
     }
   };
 
-  // Add a new function to validate SSL connection
-  const validateConnection = async () => {
-    try {
-      const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
-      await axios.get(`${API_BASE_URL}/health`);
-      return true;
-    } catch (error) {
-      console.error('Connection validation failed:', error);
-      return false;
-    }
-  };
-
-  const CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1/dlinqw87p/image/upload";
-  
-  const handleImageUpload = async (e, imageType) => {
+  const handleImageUpload = async (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('upload_preset', 'ml_default');
-      try {
-        const res = await fetch(CLOUDINARY_UPLOAD_URL, {
-          method: 'POST',
-          body: formData
-        });
-        const data = await res.json();
-        if (data.secure_url) {
-          setSections(prev => ({
-            ...prev,
-            hero: {
-              ...prev.hero,
-              [imageType]: data.secure_url
-            }
-          }));
-          setSections(prev => ({
-            ...prev,
-            hero: {
-              ...prev.hero,
-              imagePreview: data.secure_url
-            }
-          }));
-        } else {
-          alert('Failed to upload image to Cloudinary');
-        }
-      } catch (err) {
-        alert('Image upload error: ' + err.message);
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      setUpdateStatus({ error: 'Please upload a valid image file' });
+      return;
+    }
+
+    setUpdateStatus({ loading: true, error: null });
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+    try {
+      const res = await fetch(CLOUDINARY_UPLOAD_URL, {
+        method: 'POST',
+        body: formData
+      });
+      
+      const data = await res.json();
+      
+      if (data.secure_url) {
+        // Update local state with the new image URL
+        setSections(prev => ({
+          ...prev,
+          hero: {
+            ...prev.hero,
+            image: data.secure_url,
+            imagePreview: data.secure_url
+          }
+        }));
+      } else {
+        throw new Error('Failed to upload image to Cloudinary');
       }
+    } catch (error) {
+      console.error('Image upload error:', error);
+      setUpdateStatus({ 
+        error: error.message || 'Failed to upload image',
+        loading: false
+      });
     }
   };
 
@@ -160,7 +148,7 @@ export default function HeroSection({ sections, setSections, editingSection, set
               <input
                 type="file"
                 ref={fileInputRef}
-                onChange={(e) => handleImageUpload(e, 'image')}
+                onChange={handleImageUpload}
                 accept="image/*"
                 className="hidden"
               />
@@ -174,7 +162,7 @@ export default function HeroSection({ sections, setSections, editingSection, set
                 </button>
                 {(heroData.imagePreview || heroData.image) && (
                   <img
-                    src={heroData.imagePreview || getImageUrl(heroData.image)}
+                    src={heroData.imagePreview || heroData.image}
                     alt="Preview"
                     className="h-20 w-20 object-cover rounded"
                     onError={(e) => {
@@ -215,6 +203,10 @@ export default function HeroSection({ sections, setSections, editingSection, set
                   src={heroData.imagePreview || heroData.image}
                   alt="Hero"
                   className="mt-2 max-w-xs rounded"
+                  onError={(e) => {
+                    console.error('Failed to load image:', e.target.src);
+                    e.target.style.display = 'none';
+                  }}
                 />
               )}
             </div>
