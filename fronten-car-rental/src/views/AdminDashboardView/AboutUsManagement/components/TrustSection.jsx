@@ -34,7 +34,7 @@ export default function TrustSection({ sections, setSections, editingSection, se
   const bannerImageRef = useRef(null);
 
   const CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1/dlinqw87p/image/upload";
-  const CLOUDINARY_UPLOAD_PRESET = "ml_default";
+  const CLOUDINARY_UPLOAD_PRESET = "upload_preset";
  
   const handleImageUpload = async (e, imageType) => {
     const file = e.target.files[0];
