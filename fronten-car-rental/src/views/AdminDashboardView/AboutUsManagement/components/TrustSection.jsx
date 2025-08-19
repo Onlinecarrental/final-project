@@ -19,14 +19,14 @@ const validateContent = (content) => {
 };
 
 const trustIcons = {
-  'shield': <Shield className="w-6 h-6 text-blue-600" />,
-  'award': <Award className="w-6 h-6 text-yellow-500" />,
-  'thumbs-up': <ThumbsUp className="w-6 h-6 text-green-500" />,
-  'star': <Star className="w-6 h-6 text-yellow-400" />,
-  'check': <CheckCircle className="w-6 h-6 text-green-500" />,
-  'truck': <Truck className="w-6 h-6 text-blue-500" />,
-  'clock': <Clock className="w-6 h-6 text-purple-500" />,
-  'users': <Users className="w-6 h-6 text-red-500" />
+  'shield': <Shield className="w-6 h-6 text-black" />,
+  'award': <Award className="w-6 h-6 text-black" />,
+  'thumbs-up': <ThumbsUp className="w-6 h-6 text-black" />,
+  'star': <Star className="w-6 h-6 text-black" />,
+  'check': <CheckCircle className="w-6 h-6 text-black" />,
+  'truck': <Truck className="w-6 h-6 text-black" />,
+  'clock': <Clock className="w-6 h-6 text-black" />,
+  'users': <Users className="w-6 h-6 text-black" />
 };
 
 export default function TrustSection({ sections, setSections, editingSection, setEditingSection, handleUpdate }) {
@@ -399,12 +399,13 @@ export default function TrustSection({ sections, setSections, editingSection, se
               />
             </div>
 
-            {/* Subtitle Input */}
+            {/* description Input */}
+
             <div>
-              <label className="block text-sm font-medium mb-1">Subtitle</label>
+              <label className="block text-sm font-medium mb-1">Description</label>
               <input
                 type="text"
-                value={sections.trust.header?.subtitle || ''}
+                value={sections.trust.header?.description || ''}
                 onChange={(e) => {
                   setSections(prev => ({
                     ...prev,
@@ -412,13 +413,13 @@ export default function TrustSection({ sections, setSections, editingSection, se
                       ...prev.trust,
                       header: {
                         ...prev.trust.header,
-                        subtitle: e.target.value
+                        description: e.target.value
                       }
                     }
                   }));
                 }}
                 className="w-full p-2 border rounded"
-                placeholder="Enter subtitle"
+                placeholder="Enter description"
               />
             </div>
 

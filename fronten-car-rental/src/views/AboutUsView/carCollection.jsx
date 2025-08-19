@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import Button from '../../components/button';
 import HeadingTitle from '../../components/heading';
 import axios from 'axios';
-
+import bluetick from '../../assets/bluetick.svg';
 // Add a helper function to format image URLs
 const getImageUrl = (path) => {
   if (!path) return "../src/assets/AUcar.svg";
@@ -210,7 +210,7 @@ export default function CarCollection() {
               <div className="flex items-center" key={index}>
                 <div className="mr-2 rounded-full p-1">
                   <img
-                    src="/src/assets/bluetick.svg"
+                    src={bluetick}
                     alt="Checkmark"
                     className="h-6 w-6"
                     onError={(e) => {

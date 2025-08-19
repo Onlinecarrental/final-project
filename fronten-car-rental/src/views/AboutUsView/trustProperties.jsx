@@ -11,43 +11,24 @@ const getImageUrl = (path) => {
 
 // Define trust icons
 const trustIcons = {
-  'shield': <Shield className="w-12 h-12 text-blue-600" />,
-  'award': <Award className="w-12 h-12 text-yellow-500" />,
-  'thumbs-up': <ThumbsUp className="w-12 h-12 text-green-500" />,
-  'star': <Star className="w-12 h-12 text-yellow-400" />,
-  'check': <CheckCircle className="w-12 h-12 text-green-500" />,
-  'truck': <Truck className="w-12 h-12 text-blue-500" />,
-  'clock': <Clock className="w-12 h-12 text-purple-500" />,
-  'users': <Users className="w-12 h-12 text-red-500" />
+  'shield': <Shield className="w-8 h-8 text-black" />,
+  'award': <Award className="w-8 h-8 text-black" />,
+  'thumbs-up': <ThumbsUp className="w-8 h-8 text-black" />,
+  'star': <Star className="w-8 h-8 text-black" />,
+  'check': <CheckCircle className="w-8 h-8 text-black" />,
+  'truck': <Truck className="w-8 h-8 text-black" />,
+  'clock': <Clock className="w-8 h-8 text-black" />,
+  'users': <Users className="w-8 h-8 text-black" />
 };
 
 export default function TrustProperties() {
   const [trustData, setTrustData] = useState({
-    title: "Trusted & Quality Service",
-    description: "We are a company that provides the best car rental services in the world. We have been in business for over 10 years and have served more than 1 million customers.",
-    items: [
-      {
-        icon: 'shield',
-        title: 'Safe & Secure',
-        description: "Your safety is our top priority with 24/7 support and secure transactions."
-      },
-      {
-        icon: 'award',
-        title: 'Award Winning',
-        description: "Recognized as the best car rental service for 5 consecutive years."
-      },
-      {
-        icon: 'truck',
-        title: 'Wide Selection',
-        description: "Choose from a wide range of well-maintained vehicles for every need."
-      },
-      {
-        icon: 'check',
-        title: 'Easy Booking',
-        description: "Simple and quick booking process with instant confirmation."
-      }
-    ],
-    image: ""
+    header: {
+      title: "Why Trust Us",
+      description: "Our commitment to excellence",
+      subtitle: ""
+    },
+    items: []
   });
 
   const [loading, setLoading] = useState(true);
@@ -63,16 +44,16 @@ export default function TrustProperties() {
         const response = await axios.get(`${API_BASE_URL}/about/trust`);
 
         if (response.data.success && response.data.data?.content) {
-          const fetchedData = response.data.data.content;
-          const itemsData = fetchedData.items || fetchedData.features || [];
-
-          setTrustData(prev => ({
-            ...prev,
-            title: fetchedData.title || prev.title,
-            description: fetchedData.description || prev.description,
-            items: itemsData,
-            image: fetchedData.image || prev.image
-          }));
+          const { header, items } = response.data.data.content;
+          setTrustData({
+            header: {
+              title: header?.title || 'Why Trust Us',
+              description: header?.description || 'Our commitment to excellence',
+              subtitle: header?.subtitle || ''
+            },
+            items: items || [],
+            image: response.data.data.content.image || ''
+          });
         }
       } catch (error) {
         console.error('Error fetching trust data:', error);
@@ -110,16 +91,17 @@ export default function TrustProperties() {
 
   return (
     <div className="flex flex-col md:flex-row gap-10 mt-8 justify-between items-start p-6 bg-white max-w-6xl mx-auto">
-      <div className="w-full md:w-1/2 space-y-9 ">
+      <div className="w-full md:w-1/2 space-y-9">
         <div>
-          <h2 className="text-4xl font-bold mb-2">{trustData.title}</h2>
-          <p className="text-lg">{trustData.description}</p>
+          <h2 className="text-4xl font-bold mb-2">{trustData?.header?.title}</h2>
+          <p className="text-lg">{trustData?.header?.description}</p>
+
         </div>
 
         <div className="space-y-4">
           {trustData.items.map((item, index) => (
-            <div className="flex gap-5 items-start" key={index}>
-              <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-full">
+            <div className="flex gap-5 items-center" key={index}>
+              <div className="flex items-center justify-center w-12 h-12 bg-gray rounded-[10px]">
                 {trustIcons[item.icon]}
               </div>
               <div>
