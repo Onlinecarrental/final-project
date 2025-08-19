@@ -120,7 +120,7 @@ export default function CategoryManagement() {
             {categories.map(category => (
               <div
                 key={category._id}
-                className="flex items-center justify-between p-3 bg-gray-50 rounded"
+                className="flex items-center justify-between p-3 bg-grayrounded"
               >
                 {editingId === category._id ? (
                   <input

@@ -191,7 +191,7 @@ function DashboardContent() {
             <button className="px-3 py-1 text-sm text-gray-600 hover:bg-gray-100 rounded">Yearly</button>
           </div>
         </div>
-        <div className="h-64 bg-gray-50 rounded flex items-center justify-center">
+        <div className="h-64 bg-grayrounded flex items-center justify-center">
           <p className="text-gray-500">Sales chart visualization would render here</p>
         </div>
       </div>

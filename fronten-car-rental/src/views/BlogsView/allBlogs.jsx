@@ -18,9 +18,9 @@ const BlogCard = ({ blog, onImageLoad, onImageError, imageLoadingStates }) => (
       {imageLoadingStates[`blog-${blog._id}`] && (
         <div className="absolute inset-0 bg-gray-100 animate-pulse" />
       )}
-      <img 
+      <img
         src={blog.image ? blog.image : "/default-blog.jpg"}
-        alt={blog.title} 
+        alt={blog.title}
         className="w-full h-52 object-cover"
         onLoad={() => onImageLoad(`blog-${blog._id}`)}
         onError={(e) => {
@@ -49,8 +49,8 @@ const BlogCard = ({ blog, onImageLoad, onImageError, imageLoadingStates }) => (
             {imageLoadingStates[`author-${blog._id}`] && (
               <div className="absolute inset-0 bg-gray-100 animate-pulse rounded-full" />
             )}
-            <img 
-              src={blog.author.image 
+            <img
+              src={blog.author.image
                 ? blog.author.image
                 : "/default-avatar.jpg"
               }
@@ -108,13 +108,13 @@ export default function BlogListPage() {
     try {
       setLoading(true);
       setError(null);
-      
+
       const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
       const [blogsResponse, categoriesResponse] = await Promise.all([
         axios.get(`${API_BASE_URL}/blogs`),
         axios.get(`${API_BASE_URL}/categories`)
       ]);
-      
+
       if (blogsResponse.data.success) {
         setBlogs(blogsResponse.data.data);
         const initialLoadingStates = {};
@@ -149,12 +149,12 @@ export default function BlogListPage() {
   ];
 
   const filteredBlogs = blogs.filter(blog => {
-    const matchesSearch = searchTerm === '' || 
+    const matchesSearch = searchTerm === '' ||
       blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       blog.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
-    
+
     const matchesCategory = activeCategory === 'All' || blog.category === activeCategory;
-    
+
     return matchesSearch && matchesCategory;
   });
 
@@ -195,7 +195,7 @@ export default function BlogListPage() {
     return (
       <div className="flex flex-col justify-center items-center min-h-screen">
         <div className="text-red-500 text-xl mb-4">Error: {error}</div>
-        <button 
+        <button
           onClick={fetchBlogs}
           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
         >
@@ -206,7 +206,7 @@ export default function BlogListPage() {
   }
 
   return (
-    <div className="bg-gray-50 font-jakarta min-h-screen">
+    <div className="bg-grayfont-jakarta min-h-screen">
       <div className="container mx-auto px-4 py-6">
         <div className="lg:hidden mb-4">
           <button
@@ -240,11 +240,10 @@ export default function BlogListPage() {
                   <li key={category.name}>
                     <button
                       onClick={() => setActiveCategory(category.name)}
-                      className={`flex items-center justify-between w-full py-2.5 px-4 rounded-lg transition ${
-                        activeCategory === category.name 
-                          ? 'bg-indigo-50 text-indigo-700 font-medium' 
+                      className={`flex items-center justify-between w-full py-2.5 px-4 rounded-lg transition ${activeCategory === category.name
+                          ? 'bg-indigo-50 text-indigo-700 font-medium'
                           : 'hover:bg-white'
-                      }`}
+                        }`}
                     >
                       <span className="flex items-center">
                         <Tag size={16} className="mr-2" />
@@ -281,8 +280,8 @@ export default function BlogListPage() {
             ) : (
               <div className="grid md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
                 {currentPosts.map(blog => (
-                  <BlogCard 
-                    key={blog._id} 
+                  <BlogCard
+                    key={blog._id}
                     blog={blog}
                     onImageLoad={handleImageLoad}
                     onImageError={handleImageError}
@@ -307,11 +306,10 @@ export default function BlogListPage() {
                     <button
                       key={number}
                       onClick={() => setCurrentPage(number)}
-                      className={`px-4 py-2 rounded-lg ${
-                        currentPage === number
+                      className={`px-4 py-2 rounded-lg ${currentPage === number
                           ? 'bg-blue-500 text-white'
                           : 'bg-white hover:bg-gray-50'
-                      }`}
+                        }`}
                     >
                       {number}
                     </button>

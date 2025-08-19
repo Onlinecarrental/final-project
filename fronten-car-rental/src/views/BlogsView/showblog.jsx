@@ -17,14 +17,14 @@ const BlogPost = () => {
     try {
       setLoading(true);
       setError(null);
-      
+
       // Validate ID before making the request
       if (!id) {
         throw new Error('Blog ID is missing');
       }
 
       const response = await axios.get(`${API_BASE_URL}/blogs/${id}`);
-      
+
       if (response.data.success && response.data.data) {
         console.log('Blog data:', response.data.data); // Debug log
         setBlog(response.data.data);
@@ -34,8 +34,8 @@ const BlogPost = () => {
     } catch (error) {
       console.error('Error fetching blog:', error);
       setError(
-        error.response?.status === 404 
-          ? 'Blog not found' 
+        error.response?.status === 404
+          ? 'Blog not found'
           : error.response?.data?.message || 'Failed to load blog'
       );
     } finally {
@@ -62,7 +62,7 @@ const BlogPost = () => {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen">
         <div className="text-red-500 text-xl mb-4">{error || 'Blog not found'}</div>
-        <Link 
+        <Link
           to="/home/blogs"
           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
         >
@@ -73,17 +73,17 @@ const BlogPost = () => {
   }
 
   return (
-    <div className="bg-gray-50 font-sans min-h-screen">
+    <div className="bg-grayfont-sans min-h-screen">
       {/* Hero Section */}
       <div className="relative w-full h-[400px] overflow-hidden">
         <div className="absolute inset-0 bg-black/40"> {/* Darkened overlay */}
           <div
             className="w-full h-full bg-cover bg-center blur-sm" // Added blur effect
             style={{
-              backgroundImage: `url(${blog.image ? 
-                `/.netlify/functions/api/uploads/blogs/${blog.image}` : 
+              backgroundImage: `url(${blog.image ?
+                `/.netlify/functions/api/uploads/blogs/${blog.image}` :
                 heroImage
-              })`,
+                })`,
             }}
           />
         </div>
@@ -96,7 +96,7 @@ const BlogPost = () => {
           <div className="flex items-center space-x-6">
             <div className="flex items-center">
               {blog.author.image ? (
-                <img 
+                <img
                   src={`/.netlify/functions/api/uploads/authors/${blog.author.image}`}
                   alt={blog.author.name}
                   className="w-12 h-12 rounded-full object-cover border-2 border-white mr-2"
@@ -112,7 +112,7 @@ const BlogPost = () => {
               )}
               <span className="text-white text-sm font-medium">{blog.author.name}</span>
             </div>
-            
+
             <div className="flex items-center text-white">
               <Calendar size={16} className="mr-1" />
               <span className="text-sm">
@@ -134,7 +134,7 @@ const BlogPost = () => {
           <div className="lg:w-3/4">
             <BaseCard width='w-auto' boxShadow={false} className='border border-gray-200 rounded-xl overflow-hidden' height='h-auto'>
               <div className="relative">
-                <img 
+                <img
                   src={`/.netlify/functions/api/uploads/blogs/${blog.image}`}
                   alt={blog.title}
                   className="w-full h-[500px] object-cover"
@@ -144,9 +144,9 @@ const BlogPost = () => {
                   }}
                 />
               </div>
-              
+
               <div className="p-8">
-                <div 
+                <div
                   className="prose max-w-none text-gray-700"
                   dangerouslySetInnerHTML={{ __html: blog.content }}
                 />

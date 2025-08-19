@@ -10,7 +10,7 @@ const reasonIcons = {
   'trophy': <Trophy size={24} className="text-yellow-600" />,
   'star': <Star size={24} className="text-purple-600" />,
   'thumbs-up': <ThumbsUp size={24} className="text-indigo-600" />,
-  'award': <Award size={24} className="text-red-600" />
+  'award': <Award size={24} className="text-black" />
 };
 
 export default function WhyChooseUs() {
@@ -86,7 +86,7 @@ export default function WhyChooseUs() {
         />
 
         {error && (
-          <div className="text-red-600 mb-8 bg-red-50 p-4 rounded">
+          <div className="text-black mb-8 bg-red-50 p-4 rounded">
             {error}
           </div>
         )}
@@ -99,7 +99,7 @@ export default function WhyChooseUs() {
               className="flex flex-col mx-auto items-center hover:shadow-lg transition-shadow duration-300 p-6"
               height="h-auto"
             >
-              <div className="p-3 rounded-full bg-gray-50 mb-4">
+              <div className="p-3 rounded-full bg-graymb-4">
                 {getIcon(reason.icon)}
               </div>
 

@@ -52,7 +52,7 @@ export default function AdminChat() {
     return (
         <div className="w-full h-[80vh] flex bg-white rounded-lg shadow overflow-hidden font-jakarta">
             {/* Sidebar: Chat List */}
-            <div className="w-[340px] min-w-[260px] border-r bg-gray-50 flex flex-col">
+            <div className="w-[340px] min-w-[260px] border-r bg-grayflex flex-col">
                 <div className="p-4 border-b font-bold text-lg flex items-center bg-white">
                     Admin Chat — All Conversations
                 </div>
@@ -175,7 +175,7 @@ export default function AdminChat() {
                             e.target.reset();
                         }
                     }}
-                    className="flex items-center gap-2 p-4 bg-gray-50 border-t"
+                    className="flex items-center gap-2 p-4 bg-grayborder-t"
                 >
                     <input
                         name="message"

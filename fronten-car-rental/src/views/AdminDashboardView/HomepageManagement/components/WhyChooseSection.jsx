@@ -7,7 +7,7 @@ const reasonIcons = {
   'trophy': <Trophy className="w-6 h-6 text-yellow-600" />,
   'star': <Star className="w-6 h-6 text-purple-600" />,
   'thumbs-up': <ThumbsUp className="w-6 h-6 text-indigo-600" />,
-  'award': <Award className="w-6 h-6 text-red-600" />
+  'award': <Award className="w-6 h-6 text-black" />
 };
 
 export default function WhyChooseSection({ sections, setSections, editingSection, setEditingSection, handleUpdate }) {
@@ -193,7 +193,7 @@ export default function WhyChooseSection({ sections, setSections, editingSection
   return (
     <div className="space-y-8">
       {updateStatus.error && (
-        <div className="bg-red-50 text-red-600 p-4 rounded mb-4">
+        <div className="bg-red-50 text-black p-4 rounded mb-4">
           {updateStatus.error}
         </div>
       )}
@@ -379,7 +379,7 @@ export default function WhyChooseSection({ sections, setSections, editingSection
                       </button>
                       <button
                         onClick={() => deleteReason(index)}
-                        className="flex items-center gap-2 text-red-600 hover:text-red-800"
+                        className="flex items-center gap-2 text-black hover:text-red-800"
                       >
                         <Trash size={18} />
                         <span>Delete</span>

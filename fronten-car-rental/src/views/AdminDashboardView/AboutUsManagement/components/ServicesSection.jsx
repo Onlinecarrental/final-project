@@ -15,7 +15,7 @@ const IconSelector = ({ selected, onSelect }) => (
       <button
         key={iconName}
         onClick={() => onSelect(iconName)}
-        className={`p-2 rounded flex flex-col items-center ${selected === iconName ? 'bg-blue-100 ring-2 ring-blue-500' : 'bg-gray-50 hover:bg-gray-100'
+        className={`p-2 rounded flex flex-col items-center ${selected === iconName ? 'bg-blue-100 ring-2 ring-blue-500' : 'bg-grayhover:bg-gray-100'
           }`}
       >
         <svg
