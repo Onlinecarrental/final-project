@@ -84,13 +84,13 @@ const CarCollection = () => {
             hoverBgColor="hover:bg-[#000000]"
             hoverTextColor="hover:text-white"
             width="180px"
-            className='text-white'
             onClick={() => handleBodyTypeClick(type.id)}
           />
         ))}
       </div>
 
-      <div className="flex flex-col md:flex-row gap-4 mt-10 flex-wrap justify-center">
+
+      <div className="flex flex-col md:flex-row max-w-[1200px] gap-4 mt-10 flex-wrap justify-center">
         {filteredCars.slice(0, 6).map((car) => (
           <BaseCard width='w-[380px]' padding='p-[8px]' height='h-full' key={car.id} >
             <div className="relative h-48 overflow-hidden">

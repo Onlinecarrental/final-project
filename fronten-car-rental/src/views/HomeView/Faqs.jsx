@@ -1,60 +1,80 @@
-import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
-import HeadingTitle from '../../components/heading';
-import BaseCard from '../../components/card';
+import React, { useState, useEffect } from 'react';
 import { ChevronDown } from 'lucide-react';
+import HeadingTitle from '../../components/heading';
+import axios from 'axios';
 
 export default function Faqs() {
-  const [faqData, setFaqData] = useState({
+  const [faqsData, setFaqsData] = useState({
     header: {
-      title: 'Frequently Asked Questions',
-      description: 'Find answers to common questions about our car rental services'
+      title: "Frequently asked questions",
+      description: "Find answers to common questions about our car rental services"
     },
-    faqs: []
+    items: []
   });
+  const [activeIndex, setActiveIndex] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [activeIndex, setActiveIndex] = useState(null);
-
-  // Add ref for measuring content height
-  const answerRefs = useRef([]);
 
   useEffect(() => {
-    const fetchFaqs = async () => {
+    const fetchFaqsData = async () => {
       try {
         setLoading(true);
         setError(null);
 
+        // Prevent cache
+        const timestamp = new Date().getTime();
         const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
-        const response = await axios.get(`${API_BASE_URL}/homepage/faqs`);
-        
+        const response = await axios.get(`${API_BASE_URL}/homepage/faqs?timestamp=${timestamp}`, {
+          headers: {
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache',
+            'Expires': '0',
+          }
+        });
+
         if (response.data.success && response.data.data?.content) {
-          const content = response.data.data.content;
-          
-          setFaqData({
+          const fetchedData = response.data.data.content;
+          const faqItems = fetchedData.items || fetchedData.faqs || [];
+
+          setFaqsData(prev => ({
+            ...prev,
+            ...fetchedData,
             header: {
-              title: content.header?.title || faqData.header.title,
-              description: content.header?.description || faqData.header.description
+              ...prev.header,
+              ...(fetchedData.header || {})
             },
-            faqs: Array.isArray(content.faqs) ? content.faqs : []
-          });
+            items: faqItems,
+            faqs: faqItems
+          }));
         }
-      } catch (error) {
-        console.error('Error fetching FAQs:', error);
-        setError('Failed to load FAQs. Please try again later.');
-        // Keep default values on error
+      } catch (err) {
+        console.error("Error fetching FAQs:", err);
+        setError("Failed to load FAQs. Please try again later.");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchFaqs();
+    fetchFaqsData();
+
+    // Re-fetch when tab is focused
+    const handleFocus = () => {
+      fetchFaqsData();
+    };
+    window.addEventListener("focus", handleFocus);
+    return () => {
+      window.removeEventListener("focus", handleFocus);
+    };
   }, []);
 
-  // Update toggle function
   const toggleAccordion = (index) => {
-    setActiveIndex(prev => prev === index ? null : index);
+    setActiveIndex(activeIndex === index ? null : index);
   };
+
+  // Extract safe values
+  const headerTitle = faqsData.header?.title || "Frequently asked questions";
+  const headerDescription = faqsData.header?.description || "Find answers to common questions about our car rental services";
+  const items = faqsData.items || faqsData.faqs || [];
 
   if (loading) {
     return (
@@ -75,62 +95,47 @@ export default function Faqs() {
   }
 
   return (
-    <div className="w-full bg-white py-12 px-4">
-      <div className="max-w-6xl mx-auto">
-        <HeadingTitle 
-          title={faqData.header.title}
-          paragraph={faqData.header.description}
-        />
+    <div className="max-w-[1250px] mx-auto p-6 bg-gray">
+      <HeadingTitle
+        title={headerTitle}
+        paragraph={headerDescription}
+      />
 
-        {error && (
-          <div className="text-red-600 mb-8 bg-red-50 p-4 rounded text-center">
-            {error}
-          </div>
-        )}
-        
-        <div className="mt-12 space-y-4">
-          {faqData.faqs.map((faq, index) => (
-            <BaseCard 
-              key={index}
-              width="w-full"
-              height="auto"
-              className="cursor-pointer hover:shadow-lg transition-all duration-300"
+      {error && (
+        <div className="text-red-600 mb-8 bg-red-50 p-4 rounded text-center">
+          {error}
+        </div>
+      )}
+
+      <div className="space-y-3 max-w-[920px] mb-12 mt-12 mx-auto">
+        {items.map((faq, index) => (
+          <div
+            key={index}
+            className="bg-white rounded cursor-pointer"
+          >
+            <button
+              className="flex justify-between items-center w-full p-4 text-left"
               onClick={() => toggleAccordion(index)}
             >
-              <div className="p-6">
-                <div className="flex justify-between items-center">
-                  <h3 className="font-semibold text-lg pr-8">{faq.question}</h3>
-                  <ChevronDown 
-                    className={`w-6 h-6 transition-transform duration-300 flex-shrink-0 ${
-                      activeIndex === index ? 'transform rotate-180' : ''
-                    }`}
-                  />
-                </div>
-                <div 
-                  ref={el => answerRefs.current[index] = el}
-                  className={`
-                    mt-4 text-gray-600
-                    overflow-hidden
-                    transition-all duration-300 ease-in-out
-                    ${activeIndex === index ? 'opacity-100' : 'opacity-0'}
-                  `}
-                  style={{
-                    maxHeight: activeIndex === index ? answerRefs.current[index]?.scrollHeight + 'px' : '0px',
-                    visibility: activeIndex === index ? 'visible' : 'hidden'
-                  }}
-                >
-                  <p className="whitespace-pre-line pb-2">{faq.answer}</p>
-                </div>
+              <span className="font-medium">{faq.question || `Question ${index + 1}`}</span>
+              <ChevronDown
+                className={`transform text-Blue transition-transform ${activeIndex === index ? 'rotate-180' : ''}`}
+                size={20}
+              />
+            </button>
+            {activeIndex === index && (
+              <div className="p-4 pt-2 bg-black text-white">
+                <p>{faq.answer || 'No answer provided.'}</p>
               </div>
-            </BaseCard>
-          ))}
+            )}
+          </div>
+        ))}
 
-          {faqData.faqs.length === 0 && !loading && !error && (
-            <div className="text-center text-gray-500 py-8">
-              No FAQs available at the moment.
-            </div>
-          )}
-        </div>
+        {items.length === 0 && !loading && !error && (
+          <div className="text-center text-gray-500 py-8">
+            No FAQs available at the moment.
+          </div>
+        )}
       </div>
     </div>
   );
