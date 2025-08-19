@@ -50,10 +50,6 @@ export default function ServicesBenefits() {
     };
 
     fetchServices();
-
-    // Poll for updates every 5 seconds
-    const interval = setInterval(fetchServices, 5000);
-    return () => clearInterval(interval);
   }, []);
 
   if (loading) {

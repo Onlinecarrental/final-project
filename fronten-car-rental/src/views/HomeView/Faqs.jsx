@@ -21,16 +21,8 @@ export default function Faqs() {
         setLoading(true);
         setError(null);
 
-        // Prevent cache
-        const timestamp = new Date().getTime();
         const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
-        const response = await axios.get(`${API_BASE_URL}/homepage/faqs?timestamp=${timestamp}`, {
-          headers: {
-            'Cache-Control': 'no-cache',
-            'Pragma': 'no-cache',
-            'Expires': '0',
-          }
-        });
+        const response = await axios.get(`${API_BASE_URL}/homepage/faqs`);
 
         if (response.data.success && response.data.data?.content) {
           const fetchedData = response.data.data.content;
@@ -55,23 +47,14 @@ export default function Faqs() {
       }
     };
 
-    fetchFaqsData();
-
-    // Re-fetch when tab is focused
-    const handleFocus = () => {
-      fetchFaqsData();
-    };
-    window.addEventListener("focus", handleFocus);
-    return () => {
-      window.removeEventListener("focus", handleFocus);
-    };
+    fetchFaqsData(); // ✅ only once when component mounts
   }, []);
 
   const toggleAccordion = (index) => {
     setActiveIndex(activeIndex === index ? null : index);
   };
 
-  // Extract safe values
+  // Safe values
   const headerTitle = faqsData.header?.title || "Frequently asked questions";
   const headerDescription = faqsData.header?.description || "Find answers to common questions about our car rental services";
   const items = faqsData.items || faqsData.faqs || [];
@@ -95,10 +78,9 @@ export default function Faqs() {
   }
 
   return (
-    <div className=" mx-auto p-6 bg-white">
+    <div className="mx-auto p-6 bg-white">
       <HeadingTitle
         title={headerTitle}
-
         paragraph={headerDescription}
       />
 
