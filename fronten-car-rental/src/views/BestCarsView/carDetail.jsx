@@ -16,10 +16,10 @@ export default function CarDetailCard() {
       try {
         setLoading(true);
         setError(null);
-        
+
         console.log('Fetching car details for ID:', id);
         const response = await axios.get(`https://backend-car-rental-production.up.railway.app/api/cars/${id}`);
-        
+
         // Log the full response structure
         console.log('Full response:', {
           success: response.data.success,
@@ -33,7 +33,7 @@ export default function CarDetailCard() {
 
         // Set the car data from the data property
         setCar(response.data.data);
-        
+
       } catch (error) {
         console.error('Failed to fetch car:', error);
         if (error.response?.status === 404) {
@@ -122,7 +122,7 @@ export default function CarDetailCard() {
         {/* Details Section */}
         <div className="space-y-6">
           <h1 className="text-3xl font-bold">{car.name}</h1>
-          
+
           <div className="grid grid-cols-2 gap-4">
             <div>Brand: {car.brand}</div>
             <div>Model: {car.model}</div>
@@ -133,7 +133,7 @@ export default function CarDetailCard() {
             <div>Fuel Type: {car.fuelType}</div>
           </div>
 
-          <div className="bg-gray-100 p-4 rounded-lg">
+          <div className="bg-gray  p-4 rounded-lg">
             <h2 className="text-2xl font-bold">${car.dailyRate}/day</h2>
           </div>
 

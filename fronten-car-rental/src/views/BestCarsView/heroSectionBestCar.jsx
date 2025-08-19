@@ -7,17 +7,17 @@ export default function HerosectionCar() {
   const navigate = useNavigate();
   const locationHook = useLocation();
   const searchParams = new URLSearchParams(locationHook.search);
-  
+
   // Initialize state from URL parameters
   const [priceOpen, setPriceOpen] = useState(false);
   const [selectedPrice, setSelectedPrice] = useState(
     searchParams.get('price') === 'desc' ? 'High to Low' : 'Low to High'
   );
-  
+
   const [carModel, setCarModel] = useState(searchParams.get('brand') || '');
   const [bodyType, setBodyType] = useState(searchParams.get('categories') || '');
   const [location, setLocation] = useState(searchParams.get('city') || '');
-  
+
   // Update state when URL parameters change
   useEffect(() => {
     const params = new URLSearchParams(locationHook.search);
@@ -43,7 +43,7 @@ export default function HerosectionCar() {
   const extractCityFromInput = (value) => {
     const raw = (value || '').toLowerCase();
     const parts = raw.split(',').map(s => s.trim()).filter(Boolean);
-    const blacklist = ['district','division','province','state','country','pakistan','india','punjab','sindh','kpk','balochistan','azad kashmir','pb','pk'];
+    const blacklist = ['district', 'division', 'province', 'state', 'country', 'pakistan', 'india', 'punjab', 'sindh', 'kpk', 'balochistan', 'azad kashmir', 'pb', 'pk'];
     for (const p of parts) {
       if (p.length >= 3 && blacklist.every(w => !p.includes(w))) return normalize(p);
     }
@@ -91,20 +91,20 @@ export default function HerosectionCar() {
   const onSearchClick = () => {
     setSubmitted(true);
     const params = new URLSearchParams();
-    
+
     // Only add parameters if they have values
     if (carModel) params.set('brand', carModel);
     if (bodyType) params.set('categories', bodyType);
-    
+
     // Handle location with city extraction
     if (location) {
       const cityToken = extractCityFromInput(location);
       if (cityToken) params.set('city', cityToken);
     }
-    
+
     // Set price sort
     params.set('price', selectedPrice === 'Low to High' ? 'asc' : 'desc');
-    
+
     // Navigate with the new search parameters
     navigate(`/home/best-cars?${params.toString()}`);
   };
@@ -178,18 +178,18 @@ export default function HerosectionCar() {
                   onChange={(e) => setCarModel(e.target.value)}
                 >
                   <option value="">Select Car Model</option>
-                   <option value="Toyota">Toyota</option>
-                   <option value="Honda">Honda</option>
-                <option value="BMW">BMW</option>
-                <option value="Mercedes-Benz">Mercedes-Benz</option>
+                  <option value="Toyota">Toyota</option>
+                  <option value="Honda">Honda</option>
+                  <option value="BMW">BMW</option>
+                  <option value="Mercedes-Benz">Mercedes-Benz</option>
                   <option value="Hyundai">Hyundai</option>
-                <option value="Nissan">Nissan</option>
+                  <option value="Nissan">Nissan</option>
                   <option value="KIA">KIA</option>
-                   <option value="Ford">Ford</option>
-                    <option value="Tesla">Tesla</option>
-                   <option value="Audi">Audi</option>
-                   <option value="Peugeot">Peugeot</option>
- </select>
+                  <option value="Ford">Ford</option>
+                  <option value="Tesla">Tesla</option>
+                  <option value="Audi">Audi</option>
+                  <option value="Peugeot">Peugeot</option>
+                </select>
                 {submitted && !carModel && (
                   <p className="text-red-500 text-sm mt-1">Please select a car model</p>
                 )}
@@ -204,26 +204,26 @@ export default function HerosectionCar() {
                   onChange={(e) => setBodyType(e.target.value)}
                 >
                   <option value="">Select Car Type</option>
-                 <option value="SUV">SUV</option>
-    <option value="Crossover">Crossover</option>
-    <option value="Wagon">Wagon</option>
-    <option value="Family MPV">Family MPV</option>
-    <option value="Sport Coupe">Sport Coupe</option>
-    <option value="Compact">Compact</option>
-    <option value="Coupe">Coupe</option>
-    <option value="Sedan">Sedan</option>
-    <option value="Limousine">Limousine</option>
-    <option value="Convertible">Convertible</option>
-    <option value="Off-Road">Off-Road</option>
-     <option value="Hatchback">Hatchback</option>
+                  <option value="SUV">SUV</option>
+                  <option value="Crossover">Crossover</option>
+                  <option value="Wagon">Wagon</option>
+                  <option value="Family MPV">Family MPV</option>
+                  <option value="Sport Coupe">Sport Coupe</option>
+                  <option value="Compact">Compact</option>
+                  <option value="Coupe">Coupe</option>
+                  <option value="Sedan">Sedan</option>
+                  <option value="Limousine">Limousine</option>
+                  <option value="Convertible">Convertible</option>
+                  <option value="Off-Road">Off-Road</option>
+                  <option value="Hatchback">Hatchback</option>
                 </select>
                 {submitted && !bodyType && (
                   <p className="text-red-500 text-sm mt-1">Please select a body type</p>
                 )}
               </div>
-                <div className="flex-1 min-w-[210px] relative z-[1px]">
+              <div className="flex-1 min-w-[210px] relative z-[1px]">
                 <div className="text-sm text-start text-gray-600 mb-1">Location</div>
-               
+
                 <input
                   ref={locationInputRef}
                   type="text"
@@ -243,7 +243,7 @@ export default function HerosectionCar() {
                     {suggestions.map(s => (
                       <div
                         key={s.id}
-                        className="p-2 hover:bg-gray-100 cursor-pointer text-left"
+                        className="p-2 hover:bg-gray  cursor-pointer text-left"
                         onMouseDown={(e) => {
                           e.preventDefault();
                           setLocation(s.label);
@@ -291,7 +291,7 @@ export default function HerosectionCar() {
                           setSelectedPrice(option);
                           setPriceOpen(false);
                         }}
-                        className="p-2 hover:bg-gray-100 cursor-pointer"
+                        className="p-2 hover:bg-gray  cursor-pointer"
                       >
                         {option}
                       </div>

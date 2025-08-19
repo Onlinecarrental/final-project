@@ -28,7 +28,7 @@ export default function HeroSectionCarForm() {
   const extractCityFromInput = (value) => {
     const raw = (value || '').toLowerCase();
     const parts = raw.split(',').map(s => s.trim()).filter(Boolean);
-    const blacklist = ['district','division','province','state','country','pakistan','india','punjab','sindh','kpk','balochistan','azad kashmir','pb','pk'];
+    const blacklist = ['district', 'division', 'province', 'state', 'country', 'pakistan', 'india', 'punjab', 'sindh', 'kpk', 'balochistan', 'azad kashmir', 'pb', 'pk'];
     for (const p of parts) {
       if (p.length >= 3 && blacklist.every(w => !p.includes(w))) return normalize(p);
     }
@@ -52,22 +52,22 @@ export default function HeroSectionCarForm() {
   const handleSubmit = () => {
     setSubmitted(true);
     const params = new URLSearchParams();
-    
+
     // Only add parameters if they have values
     if (carModel && carModel !== '-- Select --') params.set('brand', carModel);
     if (bodyType && bodyType !== '-- Select --') params.set('categories', bodyType);
-    
+
     // Handle location with city extraction
     if (location) {
       const cityToken = extractCityFromInput(location);
       if (cityToken) params.set('city', cityToken);
     }
-    
+
     // Set price sort (default to asc if not specified)
     if (priceSort) {
       params.set('price', priceSort === 'High to Low' ? 'desc' : 'asc');
     }
-    
+
     // Navigate to the best-cars page with the query parameters
     navigate(`/home/best-cars?${params.toString()}`);
   };
@@ -113,7 +113,7 @@ export default function HeroSectionCarForm() {
     const newErrors = {};
     setErrors(newErrors);
     setSubmitted(true);
-    
+
     // All fields are optional in the search
     handleSubmit();
   };
@@ -132,9 +132,8 @@ export default function HeroSectionCarForm() {
           <div className="flex flex-col relative">
             <label className="mb-2 text-sm font-medium text-gray-700">Car Model</label>
             <select
-              className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
-                errors.carModel ? 'border-red-500' : 'border-gray-300'
-              }`}
+              className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${errors.carModel ? 'border-red-500' : 'border-gray-300'
+                }`}
               value={carModel}
               onChange={(e) => setCarModel(e.target.value)}
             >
@@ -158,14 +157,13 @@ export default function HeroSectionCarForm() {
           <div className="flex flex-col">
             <label className="mb-2 text-sm font-medium text-gray-700">Body Type</label>
             <select
-              className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
-                errors.bodyType ? 'border-red-500' : 'border-gray-300'
-              }`}
+              className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${errors.bodyType ? 'border-red-500' : 'border-gray-300'
+                }`}
               value={bodyType}
               onChange={(e) => setBodyType(e.target.value)}
             >
               <option value="">Select Car type</option>
-               <option value="SUV">SUV</option>
+              <option value="SUV">SUV</option>
               <option value="Crossover">Crossover</option>
               <option value="Wagon">Wagon</option>
               <option value="Family MPV">Family MPV</option>
@@ -187,9 +185,8 @@ export default function HeroSectionCarForm() {
               <input
                 type="text"
                 ref={locationInputRef}
-                className={`pl-4 w-full py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
-                  errors.location ? 'border-red-500' : 'border-gray-300'
-                }`}
+                className={`pl-4 w-full py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${errors.location ? 'border-red-500' : 'border-gray-300'
+                  }`}
                 placeholder="Enter location"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
@@ -201,7 +198,7 @@ export default function HeroSectionCarForm() {
                   {suggestions.map((suggestion) => (
                     <div
                       key={suggestion.id}
-                      className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                      className="px-4 py-2 cursor-pointer hover:bg-gray "
                       onMouseDown={() => {
                         setLocation(suggestion.label);
                         setShowSuggestions(false);
@@ -220,9 +217,8 @@ export default function HeroSectionCarForm() {
           <div className="flex flex-col">
             <label className="mb-2 text-sm font-medium text-gray-700">Price Sort</label>
             <select
-              className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
-                errors.priceSort ? 'border-red-500' : 'border-gray-300'
-              }`}
+              className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${errors.priceSort ? 'border-red-500' : 'border-gray-300'
+                }`}
               value={priceSort}
               onChange={(e) => setPriceSort(e.target.value)}
             >

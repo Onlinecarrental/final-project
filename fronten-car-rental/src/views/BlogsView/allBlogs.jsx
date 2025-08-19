@@ -16,7 +16,7 @@ const BlogCard = ({ blog, onImageLoad, onImageError, imageLoadingStates }) => (
   >
     <div className="relative">
       {imageLoadingStates[`blog-${blog._id}`] && (
-        <div className="absolute inset-0 bg-gray-100 animate-pulse" />
+        <div className="absolute inset-0 bg-gray  animate-pulse" />
       )}
       <img
         src={blog.image ? blog.image : "/default-blog.jpg"}
@@ -47,7 +47,7 @@ const BlogCard = ({ blog, onImageLoad, onImageError, imageLoadingStates }) => (
         <div className="flex items-center">
           <div className="relative w-10 h-10">
             {imageLoadingStates[`author-${blog._id}`] && (
-              <div className="absolute inset-0 bg-gray-100 animate-pulse rounded-full" />
+              <div className="absolute inset-0 bg-gray  animate-pulse rounded-full" />
             )}
             <img
               src={blog.author.image
@@ -241,8 +241,8 @@ export default function BlogListPage() {
                     <button
                       onClick={() => setActiveCategory(category.name)}
                       className={`flex items-center justify-between w-full py-2.5 px-4 rounded-lg transition ${activeCategory === category.name
-                          ? 'bg-indigo-50 text-indigo-700 font-medium'
-                          : 'hover:bg-white'
+                        ? 'bg-indigo-50 text-indigo-700 font-medium'
+                        : 'hover:bg-white'
                         }`}
                     >
                       <span className="flex items-center">
@@ -307,8 +307,8 @@ export default function BlogListPage() {
                       key={number}
                       onClick={() => setCurrentPage(number)}
                       className={`px-4 py-2 rounded-lg ${currentPage === number
-                          ? 'bg-blue-500 text-white'
-                          : 'bg-white hover:bg-gray-50'
+                        ? 'bg-blue-500 text-white'
+                        : 'bg-white hover:bg-gray-50'
                         }`}
                     >
                       {number}

@@ -187,8 +187,8 @@ function DashboardContent() {
           <h3 className="text-lg font-medium">Sales Overview</h3>
           <div className="flex space-x-2">
             <button className="px-3 py-1 text-sm bg-blue-600 text-white rounded">Weekly</button>
-            <button className="px-3 py-1 text-sm text-gray-600 hover:bg-gray-100 rounded">Monthly</button>
-            <button className="px-3 py-1 text-sm text-gray-600 hover:bg-gray-100 rounded">Yearly</button>
+            <button className="px-3 py-1 text-sm text-gray-600 hover:bg-gray  rounded">Monthly</button>
+            <button className="px-3 py-1 text-sm text-gray-600 hover:bg-gray  rounded">Yearly</button>
           </div>
         </div>
         <div className="h-64 bg-grayrounded flex items-center justify-center">
@@ -484,7 +484,7 @@ export default function AdminDashboard() {
         {/* Top Navigation */}
         <header className="bg-white shadow-sm z-10">
           <div className="flex items-center justify-between p-4">
-            <div className="flex items-center rounded-md bg-gray-100 px-3 py-2 w-64">
+            <div className="flex items-center rounded-md bg-gray  px-3 py-2 w-64">
               <Search size={18} className="text-gray-500" />
               <input
                 type="text"

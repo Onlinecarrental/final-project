@@ -283,7 +283,7 @@ export default function BookingForm() {
                     <label className="block text-lg font-[500] mb-1">Price:</label>
                     <div className="relative">
                       <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">$</span>
-                      <input type="number" name="price" value={formData.price} readOnly className="w-full p-2 pl-8 border border-gray-300 rounded-md bg-gray-100 cursor-not-allowed" />
+                      <input type="number" name="price" value={formData.price} readOnly className="w-full p-2 pl-8 border border-gray-300 rounded-md bg-gray  cursor-not-allowed" />
                     </div>
                   </div>
                   <div className="flex justify-between mt-6">

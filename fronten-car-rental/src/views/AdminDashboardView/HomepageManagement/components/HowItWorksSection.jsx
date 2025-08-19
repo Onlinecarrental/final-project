@@ -585,7 +585,7 @@ export default function HowItWorksSection({ sections, setSections, editingSectio
             ) : (
               <div>
                 <div className="flex items-center gap-3 mb-2">
-                  <div className="bg-gray-100 p-2 rounded-full">
+                  <div className="bg-gray  p-2 rounded-full">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-6 w-6 text-black"

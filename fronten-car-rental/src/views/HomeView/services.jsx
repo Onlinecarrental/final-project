@@ -94,7 +94,7 @@ export default function ServicesBenefits() {
               key={index}
               className="flex flex-col items-center p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
             >
-              <div className="bg-gray-100 p-4 rounded-full mb-4">
+              <div className="bg-gray  p-4 rounded-full mb-4">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-8 w-8 text-black"

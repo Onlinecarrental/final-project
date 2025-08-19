@@ -15,7 +15,7 @@ const IconSelector = ({ selected, onSelect }) => (
       <button
         key={iconName}
         onClick={() => onSelect(iconName)}
-        className={`p-2 rounded flex flex-col items-center ${selected === iconName ? 'bg-blue-100 ring-2 ring-blue-500' : 'bg-grayhover:bg-gray-100'
+        className={`p-2 rounded flex flex-col items-center ${selected === iconName ? 'bg-blue-100 ring-2 ring-blue-500' : 'bg-grayhover:bg-gray '
           }`}
       >
         <svg
@@ -540,7 +540,7 @@ export default function ServicesSection({ sections = {}, setSections, editingSec
             ) : (
               <div>
                 <div className="flex items-center gap-4 mb-2">
-                  <div className="bg-gray-100 p-2 rounded-full">
+                  <div className="bg-gray  p-2 rounded-full">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-6 w-6 text-black"

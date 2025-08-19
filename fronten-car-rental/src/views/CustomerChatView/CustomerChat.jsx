@@ -60,7 +60,7 @@ export default function CustomerChat() {
     return (
         <div className="w-full h-[80vh] flex bg-white rounded-lg shadow overflow-hidden font-jakarta">
             {/* Sidebar: Chat List */}
-            <div className="w-[340px] min-w-[260px] border-r bg-gray-100 flex flex-col">
+            <div className="w-[340px] min-w-[260px] border-r bg-gray  flex flex-col">
                 <div className="p-4 border-b font-bold text-lg flex items-center">Messages</div>
                 <div className="p-3">
                     <input
@@ -126,7 +126,7 @@ export default function CustomerChat() {
                         {menuOpen && (
                             <div className="absolute right-0 mt-2 w-40 bg-white border rounded shadow z-10">
                                 <button
-                                    className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                                    className="w-full text-left px-4 py-2 hover:bg-gray "
                                     onClick={() => {
                                         setMenuOpen(false);
                                         if (window.confirm('Are you sure you want to clear all messages in this chat?')) {
@@ -138,7 +138,7 @@ export default function CustomerChat() {
                                     Clear chat
                                 </button>
                                 <button
-                                    className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                                    className="w-full text-left px-4 py-2 hover:bg-gray "
                                     onClick={() => {
                                         setMenuOpen(false);
                                         if (window.confirm('Are you sure you want to delete this chat and all its messages?')) {
@@ -238,7 +238,7 @@ export default function CustomerChat() {
                                                 {msgMenuOpen === msg._id && (
                                                     <div className="absolute right-0 mt-6 w-28 bg-white border rounded shadow z-20">
                                                         <button
-                                                            className="w-full text-left px-3 py-2 hover:bg-gray-100"
+                                                            className="w-full text-left px-3 py-2 hover:bg-gray "
                                                             onClick={() => {
                                                                 setEditingMsgId(msg._id);
                                                                 setEditText(msg.text);
@@ -248,7 +248,7 @@ export default function CustomerChat() {
                                                             Edit
                                                         </button>
                                                         <button
-                                                            className="w-full text-left px-3 py-2 hover:bg-gray-100 text-red-600"
+                                                            className="w-full text-left px-3 py-2 hover:bg-gray  text-red-600"
                                                             onClick={() => {
                                                                 setMsgMenuOpen(null);
                                                                 if (window.confirm('Delete this message?')) {

@@ -66,7 +66,7 @@ export default function AdminChat() {
                             <div
                                 key={chat._id}
                                 onClick={() => setActiveChatId(chat._id)}
-                                className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer shadow-sm mb-2 transition-all ${activeChatId === chat._id ? 'bg-blue-100 border border-blue-400' : 'bg-white hover:bg-gray-100'}`}
+                                className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer shadow-sm mb-2 transition-all ${activeChatId === chat._id ? 'bg-blue-100 border border-blue-400' : 'bg-white hover:bg-gray '}`}
                             >
                                 <div className="w-10 h-10 rounded-full bg-blue-200 flex items-center justify-center text-blue-700 font-bold text-xl">
                                     {/* Avatar: first letter of customer */}
@@ -137,7 +137,7 @@ export default function AdminChat() {
                                         ? 'bg-blue-100 text-blue-900'
                                         : msg.senderRole === 'agent'
                                             ? 'bg-green-100 text-green-900'
-                                            : 'bg-gray-100 text-gray-900'}`}>
+                                            : 'bg-gray  text-gray-900'}`}>
                                     <div className="text-xs font-semibold mb-1 text-gray-500">
                                         {msg.senderRole === 'admin' ? 'Admin' : msg.senderRole === 'agent' ? 'Agent' : 'Customer'}
                                     </div>

@@ -99,7 +99,7 @@ export default function WhyChooseUs() {
               className="flex flex-col mx-auto items-center hover:shadow-lg transition-shadow duration-300 p-6"
               height="h-auto"
             >
-              <div className="p-3 rounded-full bg-graymb-4">
+              <div className="p-3 rounded-full bg-gray mb-4">
                 {getIcon(reason.icon)}
               </div>
 

@@ -149,8 +149,8 @@ export default function PaymentManagement() {
         e.preventDefault();
         try {
             await axios.post(`${import.meta.env.VITE_API_URL}/payments/${selectedPayment._id}/admin-pay-agent`, paymentForm);
-            setPayments(prev => prev.map(p => 
-                p._id === selectedPayment._id 
+            setPayments(prev => prev.map(p =>
+                p._id === selectedPayment._id
                     ? { ...p, adminPaymentDetails: { ...paymentForm, paymentDate: new Date() }, status: 'completed' }
                     : p
             ));
@@ -162,14 +162,16 @@ export default function PaymentManagement() {
     };
 
     const handleStripePaymentSuccess = (paymentId) => {
-        setPayments(prev => prev.map(p => 
-            p._id === paymentId 
-                ? { ...p, adminPaymentDetails: { 
-                    paymentMethod: 'Stripe', 
-                    transactionId: 'stripe_payment',
-                    paymentDate: new Date(),
-                    notes: 'Paid via Stripe'
-                }, status: 'completed' }
+        setPayments(prev => prev.map(p =>
+            p._id === paymentId
+                ? {
+                    ...p, adminPaymentDetails: {
+                        paymentMethod: 'Stripe',
+                        transactionId: 'stripe_payment',
+                        paymentDate: new Date(),
+                        notes: 'Paid via Stripe'
+                    }, status: 'completed'
+                }
                 : p
         ));
         setShowStripePaymentModal(false);
@@ -192,17 +194,17 @@ export default function PaymentManagement() {
     // Group payments by booking
     const paymentsByBooking = {};
     for (const payment of payments) {
-      const bookingId = payment.booking?._id || payment.booking;
-      if (!paymentsByBooking[bookingId]) {
-        paymentsByBooking[bookingId] = [];
-      }
-      paymentsByBooking[bookingId].push(payment);
+        const bookingId = payment.booking?._id || payment.booking;
+        if (!paymentsByBooking[bookingId]) {
+            paymentsByBooking[bookingId] = [];
+        }
+        paymentsByBooking[bookingId].push(payment);
     }
 
     // For each booking, prefer the payment with agentBankDetails, else fallback to the first
     const uniquePayments = Object.values(paymentsByBooking).map(paymentList => {
-      const withAgentDetails = paymentList.find(p => p.agentBankDetails && p.agentBankDetails.bankName);
-      return withAgentDetails || paymentList[0];
+        const withAgentDetails = paymentList.find(p => p.agentBankDetails && p.agentBankDetails.bankName);
+        return withAgentDetails || paymentList[0];
     });
 
     if (loading) return <div className="text-center py-10">Loading payments...</div>;
@@ -211,7 +213,7 @@ export default function PaymentManagement() {
     return (
         <div className="p-8">
             <h2 className="text-2xl font-bold mb-6">Payment Management</h2>
-            
+
             <BaseCard width="w-full" height="h-auto" padding="p-0" className="border">
                 <div className="grid grid-cols-8 bg-gray p-4 rounded-t-lg font-bold text-center text-sm">
                     <div>Customer</div>
@@ -308,10 +310,10 @@ export default function PaymentManagement() {
                                         className="text-xs mt-1"
                                         onClick={async () => {
                                             if (window.confirm('Are you sure you want to delete this booking and all related records?')) {
-                                              await axios.delete(`${import.meta.env.VITE_API_URL}/bookings/${payment.booking?._id || payment.booking}`);
-                                              setPayments(prev => prev.filter(p => (p.booking?._id || p.booking) !== (payment.booking?._id || payment.booking)));
+                                                await axios.delete(`${import.meta.env.VITE_API_URL}/bookings/${payment.booking?._id || payment.booking}`);
+                                                setPayments(prev => prev.filter(p => (p.booking?._id || p.booking) !== (payment.booking?._id || payment.booking)));
                                             }
-                                          }}
+                                        }}
                                     />
                                 </div>
                             </div>
@@ -333,8 +335,8 @@ export default function PaymentManagement() {
                                 ✕
                             </button>
                         </div>
-                        
-                        <div className="mb-4 p-3 bg-gray-100 rounded">
+
+                        <div className="mb-4 p-3 bg-gray  rounded">
                             <h4 className="font-semibold mb-2">Payment Details</h4>
                             <div className="text-sm space-y-1">
                                 <div><strong>Amount:</strong> ${selectedPayment.amount}</div>
@@ -420,8 +422,8 @@ export default function PaymentManagement() {
                                 ✕
                             </button>
                         </div>
-                        
-                        <div className="mb-4 p-3 bg-gray-100 rounded">
+
+                        <div className="mb-4 p-3 bg-gray  rounded">
                             <h4 className="font-semibold mb-2">Payment Details</h4>
                             <div className="text-sm space-y-1">
                                 <div><strong>Amount:</strong> ${selectedPayment.amount}</div>
