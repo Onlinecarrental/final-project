@@ -6,10 +6,10 @@ import BaseCard from '../../components/card';
 
 const reasonIcons = {
   'shield-check': <Shield size={24} className="text-black" />,
-  'clock': <Clock size={24} className="text-green-600" />,
-  'trophy': <Trophy size={24} className="text-yellow-600" />,
-  'star': <Star size={24} className="text-purple-600" />,
-  'thumbs-up': <ThumbsUp size={24} className="text-indigo-600" />,
+  'clock': <Clock size={24} className="text-black" />,
+  'trophy': <Trophy size={24} className="text-black" />,
+  'star': <Star size={24} className="text-black" />,
+  'thumbs-up': <ThumbsUp size={24} className="text-black" />,
   'award': <Award size={24} className="text-black" />
 };
 

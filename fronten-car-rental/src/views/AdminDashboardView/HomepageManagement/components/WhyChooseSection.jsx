@@ -3,10 +3,10 @@ import { Edit2, Save, RotateCcw, Plus, Trash, Shield, Clock, Trophy, Star, Thumb
 
 const reasonIcons = {
   'shield-check': <Shield className="w-6 h-6 text-black" />,
-  'clock': <Clock className="w-6 h-6 text-green-600" />,
-  'trophy': <Trophy className="w-6 h-6 text-yellow-600" />,
-  'star': <Star className="w-6 h-6 text-purple-600" />,
-  'thumbs-up': <ThumbsUp className="w-6 h-6 text-indigo-600" />,
+  'clock': <Clock className="w-6 h-6 text-black" />,
+  'trophy': <Trophy className="w-6 h-6 text-black" />,
+  'star': <Star className="w-6 h-6 text-black" />,
+  'thumbs-up': <ThumbsUp className="w-6 h-6 text-black" />,
   'award': <Award className="w-6 h-6 text-black" />
 };
 
