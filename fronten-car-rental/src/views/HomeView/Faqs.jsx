@@ -95,9 +95,10 @@ export default function Faqs() {
   }
 
   return (
-    <div className="max-w-[1250px] mx-auto p-6 bg-gray">
+    <div className=" mx-auto p-6 bg-white">
       <HeadingTitle
         title={headerTitle}
+
         paragraph={headerDescription}
       />
 
@@ -107,11 +108,11 @@ export default function Faqs() {
         </div>
       )}
 
-      <div className="space-y-3 max-w-[920px] mb-12 mt-12 mx-auto">
+      <div className="space-y-3 max-w-[1250px] mb-12 mt-12 mx-auto">
         {items.map((faq, index) => (
           <div
             key={index}
-            className="bg-white rounded cursor-pointer"
+            className="bg-gray rounded cursor-pointer"
           >
             <button
               className="flex justify-between items-center w-full p-4 text-left"

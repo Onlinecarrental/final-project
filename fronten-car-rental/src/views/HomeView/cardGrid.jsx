@@ -77,7 +77,7 @@ const CarCollection = () => {
       <div className="flex flex-wrap justify-center gap-4 p-6">
         {bodyTypes.map((type) => (
           <Button
-            textColor={selectedBodyType === type.id ? 'white' : 'black'}
+            textColor={selectedBodyType === type.id ? 'text-white' : 'text-black'}
             key={type.id}
             title={type.name}
             bgColor={selectedBodyType === type.id ? 'bg-black' : 'bg-white'}
@@ -90,7 +90,7 @@ const CarCollection = () => {
       </div>
 
 
-      <div className="flex flex-col md:flex-row max-w-[1200px] gap-4 mt-10 flex-wrap justify-center">
+      <div className="flex flex-col md:flex-row max-w-[1200px] mx-auto gap-4 mt-10 flex-wrap justify-center">
         {filteredCars.slice(0, 6).map((car) => (
           <BaseCard width='w-[380px]' padding='p-[8px]' height='h-full' key={car.id} >
             <div className="relative h-48 overflow-hidden">
