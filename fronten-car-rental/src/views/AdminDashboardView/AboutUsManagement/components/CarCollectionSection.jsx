@@ -952,45 +952,6 @@ export default function CarCollectionSection({ sections, setSections, editingSec
         )}
       </div>
 
-      {/* Banner SVG Section */}
-      <div className="bg-white rounded-lg shadow p-4 mb-6">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-xl font-semibold">Banner Image</h3>
-          <input
-            type="file"
-            ref={bannerSvgRef}
-            onChange={(e) => handleImageUpload(e, 'bannerSvg')}
-            className="hidden"
-            accept=".svg"
-          />
-          <button
-            onClick={() => bannerSvgRef.current?.click()}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-          >
-            <Upload size={18} />
-            <span>Update Banner</span>
-          </button>
-        </div>
-
-        <div className="mt-4">
-          {sections?.carCollection?.bannerSvg ? (
-            <div className="relative group">
-              <img
-                src={getImageUrl(sections.carCollection.bannerSvg)}
-                alt="Car banner"
-                className="w-full h-auto mt-10 mb-10 object-cover rounded-lg"
-              />
-              <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-opacity duration-200 rounded-lg" />
-            </div>
-          ) : (
-            <div className="p-8 border-2 border-dashed border-gray-300 rounded-lg text-center">
-              <p className="text-gray-500">No banner image uploaded</p>
-              <p className="text-sm text-gray-400 mt-1">Click update to add a banner</p>
-            </div>
-          )}
-        </div>
-      </div>
-
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-xl font-semibold">Car Collection</h3>
         <button

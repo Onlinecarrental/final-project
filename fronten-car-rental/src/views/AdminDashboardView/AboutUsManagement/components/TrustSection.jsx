@@ -488,50 +488,6 @@ export default function TrustSection({ sections, setSections, editingSection, se
         )}
       </div>
 
-      {/* Banner Image Section */}
-      <div className="bg-white rounded-lg shadow p-4 mb-6">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-xl font-semibold">Banner Image</h3>
-        </div>
-
-        <div className="space-y-4">
-          <div>
-            <input
-              type="file"
-              ref={bannerImageRef}
-              onChange={(e) => handleImageUpload(e, 'bannerImage')}
-              className="hidden"
-              accept="image/*"
-            />
-            <div className="flex gap-2 mb-2">
-              <button
-                onClick={() => bannerImageRef.current?.click()}
-                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-              >
-                <Upload size={18} />
-                <span>Upload Banner Image</span>
-              </button>
-            </div>
-
-            {sections.trust.bannerImage ? (
-              <div className="mt-2 relative group">
-                <img
-                  src={getImageUrl(sections.trust.bannerImage)}
-                  alt="Trust banner"
-                  className="w-full h-auto mt-10 mb-10 object-cover rounded-lg"
-                />
-                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-opacity duration-200 rounded-lg" />
-              </div>
-            ) : (
-              <div className="mt-4 p-8 border-2 border-dashed border-gray-300 rounded-lg text-center">
-                <p className="text-gray-500">No banner image uploaded</p>
-                <p className="text-sm text-gray-400 mt-1">Click upload to add a banner image</p>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-
       {/* Trust Properties List */}
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-xl font-semibold">Trust Properties</h3>
@@ -602,6 +558,11 @@ export default function TrustSection({ sections, setSections, editingSection, se
                   <option value="shield">Shield</option>
                   <option value="award">Award</option>
                   <option value="thumbs-up">Thumbs Up</option>
+                  <option value="star">Star</option>
+                  <option value="check">Check Circle</option>
+                  <option value="truck">Truck</option>
+                  <option value="clock">Clock</option>
+                  <option value="users">Users</option>
                 </select>
                 <div className="flex gap-2">
                   <button
