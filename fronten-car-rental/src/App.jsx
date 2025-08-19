@@ -66,7 +66,7 @@ const App = () => {
                         </ProtectedRoute>
                     }
                 />
-               <Route
+                <Route
                     path="/home/customerreviews"
                     element={
                         <ProtectedRoute type="customer">
@@ -176,7 +176,7 @@ const App = () => {
                     }
                 />
                 <Route
-                    path="/customer-chat"
+                    path="/home/customer-chat"
                     element={
                         <ProtectedRoute type="customer">
                             <Layout><CustomerChat /></Layout>

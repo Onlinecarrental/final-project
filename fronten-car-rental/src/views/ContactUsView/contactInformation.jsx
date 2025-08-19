@@ -8,47 +8,47 @@ export default function ContactInformation() {
     email: "",
     message: "",
   });
-  
+
   const [errors, setErrors] = useState({});
-  
+
   // ✅ **Live Validation Function**
   const validateForm = () => {
     let newErrors = {};
-    
+
     // ✅ **Name Validation (Only Letters)**
     if (!formData.name.trim()) {
       newErrors.name = "Name is required.";
     } else if (!/^[A-Za-z\s]+$/.test(formData.name)) {
       newErrors.name = "Only alphabets are allowed in Name.";
     }
-    
+
     // ✅ **Email Validation**
     if (!formData.email.trim()) {
       newErrors.email = "Email is required.";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = "Enter a valid email address.";
     }
-    
+
     // ✅ **Message Validation (Max 500 Characters)**
     if (!formData.message.trim()) {
       newErrors.message = "Message is required.";
     } else if (formData.message.length > 500) {
       newErrors.message = "Message cannot exceed 500 characters.";
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0; // ✅ If no errors, return true
   };
-  
+
   // ✅ **Handle Input Change (Live Validation)**
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
-    
+
     // ✅ Revalidate individual field
     setErrors((prevErrors) => ({ ...prevErrors, [id]: "" }));
   };
-  
+
   // ✅ **Handle Form Submit (with API)**
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -77,7 +77,7 @@ export default function ContactInformation() {
   return (
     <div className="bg-gray p-6 flex flex-col items-center">
       <h1 className="text-4xl font-bold mb-12">Contact Information</h1>
-      
+
       <div className="flex flex-col lg:flex-row w-full max-w-6xl gap-12">
         {/* Left Side - Contact Cards in 2x2 Grid */}
         <div className="flex-1">
@@ -86,9 +86,9 @@ export default function ContactInformation() {
             <BaseCard padding="p-6" width="195px" height="192px" className="flex flex-col">
               <div className="flex flex-col items-start">
                 <div className="bg-gray p-2 rounded-md mr-4">
-                  <img 
-                    src="../src/assets/mail.svg"
-                    alt="Mail icon" 
+                  <img
+                    src="/src/assets/mail.svg"
+                    alt="Mail icon"
                     className="w-[30px] h-[30px]"
                   />
                 </div>
@@ -99,14 +99,14 @@ export default function ContactInformation() {
                 </div>
               </div>
             </BaseCard>
-            
+
             {/* Working Time Card */}
             <BaseCard padding="p-6" width="195px" height="192px" className="flex flex-col ">
               <div className="flex flex-col items-start">
                 <div className="bg-gray p-2 rounded-md mr-4">
-                  <img 
-                    src="../src/assets/contact.svg"
-                    alt="Contact icon" 
+                  <img
+                    src="/src/assets/contact.svg"
+                    alt="Contact icon"
                     className="w-[50px] h-[40px]"
                   />
                 </div>
@@ -117,14 +117,14 @@ export default function ContactInformation() {
                 </div>
               </div>
             </BaseCard>
-            
+
             {/* Contact Card */}
             <BaseCard padding="p-6" width="195px" height="192px" className="flex flex-col ">
               <div className="flex flex-col items-start">
                 <div className="bg-gray p-2 rounded-md mr-4">
-                  <img 
-                    src="../src/assets/workingman.svg"
-                    alt="Working Man icon" 
+                  <img
+                    src="/src/assets/workingman.svg"
+                    alt="Working Man icon"
                     className="w-[50px] h-[40px]"
                   />
                 </div>
@@ -135,14 +135,14 @@ export default function ContactInformation() {
                 </div>
               </div>
             </BaseCard>
-            
+
             {/* Working Hours Card */}
             <BaseCard padding="p-6" width="195px" height="192px" className="flex flex-col">
               <div className="flex flex-col items-start">
                 <div className="bg-gray p-2 rounded-md mr-4">
-                  <img 
-                    src="../src/assets/workhour.svg"
-                    alt="Work Hour icon" 
+                  <img
+                    src="/src/assets/workhour.svg"
+                    alt="Work Hour icon"
                     className="w-[50px] h-[40px]"
                   />
                 </div>
@@ -155,8 +155,8 @@ export default function ContactInformation() {
             </BaseCard>
           </div>
         </div>
-        
-        {/* Right Side - Contact Form */}  
+
+        {/* Right Side - Contact Form */}
         <div className="flex-1">
           <BaseCard width="w-full" height="auto" className="rounded-[25px]">
             <form onSubmit={handleSubmit} className="space-y-4 p-4">

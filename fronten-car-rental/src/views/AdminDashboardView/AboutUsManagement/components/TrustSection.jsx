@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Edit2, Save, RotateCcw, Plus, Trash, Upload, Image, Shield, Award, ThumbsUp } from 'lucide-react';
+import { Edit2, Save, RotateCcw, Plus, Trash, Upload, Image, Shield, Award, ThumbsUp, Star, CheckCircle, Truck, Clock, Users } from 'lucide-react';
 
 // Add helper function for image URLs
 const getImageUrl = (path) => {
@@ -19,9 +19,14 @@ const validateContent = (content) => {
 };
 
 const trustIcons = {
-  'shield': <Shield className="w-6 h-6 text-black" />,
-  'award': <Award className="w-6 h-6 text-yellow-600" />,
-  'thumbs-up': <ThumbsUp className="w-6 h-6 text-green-600" />
+  'shield': <Shield className="w-6 h-6 text-blue-600" />,
+  'award': <Award className="w-6 h-6 text-yellow-500" />,
+  'thumbs-up': <ThumbsUp className="w-6 h-6 text-green-500" />,
+  'star': <Star className="w-6 h-6 text-yellow-400" />,
+  'check': <CheckCircle className="w-6 h-6 text-green-500" />,
+  'truck': <Truck className="w-6 h-6 text-blue-500" />,
+  'clock': <Clock className="w-6 h-6 text-purple-500" />,
+  'users': <Users className="w-6 h-6 text-red-500" />
 };
 
 export default function TrustSection({ sections, setSections, editingSection, setEditingSection, handleUpdate }) {

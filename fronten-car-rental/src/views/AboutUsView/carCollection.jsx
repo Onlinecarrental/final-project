@@ -210,9 +210,13 @@ export default function CarCollection() {
               <div className="flex items-center" key={index}>
                 <div className="mr-2 rounded-full p-1">
                   <img
-                    src="../src/assets/bluetick.svg"
+                    src="/src/assets/bluetick.svg"
                     alt="Checkmark"
                     className="h-6 w-6"
+                    onError={(e) => {
+                      console.error('Error loading blue tick icon');
+                      e.target.style.display = 'none';
+                    }}
                   />
                 </div>
                 <span className="text-base font-medium">{getFeatureText(feature)}</span>
@@ -229,7 +233,7 @@ export default function CarCollection() {
               className="w-full h-auto mt-10 mb-10 object-cover rounded-lg"
               onError={(e) => {
                 console.log("Image error, falling back to default", e.target.src);
-                e.target.src = "../src/assets/AUcar.svg";
+                e.target.src = "/src/assets/AUcar.svg";
               }}
             />
           </div>

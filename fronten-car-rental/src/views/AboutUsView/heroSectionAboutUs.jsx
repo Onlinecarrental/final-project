@@ -65,6 +65,13 @@ export default function HerosectionAboutUs() {
     };
   }, []);
 
+  // Helper function to get image URL
+  const getImageUrl = (path) => {
+    if (!path) return heroImage;
+    if (path.startsWith('http')) return path;
+    return `/.netlify/functions/api${path}`;
+  };
+
   // Ensure we have required data
   const title = heroData.title || "About Us";
   const description = heroData.description || "This is sample of page tagline and you can set it up using page option";
@@ -75,9 +82,10 @@ export default function HerosectionAboutUs() {
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 bg-black/20">
         <div
-          className="w-full h-full bg-cover opacity-30 bg-center"
+          className="w-full h-full bg-cover bg-center"
           style={{
-            backgroundImage: `url(${imagePath ? `/.netlify/functions/api/${imagePath}` : heroImage})`,
+            backgroundImage: `url(${getImageUrl(imagePath)})`,
+            opacity: 0.7
           }}
         />
       </div>
