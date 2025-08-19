@@ -131,7 +131,7 @@ export default function BlogManagement() {
       // Validate form data
       const validationErrors = validateForm(formData);
       if (validationErrors.length > 0) {
-        const errorMessage = 'Please fix the following errors:\n\n• ' + 
+        const errorMessage = 'Please fix the following errors:\n\n• ' +
           validationErrors.join('\n• ');
         alert(errorMessage);
         return;
@@ -176,7 +176,7 @@ export default function BlogManagement() {
 
       // Make the API request
       const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
-      const url = isEditing 
+      const url = isEditing
         ? `${API_BASE_URL}/blogs/${currentBlog._id}`
         : `${API_BASE_URL}/blogs`;
 
@@ -194,8 +194,8 @@ export default function BlogManagement() {
       }
     } catch (error) {
       console.error('Blog submission error:', error);
-      const errorMessage = error.response?.data?.message 
-        || error.message 
+      const errorMessage = error.response?.data?.message
+        || error.message
         || 'Failed to save blog';
       alert(errorMessage);
     } finally {
@@ -363,9 +363,9 @@ export default function BlogManagement() {
                     />
                     {formData.author.imagePreview && (
                       <div className="mt-2">
-                        <img 
-                          src={formData.author.imagePreview} 
-                          alt="Author preview" 
+                        <img
+                          src={formData.author.imagePreview}
+                          alt="Author preview"
                           className="w-24 h-24 object-cover rounded-full"
                         />
                       </div>
@@ -399,9 +399,9 @@ export default function BlogManagement() {
                   />
                   {formData.imagePreview && (
                     <div className="mt-2">
-                      <img 
-                        src={formData.imagePreview} 
-                        alt="Blog cover preview" 
+                      <img
+                        src={formData.imagePreview}
+                        alt="Blog cover preview"
                         className="w-32 h-32 object-cover rounded"
                       />
                     </div>
@@ -415,8 +415,8 @@ export default function BlogManagement() {
                     init={{
                       height: 500,
                       plugins: [
-                        'anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'image', 
-                        'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 
+                        'anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'image',
+                        'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks',
                         'wordcount', 'checklist', 'mediaembed', 'casechange', 'formatpainter'
                       ],
                       toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat'
@@ -431,29 +431,28 @@ export default function BlogManagement() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className={`bg-blue-600 text-white px-4 py-2 rounded flex items-center ${
-                    isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700'
-                  }`}
+                  className={`bg-blue-600 text-white px-4 py-2 rounded flex items-center ${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700'
+                    }`}
                 >
                   {isSubmitting ? (
                     <>
-                      <svg 
-                        className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" 
-                        xmlns="http://www.w3.org/2000/svg" 
-                        fill="none" 
+                      <svg
+                        className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
                         viewBox="0 0 24 24"
                       >
-                        <circle 
-                          className="opacity-25" 
-                          cx="12" 
-                          cy="12" 
-                          r="10" 
-                          stroke="currentColor" 
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
                           strokeWidth="4"
                         />
-                        <path 
-                          className="opacity-75" 
-                          fill="currentColor" 
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
                           d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                         />
                       </svg>
@@ -486,7 +485,7 @@ export default function BlogManagement() {
             <div className="flex gap-2">
               <button
                 onClick={() => handleEdit(blog)}
-                className="p-2 text-blue-600 hover:bg-blue-50 rounded"
+                className="p-2 text-black hover:bg-blue-50 rounded"
               >
                 <Edit2 size={20} />
               </button>

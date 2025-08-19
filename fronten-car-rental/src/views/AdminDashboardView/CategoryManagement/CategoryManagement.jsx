@@ -35,7 +35,7 @@ export default function CategoryManagement() {
       const response = await axios.post(`${API_BASE_URL}/categories`, {
         name: newCategory.trim()
       });
-      
+
       if (response.data.success) {
         setCategories([...categories, response.data.data]);
         setNewCategory('');
@@ -59,7 +59,7 @@ export default function CategoryManagement() {
       });
 
       if (response.data.success) {
-        setCategories(categories.map(cat => 
+        setCategories(categories.map(cat =>
           cat._id === id ? { ...cat, name: editValue.trim() } : cat
         ));
         setEditingId(null);
@@ -80,7 +80,7 @@ export default function CategoryManagement() {
       setLoading(true);
       const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
       const response = await axios.delete(`${API_BASE_URL}/categories/${id}`);
-      
+
       if (response.data.success) {
         setCategories(categories.filter(cat => cat._id !== id));
       }
@@ -118,8 +118,8 @@ export default function CategoryManagement() {
 
           <div className="grid gap-4">
             {categories.map(category => (
-              <div 
-                key={category._id} 
+              <div
+                key={category._id}
                 className="flex items-center justify-between p-3 bg-gray-50 rounded"
               >
                 {editingId === category._id ? (
@@ -133,7 +133,7 @@ export default function CategoryManagement() {
                 ) : (
                   <span className="font-medium">{category.name}</span>
                 )}
-                
+
                 <div className="flex items-center gap-2">
                   {editingId === category._id ? (
                     <>
@@ -161,7 +161,7 @@ export default function CategoryManagement() {
                           setEditingId(category._id);
                           setEditValue(category.name);
                         }}
-                        className="text-blue-600 hover:text-blue-700"
+                        className="text-black hover:text-blue-700"
                         disabled={loading}
                       >
                         <Edit2 size={18} />

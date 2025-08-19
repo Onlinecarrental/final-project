@@ -126,7 +126,7 @@ function DashboardContent() {
                 <h3 className="text-2xl font-bold mt-1">{stat.value}</h3>
               </div>
               <div className={`p-3 rounded-full ${stat.title === 'Revenue' ? 'bg-green-100 text-green-600' :
-                stat.title === 'Users' ? 'bg-blue-100 text-blue-600' :
+                stat.title === 'Users' ? 'bg-blue-100 text-black' :
                   stat.title === 'Orders' ? 'bg-purple-100 text-purple-600' :
                     'bg-yellow-100 text-yellow-600'}`}>
                 {stat.icon}
@@ -172,7 +172,7 @@ function DashboardContent() {
                       {user.status}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-600 hover:text-blue-900">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-black hover:text-blue-900">
                     <a href="#" onClick={(e) => e.preventDefault()}>Edit</a>
                   </td>
                 </tr>
@@ -346,7 +346,7 @@ export default function AdminDashboard() {
         return <DashboardContent />;
       case 'bookings':
         return <BookingManagement />;
-     
+
       case 'blogs':
         return <BlogContent />;
       case 'categories':
@@ -431,7 +431,7 @@ export default function AdminDashboard() {
             isActive={activeTab === 'blogs'}
             onClick={() => setActiveTab('blogs')}
           />
-        
+
           <SidebarItem
             icon={<Folder size={20} />}
             text="Categories"
@@ -453,7 +453,7 @@ export default function AdminDashboard() {
             isActive={activeTab === 'payments'}
             onClick={() => setActiveTab('payments')}
           />
-          
+
           <SidebarItem
             icon={<MessageSquare size={20} />}
             text="Admin Chat"

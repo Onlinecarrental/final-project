@@ -149,7 +149,7 @@ export default function CarCollectionSection({ sections, setSections, editingSec
     try {
       setUpdateStatus({ loading: true, error: null, success: null });
 
-      const  decoration = sections.carCollection.decoration || defaultDecoration;
+      const decoration = sections.carCollection.decoration || defaultDecoration;
       const validationErrors = validateDecoration(decoration);
       if (validationErrors.length > 0) {
         throw new Error(validationErrors.join('\n'));
@@ -507,7 +507,7 @@ export default function CarCollectionSection({ sections, setSections, editingSec
         }
 
         const data = await res.json();
-        
+
         if (data.secure_url) {
           setSections(prev => ({
             ...prev,
@@ -688,7 +688,7 @@ export default function CarCollectionSection({ sections, setSections, editingSec
           {editingSection !== 'header' && (
             <button
               onClick={() => setEditingSection('header')}
-              className="flex items-center gap-2 text-blue-600 hover:text-blue-800"
+              className="flex items-center gap-2 text-black hover:text-blue-800"
             >
               <Edit2 size={18} />
               <span>Edit Header</span>
@@ -775,7 +775,7 @@ export default function CarCollectionSection({ sections, setSections, editingSec
           {editingSection !== 'decoration' && (
             <button
               onClick={() => setEditingSection('decoration')}
-              className="flex items-center gap-2 text-blue-600 hover:text-blue-800"
+              className="flex items-center gap-2 text-black hover:text-blue-800"
             >
               <Edit2 size={18} />
               <span>Edit Decoration</span>
@@ -870,7 +870,7 @@ export default function CarCollectionSection({ sections, setSections, editingSec
                 ))}
                 <button
                   onClick={handleFeatureAdd}
-                  className="flex items-center gap-2 text-blue-600 hover:text-blue-800"
+                  className="flex items-center gap-2 text-black hover:text-blue-800"
                 >
                   <Plus size={18} />
                   <span>Add Feature</span>
@@ -1093,7 +1093,7 @@ export default function CarCollectionSection({ sections, setSections, editingSec
                 )}
                 <button
                   onClick={() => setEditingSection(`car-${index}`)}
-                  className="flex items-center gap-2 text-blue-600 hover:text-blue-700 transition-colors"
+                  className="flex items-center gap-2 text-black hover:text-blue-700 transition-colors"
                 >
                   <Edit2 size={18} />
                   <span>Edit</span>

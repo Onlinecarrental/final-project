@@ -179,7 +179,7 @@ export default function ReviewManagement() {
                       <>
                         <button
                           onClick={() => handleEdit(review)}
-                          className="text-blue-600 hover:text-blue-900 flex items-center gap-1"
+                          className="text-black hover:text-blue-900 flex items-center gap-1"
                           title="Edit Review"
                         >
                           <Edit size={18} />

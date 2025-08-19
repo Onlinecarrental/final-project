@@ -108,14 +108,14 @@ export default function Faqs() {
         </div>
       )}
 
-      <div className="space-y-3 max-w-[1250px] mb-12 mt-12 mx-auto">
+      <div className="space-y-3 max-w-[1020px] mb-12 mt-12 mx-auto">
         {items.map((faq, index) => (
           <div
             key={index}
             className="bg-gray rounded cursor-pointer"
           >
             <button
-              className="flex justify-between items-center w-full p-4 text-left"
+              className="flex justify-between items-center w-full p-5 text-left"
               onClick={() => toggleAccordion(index)}
             >
               <span className="font-medium">{faq.question || `Question ${index + 1}`}</span>

@@ -126,7 +126,7 @@ export default function HeroSection({ sections, setSections, editingSection, set
           <div className="text-red-600 mb-2">Error: {updateStatus.error}</div>
         )}
         {updateStatus.loading && (
-          <div className="text-blue-600 mb-2">Updating...</div>
+          <div className="text-black mb-2">Updating...</div>
         )}
         {isEditing ? (
           <div className="space-y-4">
@@ -223,7 +223,7 @@ export default function HeroSection({ sections, setSections, editingSection, set
             </div>
             <button
               onClick={handleEdit}
-              className="flex items-center gap-2 text-blue-600"
+              className="flex items-center gap-2 text-black"
             >
               <Edit2 size={18} />
               <span>Edit Section</span>

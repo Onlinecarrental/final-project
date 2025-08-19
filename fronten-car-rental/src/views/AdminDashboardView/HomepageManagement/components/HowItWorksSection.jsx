@@ -347,7 +347,7 @@ export default function HowItWorksSection({ sections, setSections, editingSectio
           {!isEditingHeader && (
             <button
               onClick={handleHeaderEdit}
-              className="flex items-center gap-2 text-blue-600 hover:text-blue-800"
+              className="flex items-center gap-2 text-black hover:text-black"
             >
               <Edit2 size={18} />
               <span>Edit Header</span>
@@ -494,7 +494,7 @@ export default function HowItWorksSection({ sections, setSections, editingSectio
         )}
 
         {updateStatus.loading && (
-          <div className="mt-4 flex items-center gap-2 text-blue-600">
+          <div className="mt-4 flex items-center gap-2 text-black">
             <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent 
               rounded-full animate-spin" />
             <span>Processing...</span>
@@ -588,7 +588,7 @@ export default function HowItWorksSection({ sections, setSections, editingSectio
                   <div className="bg-gray-100 p-2 rounded-full">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6 text-blue-600"
+                      className="h-6 w-6 text-black"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -606,7 +606,7 @@ export default function HowItWorksSection({ sections, setSections, editingSectio
                 <p className="text-gray-600 mb-4">{step.description || 'No description'}</p>
                 <button
                   onClick={() => setEditingSection(`howItWorks-${index}`)}
-                  className="flex items-center gap-2 text-blue-600 hover:text-blue-900"
+                  className="flex items-center gap-2 text-black hover:text-blue-900"
                 >
                   <Edit2 size={18} />
                   <span>Edit</span>

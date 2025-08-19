@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Edit2, Save, RotateCcw, Plus, Trash, Shield, Clock, Trophy, Star, ThumbsUp, Award } from 'lucide-react';
 
 const reasonIcons = {
-  'shield-check': <Shield className="w-6 h-6 text-blue-600" />,
+  'shield-check': <Shield className="w-6 h-6 text-black" />,
   'clock': <Clock className="w-6 h-6 text-green-600" />,
   'trophy': <Trophy className="w-6 h-6 text-yellow-600" />,
   'star': <Star className="w-6 h-6 text-purple-600" />,
@@ -82,7 +82,7 @@ export default function WhyChooseSection({ sections, setSections, editingSection
   };
 
   const getIconComponent = (iconName) => {
-    return reasonIcons[iconName] || <Shield className="w-6 h-6 text-blue-600" />;
+    return reasonIcons[iconName] || <Shield className="w-6 h-6 text-black" />;
   };
 
   const addNewReason = () => {
@@ -211,7 +211,7 @@ export default function WhyChooseSection({ sections, setSections, editingSection
           {!isEditingHeader && (
             <button
               onClick={handleHeaderEdit}
-              className="flex items-center gap-2 text-blue-600 hover:text-blue-800"
+              className="flex items-center gap-2 text-black hover:text-blue-800"
             >
               <Edit2 size={18} />
               <span>Edit Header</span>
@@ -372,7 +372,7 @@ export default function WhyChooseSection({ sections, setSections, editingSection
                     <div className="flex justify-between items-center">
                       <button
                         onClick={() => setEditingSection(`whyChoose-${index}`)}
-                        className="flex items-center gap-2 text-blue-600 hover:text-blue-800"
+                        className="flex items-center gap-2 text-black hover:text-blue-800"
                       >
                         <Edit2 size={18} />
                         <span>Edit</span>

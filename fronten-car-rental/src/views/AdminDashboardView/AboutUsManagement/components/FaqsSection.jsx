@@ -182,7 +182,7 @@ export default function FaqsSection({ sections, setSections, editingSection, set
           {!isEditingHeader && (
             <button
               onClick={handleHeaderEdit}
-              className="flex items-center gap-2 text-blue-600 hover:text-blue-800"
+              className="flex items-center gap-2 text-black hover:text-blue-800"
             >
               <Edit2 size={18} />
               <span>Edit Header</span>
@@ -340,7 +340,7 @@ export default function FaqsSection({ sections, setSections, editingSection, set
                   <p className="text-gray-600 mb-4">{faq.answer || 'No answer provided'}</p>
                   <button
                     onClick={() => setEditingSection(`faq-${index}`)}
-                    className="flex items-center gap-2 text-blue-600 hover:text-blue-800"
+                    className="flex items-center gap-2 text-black hover:text-blue-800"
                   >
                     <Edit2 size={18} />
                     <span>Edit</span>

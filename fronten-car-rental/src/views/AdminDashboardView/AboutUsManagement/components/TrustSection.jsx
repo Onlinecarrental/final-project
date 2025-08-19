@@ -19,7 +19,7 @@ const validateContent = (content) => {
 };
 
 const trustIcons = {
-  'shield': <Shield className="w-6 h-6 text-blue-600" />,
+  'shield': <Shield className="w-6 h-6 text-black" />,
   'award': <Award className="w-6 h-6 text-yellow-600" />,
   'thumbs-up': <ThumbsUp className="w-6 h-6 text-green-600" />
 };
@@ -35,7 +35,7 @@ export default function TrustSection({ sections, setSections, editingSection, se
 
   const CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1/dlinqw87p/image/upload";
   const CLOUDINARY_UPLOAD_PRESET = "upload_preset";
- 
+
   const handleImageUpload = async (e, imageType) => {
     const file = e.target.files[0];
     if (file) {
@@ -61,7 +61,7 @@ export default function TrustSection({ sections, setSections, editingSection, se
         }
 
         const data = await res.json();
-        
+
         if (data.secure_url) {
           setSections(prev => ({
             ...prev,
@@ -363,7 +363,7 @@ export default function TrustSection({ sections, setSections, editingSection, se
           {editingSection !== 'header' && (
             <button
               onClick={() => setEditingSection('header')}
-              className="flex items-center gap-2 text-blue-600 hover:text-blue-800"
+              className="flex items-center gap-2 text-black hover:text-blue-800"
             >
               <Edit2 size={18} />
               <span>Edit Header</span>
@@ -631,7 +631,7 @@ export default function TrustSection({ sections, setSections, editingSection, se
                 <p className="text-gray-600 mb-4">{item.description}</p>
                 <button
                   onClick={() => setEditingSection(`trust-${index}`)}
-                  className="flex items-center gap-2 text-blue-600 hover:text-blue-700 transition-colors"
+                  className="flex items-center gap-2 text-black hover:text-blue-700 transition-colors"
                 >
                   <Edit2 size={18} />
                   <span>Edit</span>

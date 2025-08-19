@@ -3,7 +3,7 @@ import logo from '../assets/LOGO.png';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth, db } from '../firebase/config';
 import { getDoc, doc } from 'firebase/firestore';
-import { useNavigate, useLocation, Link  } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 
 const AgentLogin = () => {
   const navigate = useNavigate();
@@ -58,13 +58,13 @@ const AgentLogin = () => {
       console.log('Attempting agent login with:', { email });
       const result = await signInWithEmailAndPassword(auth, email, password);
       console.log('Login successful:', result.user.email);
-      
+
       const userEmail = result.user.email.toLowerCase();
       const userId = result.user.uid;
 
       // Get user role from Firestore using userId
       const userDoc = await getDoc(doc(db, "agent", userId));
-      
+
       if (userDoc.exists()) {
         const role = userDoc.data().role;
         if (role === 'admin') {
@@ -115,12 +115,12 @@ const AgentLogin = () => {
           }
           return;
         }
-        
+
         setError('Agent account not found');
       }
     } catch (error) {
       console.error('Agent login error:', error);
-      
+
       // Handle specific Firebase auth errors
       switch (error.code) {
         case 'auth/invalid-email':
@@ -162,20 +162,20 @@ const AgentLogin = () => {
               <div className="absolute top-1/3 right-1/3 w-10 h-10 border-2 border-[#5937E0] rounded-full opacity-10"></div>
             </div>
             <div className="relative z-10 text-center">
-                <Link to="/" >
-              <div className="bg-white/90 rounded-full p-5 mb-6 shadow-xl border-4 border-[#5937E0] flex items-center justify-center transition-transform duration-300 hover:scale-105">
-                <img
-                  src={logo}
-                  alt="Logo"
-                  className="h-24 w-24 object-contain drop-shadow-lg"
-                />
-              </div>
-              <h1 className="text-4xl font-extrabold mb-2 tracking-wide text-[#000000] drop-shadow-sm">
-               Online Car Rental
-              </h1>
-              <p className="text-2xl font-semibold opacity-90 text-[#5937E0] tracking-wide mb-2">
-                AGENT PORTAL
-              </p>
+              <Link to="/" >
+                <div className="bg-white/90 rounded-full p-5 mb-6 shadow-xl border-4 border-[#5937E0] flex items-center justify-center transition-transform duration-300 hover:scale-105">
+                  <img
+                    src={logo}
+                    alt="Logo"
+                    className="h-24 w-24 object-contain drop-shadow-lg"
+                  />
+                </div>
+                <h1 className="text-4xl font-extrabold mb-2 tracking-wide text-[#000000] drop-shadow-sm">
+                  Online Car Rental
+                </h1>
+                <p className="text-2xl font-semibold opacity-90 text-[#5937E0] tracking-wide mb-2">
+                  AGENT PORTAL
+                </p>
               </Link>
               <p className="mt-6 text-lg opacity-80 text-[#000000] font-medium">
                 Welcome back! Please sign in to your agent account.
@@ -251,11 +251,10 @@ const AgentLogin = () => {
 
                 <button
                   type="submit"
-                    className={`w-full py-3 px-4 rounded-xl font-semibold text-white transition duration-200 transform hover:scale-105 ${
-                    loading 
-                      ? 'bg-gray-400 cursor-not-allowed' 
+                  className={`w-full py-3 px-4 rounded-xl font-semibold text-white transition duration-200 transform hover:scale-105 ${loading
+                      ? 'bg-gray-400 cursor-not-allowed'
                       : 'bg-gradient-to-r from-[#5937E0]  to-[#000000] hover:from-[#5937E0] hover:to-[#000000] shadow-xl'
-                  }`}
+                    }`}
                   disabled={loading}
                 >
                   {loading ? (
@@ -276,8 +275,8 @@ const AgentLogin = () => {
                 <p className="text-gray-600">
                   Dont have an agent account?{' '}
                   <Link
-                    to="/agent-signup" 
-                    className="text-blue-600 hover:text-blue-700 font-semibold transition duration-200 hover:underline"
+                    to="/agent-signup"
+                    className="text-black hover:text-blue-700 font-semibold transition duration-200 hover:underline"
                   >
                     Sign up now
                   </Link>

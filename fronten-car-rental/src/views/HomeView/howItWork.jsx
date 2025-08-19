@@ -69,7 +69,7 @@ export default function HowItWork() {
 
         if (response.data.success && response.data.data?.content) {
           const content = response.data.data.content;
-          
+
           setHowItWorksData({
             header: {
               title: content.header?.title || defaultData.header.title,
@@ -147,7 +147,7 @@ export default function HowItWork() {
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-blue-600"
+                  className="h-6 w-6 text-Black"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -176,9 +176,9 @@ export default function HowItWork() {
           className="flex justify-end items-center mt-8 md:mt-0"
         >
           <div className="flex justify-end my-auto">
-            <img 
-              src={howItWorksData.image} 
-              alt="How It Works Vehicle" 
+            <img
+              src={howItWorksData.image}
+              alt="How It Works Vehicle"
               className="w-full max-w-[400px] h-auto object-contain"
               onError={(e) => {
                 console.error('Image failed to load:', e.target.src);

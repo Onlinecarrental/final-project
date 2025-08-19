@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Edit2, Save, RotateCcw, Plus, Trash, Shield, Clock, Trophy, Star, ThumbsUp, Award } from 'lucide-react';
 
 const reasonIcons = {
-  'shield-check': <Shield className="w-6 h-6 text-blue-600" />,
+  'shield-check': <Shield className="w-6 h-6 text-black" />,
   'clock': <Clock className="w-6 h-6 text-green-600" />,
   'trophy': <Trophy className="w-6 h-6 text-yellow-600" />,
   'star': <Star className="w-6 h-6 text-purple-600" />,
@@ -82,7 +82,7 @@ export default function WhyChooseSection({ sections, setSections, editingSection
   };
 
   const getIconComponent = (iconName) => {
-    return reasonIcons[iconName] || <Shield className="w-6 h-6 text-blue-600" />;
+    return reasonIcons[iconName] || <Shield className="w-6 h-6 text-black" />;
   };
 
   const addNewReason = () => {
@@ -211,7 +211,7 @@ export default function WhyChooseSection({ sections, setSections, editingSection
           {!isEditingHeader && (
             <button
               onClick={handleHeaderEdit}
-              className="flex items-center gap-2 text-blue-600 hover:text-blue-800"
+              className="flex items-center gap-2 text-black hover:text-blue-800"
             >
               <Edit2 size={18} />
               <span>Edit Header</span>
@@ -283,7 +283,7 @@ export default function WhyChooseSection({ sections, setSections, editingSection
       <div className="bg-white rounded-lg shadow p-4">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-xl font-semibold">Reasons</h3>
-          <button 
+          <button
             onClick={addNewReason}
             className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
           >
@@ -337,14 +337,14 @@ export default function WhyChooseSection({ sections, setSections, editingSection
                   </div>
                   <div className="flex justify-between">
                     <div className="flex gap-2">
-                      <button 
+                      <button
                         onClick={() => handleReasonSave(index)}
                         className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
                       >
                         <Save size={18} />
                         <span>Save</span>
                       </button>
-                      <button 
+                      <button
                         onClick={() => setEditingSection(null)}
                         className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700"
                       >
@@ -352,7 +352,7 @@ export default function WhyChooseSection({ sections, setSections, editingSection
                         <span>Cancel</span>
                       </button>
                     </div>
-                    <button 
+                    <button
                       onClick={() => deleteReason(index)}
                       className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
                     >
@@ -370,14 +370,14 @@ export default function WhyChooseSection({ sections, setSections, editingSection
                     <h4 className="font-medium mb-2">{reason.title || 'Untitled Reason'}</h4>
                     <p className="text-gray-600 mb-4">{reason.description || 'No description'}</p>
                     <div className="flex justify-between items-center">
-                      <button 
+                      <button
                         onClick={() => setEditingSection(`whyChoose-${index}`)}
-                        className="flex items-center gap-2 text-blue-600 hover:text-blue-800"
+                        className="flex items-center gap-2 text-black hover:text-blue-800"
                       >
                         <Edit2 size={18} />
                         <span>Edit</span>
                       </button>
-                      <button 
+                      <button
                         onClick={() => deleteReason(index)}
                         className="flex items-center gap-2 text-red-600 hover:text-red-800"
                       >

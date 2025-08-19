@@ -5,7 +5,7 @@ import HeadingTitle from '../../components/heading';
 import BaseCard from '../../components/card';
 
 const reasonIcons = {
-  'shield-check': <Shield size={24} className="text-blue-600" />,
+  'shield-check': <Shield size={24} className="text-black" />,
   'clock': <Clock size={24} className="text-green-600" />,
   'trophy': <Trophy size={24} className="text-yellow-600" />,
   'star': <Star size={24} className="text-purple-600" />,
@@ -32,10 +32,10 @@ export default function WhyChooseUs() {
 
         const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
         const response = await axios.get(`${API_BASE_URL}/homepage/whyChoose`);
-        
+
         if (response.data.success && response.data.data?.content) {
           const content = response.data.data.content;
-          
+
           setWhyChooseData({
             header: {
               title: content.header?.title || whyChooseData.header.title,
@@ -80,7 +80,7 @@ export default function WhyChooseUs() {
   return (
     <div className="w-full bg-gray py-12 px-4">
       <div className="max-w-6xl mx-auto">
-        <HeadingTitle 
+        <HeadingTitle
           title={whyChooseData.header.title}
           paragraph={whyChooseData.header.description}
         />
@@ -90,23 +90,23 @@ export default function WhyChooseUs() {
             {error}
           </div>
         )}
-        
+
         <div className="grid grid-cols-1 mt-12 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {whyChooseData.reasons.map((reason, index) => (
-            <BaseCard 
+            <BaseCard
               key={index}
               width="w-[300px]"
-              className="flex flex-col mx-auto items-center hover:shadow-lg transition-shadow duration-300 p-6" 
+              className="flex flex-col mx-auto items-center hover:shadow-lg transition-shadow duration-300 p-6"
               height="h-auto"
             >
               <div className="p-3 rounded-full bg-gray-50 mb-4">
                 {getIcon(reason.icon)}
               </div>
-              
+
               <h3 className="font-bold text-xl text-center mb-3">
                 {reason.title}
               </h3>
-              
+
               <p className="text-gray-600 text-center">
                 {reason.description}
               </p>

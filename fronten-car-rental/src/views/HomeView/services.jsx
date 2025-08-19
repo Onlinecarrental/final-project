@@ -97,7 +97,7 @@ export default function ServicesBenefits() {
               <div className="bg-gray-100 p-4 rounded-full mb-4">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-8 w-8 text-blue-600"
+                  className="h-8 w-8 text-black"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"

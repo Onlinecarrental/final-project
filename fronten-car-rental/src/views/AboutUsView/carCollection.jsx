@@ -168,15 +168,6 @@ export default function CarCollection() {
 
   return (
     <div className="mt-20 py-9 bg-gray">
-      {/* Development mode refresh button - uncomment for testing */}
-      <div className="fixed top-20 right-4 z-50 opacity-50 hover:opacity-100">
-        <button
-          onClick={reloadData}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm"
-        >
-          {loading ? "Loading..." : "↻ Refresh Data"}
-        </button>
-      </div>
 
       <div className="max-w-[1280px] mx-auto p-6">
         <HeadingTitle

@@ -20,7 +20,7 @@ const IconSelector = ({ selected, onSelect }) => (
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className="h-6 w-6 text-blue-600"
+          className="h-6 w-6 text-black"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -385,7 +385,7 @@ export default function ServicesSection({ sections = {}, setSections, editingSec
           {!isEditingHeader ? (
             <button
               onClick={handleHeaderEdit}
-              className="flex items-center gap-2 text-blue-600 hover:text-blue-800"
+              className="flex items-center gap-2 text-black hover:text-blue-800"
             >
               <Edit2 size={18} />
               <span>Edit Header</span>
@@ -543,7 +543,7 @@ export default function ServicesSection({ sections = {}, setSections, editingSec
                   <div className="bg-gray-100 p-2 rounded-full">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6 text-blue-600"
+                      className="h-6 w-6 text-black"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -561,7 +561,7 @@ export default function ServicesSection({ sections = {}, setSections, editingSec
                 <p className="text-gray-600 mb-4">{service.description}</p>
                 <button
                   onClick={() => setEditingSection(`service-${index}`)}
-                  className="flex items-center gap-2 text-blue-600 hover:text-blue-900"
+                  className="flex items-center gap-2 text-black hover:text-blue-900"
                 >
                   <Edit2 size={18} />
                   <span>Edit</span>
