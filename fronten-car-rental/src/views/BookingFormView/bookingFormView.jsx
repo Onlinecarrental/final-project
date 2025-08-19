@@ -55,6 +55,17 @@ export default function BookingForm() {
     const fallback = parts.find(p => p.length >= 3) || raw;
     return normalize(fallback);
   };
+  const buildDisplayLabelFromLocationIQ = (item) => {
+    const addr = item.address || {};
+    const city = addr.city || addr.town || addr.village || addr.county || '';
+    if (!city) return '';
+    return `${city}, Pakistan`;
+  };
+
+  const extractCityNameFromLocationIQ = (item) => {
+    const addr = item.address || {};
+    return addr.city || addr.town || addr.village || addr.county || '';
+  };
 
   const fetchLocations = async (query) => {
     if (!query || query.length < 2) {
@@ -63,18 +74,26 @@ export default function BookingForm() {
     }
 
     try {
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=pk&limit=5&featureType=city`
-      );
-      const data = await response.json();
-      // Filter to only include city results and extract just the city name
-      const citySuggestions = data
-        .filter(item => item.type === 'city' || item.class === 'boundary')
-        .map(item => ({
-          ...item,
-          display_name: item.display_name.split(',')[0].trim()
-        }));
-      setSuggestions(citySuggestions);
+      // LocationIQ Autocomplete API (Pakistan only, cities only)
+      const url = `https://api.locationiq.com/v1/autocomplete?key=pk.41bdd2ef6f73572085513083abde96b4&q=${encodeURIComponent(query)}&limit=7&countrycodes=pk&normalizecity=1&dedupe=1&addressdetails=1&tag=place:city`;
+
+      const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+      const data = await res.json();
+
+      const items = (Array.isArray(data) ? data : [])
+        .map(item => {
+          const cityName = extractCityNameFromLocationIQ(item);
+          const label = buildDisplayLabelFromLocationIQ(item);
+          return {
+            id: item.place_id || `${item.lat},${item.lon}`,
+            label,
+            cityName,
+            raw: item,
+          };
+        })
+        .filter(x => !!x.label && !!x.cityName);
+
+      setSuggestions(items);
     } catch (error) {
       console.error('Error fetching locations:', error);
       setSuggestions([]);
@@ -84,6 +103,7 @@ export default function BookingForm() {
   const handleLocationChange = (e) => {
     const value = e.target.value;
     setFormData(prev => ({ ...prev, location: value }));
+    setShowSuggestions(true);
 
     if (debounceRef.current) {
       clearTimeout(debounceRef.current);
@@ -95,9 +115,7 @@ export default function BookingForm() {
   };
 
   const handleSelectSuggestion = (suggestion) => {
-    // Extract just the city name (first part before comma)
-    const cityName = suggestion.display_name.split(',')[0].trim();
-    setFormData(prev => ({ ...prev, location: cityName }));
+    setFormData(prev => ({ ...prev, location: suggestion.cityName }));
     setShowSuggestions(false);
   };
 
@@ -362,31 +380,36 @@ export default function BookingForm() {
                   <div className=" text-center  text-[28px] font-bold">Booking & Payment Details</div>
                   <div className="mb-4 relative">
                     <label className="block text-lg font-[500] mb-1">Location:</label>
-                    <input
-                      type="text"
-                      name="location"
-                      value={formData.location}
-                      onChange={handleLocationChange}
-                      onFocus={() => setShowSuggestions(true)}
-                      onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-                      placeholder="Enter location"
-                      className="w-full p-2 border border-gray-300 rounded-md"
-                      ref={locationInputRef}
-                    />
-                    {showSuggestions && suggestions.length > 0 && (
-                      <ul className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg">
-                        {suggestions.map((suggestion, index) => (
-                          <li
-                            key={index}
-                            className="p-2 hover:bg-gray-100 cursor-pointer"
-                            onMouseDown={() => handleSelectSuggestion(suggestion)}
-                          >
-                            {suggestion.display_name}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                    {errors.location && <p className="text-red-500 text-sm">{errors.location}</p>}
+                    <div className="relative">
+                      <input
+                        type="text"
+                        name="location"
+                        value={formData.location}
+                        onChange={handleLocationChange}
+                        onFocus={() => setShowSuggestions(true)}
+                        onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+                        placeholder="Enter city name"
+                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                        required
+                        autoComplete="off"
+                        ref={locationInputRef}
+                      />
+                      {showSuggestions && suggestions.length > 0 && (
+                        <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden">
+                          {suggestions.map((s) => (
+                            <div
+                              key={s.id}
+                              className="px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0 transition-colors duration-150"
+                              onMouseDown={() => handleSelectSuggestion(s)}
+                            >
+                              <div className="font-medium text-gray-900">{s.label}</div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                    </div>
+                    {errors.location && <p className="text-red-500 text-sm mt-1">{errors.location}</p>}
                   </div>
                   <div className="mb-4 ">
                     <label className="block text-lg font-[500] mb-1">Date From:</label>
