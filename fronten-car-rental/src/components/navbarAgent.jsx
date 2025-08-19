@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FaBell } from "react-icons/fa";
 import { auth, db } from "../firebase/config";
 import { doc, getDoc } from "firebase/firestore";
-
+import logo from "../assets/LOGO.png";
 function NavbarAgent() {
   const [agentName, setAgentName] = useState("Car Agent");
 
@@ -39,16 +39,14 @@ function NavbarAgent() {
       <div className="flex items-center">
         <div className="w-12 h-12 rounded-full mr-3 overflow-hidden">
           <img
-            src="../src/assets/LOGO.png"
+            src={logo}
             alt="Car Agent Profile"
             className="w-full h-full object-cover bg-gray-200"
           />
         </div>
         <span className="text-black font-extrabold">{agentName}</span>
       </div>
-      <div className="w-8 h-8 bg-white rounded-md flex items-center justify-center">
-        <FaBell className="text-gray-700" />
-      </div>
+
     </div>
   );
 }

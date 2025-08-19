@@ -5,7 +5,20 @@ import { getAgentNameById } from '../../modules/chat/chatUtils';
 export default function CustomerChat() {
     // Assume user info is stored in localStorage
     const user = JSON.parse(localStorage.getItem('user'));
-    const { chats, messages, setActiveChatId, send, activeChatId, loading, error, deleteMessage, deleteChat, clearChat, editMessage } = useChat({
+    const {
+        chats,
+        messages,
+        setActiveChatId,
+        send,
+        activeChatId,
+        loading,
+        error,
+        deleteMessage,
+        deleteChat,
+        clearChat,
+        editMessage,
+        markMessagesAsRead
+    } = useChat({
         userId: user?.uid,
         role: 'customer',
         isAdmin: false
@@ -25,6 +38,21 @@ export default function CustomerChat() {
             setActiveChatId(chats[0]._id);
         }
     }, [chats, activeChatId, setActiveChatId]);
+
+    // Debug: Log the chats data structure
+    useEffect(() => {
+        console.log('Chats data:', chats);
+        chats.forEach((chat, index) => {
+            console.log(`Chat ${index}:`, {
+                id: chat._id,
+                agentName: chat.agentName,
+                agentId: chat.agentId,
+                lastMessage: chat.lastMessage,
+                unreadCount: chat.unreadCount,
+                fullChat: chat
+            });
+        });
+    }, [chats]);
 
     // Filter chats by search
     const filteredChats = chats.filter(chat => {
@@ -57,11 +85,17 @@ export default function CustomerChat() {
 
     const headerName = activeChatId ? agentNames[chats.find(chat => chat._id === activeChatId)?.agentId] || 'Agent NAme' : 'Agent NAme';
 
+    // Handle chat selection
+    const handleChatSelect = async (chatId) => {
+        setActiveChatId(chatId);
+        await markMessagesAsRead(chatId);
+    };
+
     return (
         <div className="w-full h-[80vh] flex bg-white rounded-lg shadow overflow-hidden font-jakarta">
             {/* Sidebar: Chat List */}
-            <div className="w-[340px] min-w-[260px] border-r bg-gray  flex flex-col">
-                <div className="p-4 border-b font-bold text-lg flex items-center">Messages</div>
+            <div className="w-[340px] min-w-[260px] border-r bg-  flex flex-col">
+                <div className="p-4 border-b font-bold text-lg justify-center flex items-center">Messages</div>
                 <div className="p-3">
                     <input
                         type="text"
@@ -75,24 +109,43 @@ export default function CustomerChat() {
                     {filteredChats.map(chat => (
                         <div
                             key={chat._id}
-                            className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer shadow-sm mb-2 transition-all ${activeChatId === chat._id ? 'bg-gray-300' : 'bg-white hover:bg-gray-200'}`}
+                            className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer shadow-sm mb-2 transition-all ${activeChatId === chat._id ? 'bg-gray' : 'bg-white hover:bg-gray-200'}`}
+                            onClick={() => handleChatSelect(chat._id)}
                         >
                             <div
                                 className="flex-1 flex items-center gap-3 min-w-0"
-                                onClick={() => setActiveChatId(chat._id)}
                                 style={{ cursor: 'pointer' }}
                             >
-                                <div className="w-10 h-10 rounded-full bg-gray-400 flex items-center justify-center text-white font-bold text-xl">
+                                <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-black font-bold text-xl">
                                     {/* Placeholder avatar */}
                                     {chat.agentName ? chat.agentName[0] : 'A'}
                                 </div>
                                 <div className="flex-1 min-w-0">
                                     <div className="font-semibold truncate">{chat.agentName || agentNames[chat.agentId] || 'Agent NAme'}</div>
-                                    <div className="text-xs text-gray-500 truncate">{chat.lastMessage?.text || 'No messages yet'}</div>
+                                    <div className="text-xs text-gray-500 truncate">
+                                        {chat.lastMessage ?
+                                            (typeof chat.lastMessage === 'string' ?
+                                                chat.lastMessage :
+                                                (chat.lastMessage.text || 'No message text')
+                                            ) :
+                                            'No messages yet'}
+                                    </div>
                                 </div>
                                 <div className="flex flex-col items-end">
-                                    <span className="text-xs text-gray-400">{chat.lastMessage?.createdAt ? new Date(chat.lastMessage.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}</span>
-                                    {chat.unreadCount > 0 && <span className="w-3 h-3 bg-red-500 rounded-full mt-1"></span>}
+                                    <span className="text-xs text-gray-400">
+                                        {chat.updatedAt ?
+                                            new Date(chat.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) :
+                                            (chat.lastMessage?.createdAt ?
+                                                new Date(chat.lastMessage.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) :
+                                                ''
+                                            )
+                                        }
+                                    </span>
+                                    {chat.unreadCount > 0 && (
+                                        <span className="bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                                            {chat.unreadCount > 9 ? '9+' : chat.unreadCount}
+                                        </span>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -102,8 +155,8 @@ export default function CustomerChat() {
             {/* Main Chat Area */}
             <div className="flex-1 flex flex-col">
                 {/* Header */}
-                <div className="flex items-center gap-4 bg-gray-300 p-4 border-b relative">
-                    <div className="w-12 h-12 rounded-full bg-gray-400 flex items-center justify-center text-white font-bold text-2xl">
+                <div className="flex items-center gap-4 bg-gray  p-4 border-b relative">
+                    <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center text-black font-bold text-2xl">
                         {headerName[0] || 'A'}
                     </div>
                     <div className="font-semibold text-lg flex-1">
@@ -187,7 +240,7 @@ export default function CustomerChat() {
                         <>
                             {messages.map(msg => (
                                 <div key={msg._id} className={`flex ${msg.senderId === user?.uid ? 'justify-end' : 'justify-start'} group`}>
-                                    <div className={`relative max-w-xs px-4 py-2 rounded-[12px] shadow transition-none ${msg.senderId === user?.uid ? 'bg-gray-300' : 'bg-gray-200'}`}>
+                                    <div className={`relative max-w-xs px-4 py-2 rounded-[12px] shadow transition-none ${msg.senderId === user?.uid ? 'bg-gray' : 'bg-gray'}`}>
                                         <div className="text-base font-medium mb-1">{msg.senderId !== user?.uid && msg.senderName ? msg.senderName : ''}</div>
                                         {/* Edit mode */}
                                         {editingMsgId === msg._id ? (
@@ -209,7 +262,7 @@ export default function CustomerChat() {
                                                 />
                                                 <div className="flex gap-2 mt-1">
                                                     <button type="submit" className="px-2 py-1 bg-blue-500 text-white rounded">Save</button>
-                                                    <button type="button" className="px-2 py-1 bg-gray-300 rounded" onClick={() => setEditingMsgId(null)}>Cancel</button>
+                                                    <button type="button" className="px-2 py-1 bg-gray rounded" onClick={() => setEditingMsgId(null)}>Cancel</button>
                                                 </div>
                                             </form>
                                         ) : (
@@ -278,7 +331,7 @@ export default function CustomerChat() {
                             e.target.reset();
                         }
                     }}
-                    className="flex items-center gap-2 p-4 bg-gray-300 border-t"
+                    className="flex items-center gap-2 p-4 bg-gray border-t"
                 >
                     <input
                         name="message"
@@ -298,7 +351,7 @@ export default function CustomerChat() {
                             }
                         }}
                     />
-                    <button type="submit" className="p-2 rounded-full bg-gray-500 text-white hover:bg-gray-700 transition-colors flex items-center justify-center" aria-label="Send">
+                    <button type="submit" className="p-2 rounded-full  bg-Blue text-white hover:bg-gray-700 transition-colors flex items-center justify-center" aria-label="Send">
                         {/* Paper plane SVG icon */}
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 21l16.5-9-16.5-9v7.5l11.25 1.5-11.25 1.5V21z" />

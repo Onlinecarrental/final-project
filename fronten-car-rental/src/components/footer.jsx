@@ -29,9 +29,10 @@ const Footer = () => {
             <div className="bg-gray-900 rounded-lg p-6 text-center">
               <h3 className="text-lg font-semibold mb-4">Discover</h3>
               <ul className="space-y-3 text-sm text-gray-400">
-                <li className="hover:text-white cursor-pointer transition-colors">Browse Cars</li>
-                <li className="hover:text-white cursor-pointer transition-colors">Customer Reviews</li>
-                <li className="hover:text-white cursor-pointer transition-colors">Travel Tips & Blogs</li>
+                <li className="hover:text-white cursor-pointer transition-colors">
+                  <Link to="/home/best-cars">Browse Cars</Link></li>
+                <li className="hover:text-white cursor-pointer transition-colors">  <Link to="/home/customerreviews">Customer Reviews</Link></li>
+                <li className="hover:text-white cursor-pointer transition-colors">  <Link to="/home/blogs">Travel Tips & Blogs</Link></li>
               </ul>
             </div>
 

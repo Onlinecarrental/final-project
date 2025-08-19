@@ -397,6 +397,7 @@ export default function AddCarInfo() {
       <h1 className="text-3xl font-bold text-center mb-6">
         {isEditing ? "Edit Car" : "Add New Car"}
       </h1>
+      <p className="text-base font-poppins text-black mt-2 max-w-[600px] mx-auto">  {isEditing ? "" : "Join our business network and unlock premium services for your company"}</p>
 
       {/* Basic Info Section */}
       <div className="w-full mx-auto px-4 py-6">

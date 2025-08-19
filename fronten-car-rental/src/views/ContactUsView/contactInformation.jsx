@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import BaseCard from "../../components/card";
 import Button from "../../components/button";
-
+import workHour from "../../assets/workhour.svg";
+import mail from "../../assets/mail.svg";
+import Contact from "../../assets/contact.svg";
+import workingman from "../../assets/workingman.svg";
 export default function ContactInformation() {
   const [formData, setFormData] = useState({
     name: "",
@@ -87,7 +90,7 @@ export default function ContactInformation() {
               <div className="flex flex-col items-start">
                 <div className="bg-gray p-2 rounded-md mr-4">
                   <img
-                    src="/src/assets/mail.svg"
+                    src={mail}
                     alt="Mail icon"
                     className="w-[30px] h-[30px]"
                   />
@@ -105,7 +108,7 @@ export default function ContactInformation() {
               <div className="flex flex-col items-start">
                 <div className="bg-gray p-2 rounded-md mr-4">
                   <img
-                    src="/src/assets/contact.svg"
+                    src={Contact}
                     alt="Contact icon"
                     className="w-[50px] h-[40px]"
                   />
@@ -123,7 +126,7 @@ export default function ContactInformation() {
               <div className="flex flex-col items-start">
                 <div className="bg-gray p-2 rounded-md mr-4">
                   <img
-                    src="/src/assets/workingman.svg"
+                    src={workingman}
                     alt="Working Man icon"
                     className="w-[50px] h-[40px]"
                   />
@@ -141,7 +144,7 @@ export default function ContactInformation() {
               <div className="flex flex-col items-start">
                 <div className="bg-gray p-2 rounded-md mr-4">
                   <img
-                    src="/src/assets/workhour.svg"
+                    src={workHour}
                     alt="Work Hour icon"
                     className="w-[50px] h-[40px]"
                   />

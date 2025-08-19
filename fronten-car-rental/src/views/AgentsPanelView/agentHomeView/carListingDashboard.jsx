@@ -8,6 +8,9 @@ const statusColors = {
   available: "bg-green-500"
 };
 
+// Backend base
+const BACKEND_BASE = "https://backend-car-rental-production.up.railway.app";
+
 const CarListingDashboard = () => {
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -23,8 +26,9 @@ const CarListingDashboard = () => {
       setError("");
       if (!user.uid) return;
       const res = await axios.get(`${API_BASE_URL}/cars`);
-      // Only show available cars for this agent
-      const agentCars = (res.data.data || []).filter(car => car.agentId === user.uid && car.status === 'available');
+      const agentCars = (res.data.data || []).filter(
+        car => car.agentId === user.uid && car.status === 'available'
+      );
       setCars(agentCars);
     } catch (err) {
       setError("Failed to load cars.");
@@ -40,7 +44,6 @@ const CarListingDashboard = () => {
 
   const handleEdit = async (car) => {
     try {
-      // First fetch the car details
       const response = await axios.get(`${API_BASE_URL}/cars/${car._id}`);
       if (response.data.success) {
         localStorage.setItem('editCarData', JSON.stringify(response.data.data));
@@ -73,6 +76,18 @@ const CarListingDashboard = () => {
     }
   };
 
+  // ✅ same image resolver function as AllCarsList
+  const resolveImageUrl = (ci) => {
+    if (!ci) return "/default-car.jpg"; // no image
+    if (/^https?:\/\//i.test(ci)) return ci; // already absolute
+
+    let imagePath = ci;
+    if (imagePath.startsWith('/')) imagePath = imagePath.substring(1);
+    imagePath = imagePath.replace(/^uploads\//, '');
+
+    return `${BACKEND_BASE}/uploads/${imagePath}`;
+  };
+
   return (
     <BaseCard
       width="w-full"
@@ -96,9 +111,10 @@ const CarListingDashboard = () => {
                 <span className={`w-4 h-4 rounded-full ${statusColors[car.status] || 'bg-gray-400'}`}></span>
                 <div className="w-10 h-10 rounded-md overflow-hidden bg-white">
                   <img
-                    src={`/.netlify/functions/api/${car.coverImage}`}
+                    src={resolveImageUrl(car.coverImage)}
                     alt={car.name}
                     className="w-full h-full object-cover"
+                    onError={(e) => { e.currentTarget.src = "/default-car.jpg"; }}
                   />
                 </div>
                 <span className="font-medium text-lg">{car.name}</span>

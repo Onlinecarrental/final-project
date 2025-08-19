@@ -42,4 +42,12 @@ export const deleteChat = async (chatId, userId, role) => {
 export const clearChat = async (chatId, userId, role) => {
     const res = await axios.delete(`https://backend-car-rental-production.up.railway.app/api/chats/${chatId}/messages?userId=${userId}&role=${role}`);
     return res.data;
-}; 
+};
+
+export const markMessagesAsRead = async (chatId, userId, role) => {
+    const res = await axios.patch(`https://backend-car-rental-production.up.railway.app/api/chats/${chatId}/mark-read`, {
+        userId,
+        role
+    });
+    return res.data;
+};

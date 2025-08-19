@@ -1,5 +1,15 @@
 import { useState, useEffect } from 'react';
-import { getUserChats, getAllChats, getChatMessages, sendMessage, deleteMessage as apiDeleteMessage, deleteChat as apiDeleteChat, clearChat as apiClearChat, editMessage as apiEditMessage } from './chatApi';
+import { 
+    getUserChats, 
+    getAllChats, 
+    getChatMessages, 
+    sendMessage, 
+    deleteMessage as apiDeleteMessage, 
+    deleteChat as apiDeleteChat, 
+    clearChat as apiClearChat, 
+    editMessage as apiEditMessage,
+    markMessagesAsRead as apiMarkMessagesAsRead  
+} from './chatApi';
 
 export function useChat({ userId, role, isAdmin }) {
     const [chats, setChats] = useState([]);
@@ -120,6 +130,25 @@ export function useChat({ userId, role, isAdmin }) {
         }
     };
 
+    // Mark messages as read
+    const markMessagesAsRead = async (chatId) => {
+        if (!chatId || !userId) return;
+        try {
+            await apiMarkMessagesAsRead(chatId, userId, role);
+            // Refresh chats to update unread counts
+            if (isAdmin) {
+                const updatedChats = await getAllChats();
+                setChats(updatedChats);
+            } else if (userId && role) {
+                const updatedChats = await getUserChats(userId, role);
+                setChats(updatedChats);
+            }
+        } catch (err) {
+            console.error('Error marking messages as read:', err);
+            setError(err);
+        }
+    };
+
     return {
         chats,
         messages,
@@ -132,5 +161,6 @@ export function useChat({ userId, role, isAdmin }) {
         deleteChat,
         clearChat,
         editMessage,
+        markMessagesAsRead
     };
 } 

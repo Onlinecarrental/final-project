@@ -1,13 +1,3 @@
-  // Delete booking handler
-  const handleDelete = async (bookingId) => {
-    if (!window.confirm('Are you sure you want to delete this booking? This action cannot be undone.')) return;
-    try {
-      await axios.delete(`https://backend-car-rental-production.up.railway.app/api/bookings/${bookingId}`);
-      setBookings(prev => prev.filter(b => b._id !== bookingId));
-    } catch (err) {
-      alert('Failed to delete booking.');
-    }
-  };
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import BaseCard from "../../../components/card";
@@ -92,6 +82,22 @@ export default function AllBookings() {
       setBookings(prev => prev.map(b => b._id === bookingId ? { ...b, status: 'approved' } : b));
     } catch (err) {
       alert('Failed to approve booking.');
+    }
+  };
+
+  // Delete booking handler
+  const handleDelete = async (bookingId) => {
+    if (!window.confirm('Are you sure you want to delete this booking? This action cannot be undone.')) return;
+    try {
+      await axios.delete(`https://backend-car-rental-production.up.railway.app/api/bookings/${bookingId}`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      setBookings(prev => prev.filter(b => b._id !== bookingId));
+    } catch (err) {
+      console.error('Delete error:', err);
+      alert('Failed to delete booking. Please try again.');
     }
   };
 

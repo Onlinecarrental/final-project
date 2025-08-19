@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import 'flatpickr/dist/flatpickr.css';
 import flatpickr from 'flatpickr';
@@ -6,16 +6,20 @@ import axios from 'axios';
 import { auth } from '../../firebase/config';
 
 export default function BookingForm() {
-  const location = useLocation();
+  const locationHook = useLocation();
   const navigate = useNavigate();
-  const carDetails = location.state?.carDetails;
+  const carDetails = locationHook.state?.carDetails;
   const user = JSON.parse(localStorage.getItem('user')) || {};
+  const locationInputRef = useRef(null);
+  const [suggestions, setSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const debounceRef = useRef(null);
 
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     name: user.name || '',
     email: user.email || '',
-    mobile: '',
+    mobile: '+92',
     location: '',
     dateFrom: '',
     dateTo: '',
@@ -33,6 +37,89 @@ export default function BookingForm() {
   const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
 
   // Validate each step (move price, payment method, payment number to step 2)
+  // Location API functions
+  const normalize = (str) => (str || '')
+    .toLowerCase()
+    .replace(/\b(district|division|province|state|city|tehsil)\b/g, '')
+    .replace(/[^a-z\s]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  const extractCityFromInput = (value) => {
+    const raw = (value || '').toLowerCase();
+    const parts = raw.split(',').map(s => s.trim()).filter(Boolean);
+    const blacklist = ['district', 'division', 'province', 'state', 'country', 'pakistan', 'india', 'punjab', 'sindh', 'kpk', 'balochistan', 'azad kashmir', 'pb', 'pk'];
+    for (const p of parts) {
+      if (p.length >= 3 && blacklist.every(w => !p.includes(w))) return normalize(p);
+    }
+    const fallback = parts.find(p => p.length >= 3) || raw;
+    return normalize(fallback);
+  };
+
+  const fetchLocations = async (query) => {
+    if (!query || query.length < 2) {
+      setSuggestions([]);
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=pk&limit=5&featureType=city`
+      );
+      const data = await response.json();
+      // Filter to only include city results and extract just the city name
+      const citySuggestions = data
+        .filter(item => item.type === 'city' || item.class === 'boundary')
+        .map(item => ({
+          ...item,
+          display_name: item.display_name.split(',')[0].trim()
+        }));
+      setSuggestions(citySuggestions);
+    } catch (error) {
+      console.error('Error fetching locations:', error);
+      setSuggestions([]);
+    }
+  };
+
+  const handleLocationChange = (e) => {
+    const value = e.target.value;
+    setFormData(prev => ({ ...prev, location: value }));
+
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
+
+    debounceRef.current = setTimeout(() => {
+      fetchLocations(value);
+    }, 300);
+  };
+
+  const handleSelectSuggestion = (suggestion) => {
+    // Extract just the city name (first part before comma)
+    const cityName = suggestion.display_name.split(',')[0].trim();
+    setFormData(prev => ({ ...prev, location: cityName }));
+    setShowSuggestions(false);
+  };
+
+  // Phone number formatting
+  const handlePhoneChange = (e) => {
+    let value = e.target.value.replace(/\D/g, '');
+    if (value.startsWith('92')) {
+      value = `+${value}`;
+    } else if (value.startsWith('0')) {
+      value = `+92${value.substring(1)}`;
+    } else if (!value.startsWith('+')) {
+      value = `+92${value}`;
+    }
+
+    // Limit to 13 characters (+92XXXXXXXXXX)
+    if (value.length > 13) {
+      value = value.substring(0, 13);
+    }
+
+    setFormData(prev => ({ ...prev, mobile: value }));
+  };
+
   const validateStep = () => {
     const stepErrors = {};
     if (currentStep === 1) {
@@ -40,7 +127,7 @@ export default function BookingForm() {
       if (!formData.email.trim()) stepErrors.email = 'Email is required';
       else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) stepErrors.email = 'Invalid email address';
       if (!formData.mobile.trim()) stepErrors.mobile = 'Mobile number is required';
-      else if (!/^\d{11}$/.test(formData.mobile)) stepErrors.mobile = 'Phone must be 11 digits';
+      else if (!/^\+92\d{10}$/.test(formData.mobile)) stepErrors.mobile = 'Phone must be in format +92XXXXXXXXXX';
     }
     if (currentStep === 2) {
       if (!formData.location.trim()) stepErrors.location = 'Location is required';
@@ -134,7 +221,7 @@ export default function BookingForm() {
         // 2. Proceed with chat system as before
         const chatResult = await createChatWithAgent();
         setBookingSuccess(true);
-        navigate('/customer-chat', { state: { chatId: chatResult.chatId } });
+        navigate('/home/customer-chat', { state: { chatId: chatResult.chatId } });
       } catch (error) {
         setSubmitError('Booking successful, but there was an issue starting the chat. Please contact support.');
         setBookingSuccess(true);
@@ -149,7 +236,7 @@ export default function BookingForm() {
     setFormData({
       name: user.name || '',
       email: user.email || '',
-      mobile: '',
+      mobile: '+92',
       location: '',
       dateFrom: '',
       dateTo: '',
@@ -253,7 +340,15 @@ export default function BookingForm() {
                   </div>
                   <div className="mb-4 ">
                     <label className="block text-lg font-[500] mb-1">Mobile No:</label>
-                    <input type="text" name="mobile" value={formData.mobile} onChange={handleInputChange} placeholder="Enter 11-digit mobile number" maxLength="11" className="w-full p-2 border border-gray-300 rounded-md" />
+                    <input
+                      type="tel"
+                      name="mobile"
+                      value={formData.mobile}
+                      onChange={handlePhoneChange}
+                      placeholder="+923001234567"
+                      className="w-full p-2 border border-gray-300 rounded-md"
+                      maxLength={13}
+                    />
                     {errors.mobile && <p className="text-red-500 text-sm">{errors.mobile}</p>}
                   </div>
                   <div className="flex justify-between mt-6">
@@ -265,9 +360,32 @@ export default function BookingForm() {
               {currentStep === 2 && (
                 <div className="bg-gray mx-auto max-w-[700px] p-4 rounded-md">
                   <div className=" text-center  text-[28px] font-bold">Booking & Payment Details</div>
-                  <div className="mb-4 ">
+                  <div className="mb-4 relative">
                     <label className="block text-lg font-[500] mb-1">Location:</label>
-                    <input type="text" name="location" value={formData.location} onChange={handleInputChange} placeholder="Enter location" className="w-full p-2 border border-gray-300 rounded-md" />
+                    <input
+                      type="text"
+                      name="location"
+                      value={formData.location}
+                      onChange={handleLocationChange}
+                      onFocus={() => setShowSuggestions(true)}
+                      onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+                      placeholder="Enter location"
+                      className="w-full p-2 border border-gray-300 rounded-md"
+                      ref={locationInputRef}
+                    />
+                    {showSuggestions && suggestions.length > 0 && (
+                      <ul className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg">
+                        {suggestions.map((suggestion, index) => (
+                          <li
+                            key={index}
+                            className="p-2 hover:bg-gray-100 cursor-pointer"
+                            onMouseDown={() => handleSelectSuggestion(suggestion)}
+                          >
+                            {suggestion.display_name}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                     {errors.location && <p className="text-red-500 text-sm">{errors.location}</p>}
                   </div>
                   <div className="mb-4 ">

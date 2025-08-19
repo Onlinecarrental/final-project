@@ -10,60 +10,63 @@ const BlogCard = ({ blog, onImageLoad, onImageError, imageLoadingStates }) => (
     boxShadow={false}
     width="w-full"
     height="h-full"
-    bgColor="bg-gray"
+    bgColor="bg-white"
     padding="p-0"
-    className="overflow-hidden flex flex-col transition-transform hover:-translate-y-1 hover:shadow-md"
+    className="overflow-hidden border border-black flex flex-col transition-all duration-300 hover:-translate-y-2 hover:shadow-lg rounded-2xl"
   >
-    <div className="relative">
+    {/* Image Section */}
+    <div className="relative group w-full h-60 bg-gray-100 flex items-center justify-center">
       {imageLoadingStates[`blog-${blog._id}`] && (
-        <div className="absolute inset-0 bg-gray  animate-pulse" />
+        <div className="absolute inset-0 bg-gray-200 animate-pulse" />
       )}
       <img
         src={blog.image ? blog.image : "/default-blog.jpg"}
         alt={blog.title}
-        className="w-full h-52 object-cover"
+        className="w-full h-full  object-cover-center group-hover:scale-105 transition-transform duration-500"
         onLoad={() => onImageLoad(`blog-${blog._id}`)}
         onError={(e) => {
-          onImageError(blog._id, 'Blog', blog.image);
+          onImageError(blog._id, "Blog", blog.image);
           e.target.src = "/default-blog.jpg";
         }}
       />
-      <div className="absolute top-3 right-3">
-        <span className="bg-Blue bg-opacity-90 text-white text-xs px-3 py-1.5 rounded-md">
+
+      {/* Category Tag */}
+      <div className="absolute top-3 left-3">
+        <span className="bg-blue-600/90 text-white text-xs font-medium px-3 py-1.5 rounded-full shadow-md">
           {blog.category}
         </span>
       </div>
     </div>
 
+    {/* Content Section */}
     <div className="p-5 flex flex-col justify-between flex-grow">
       <div>
-        <h3 className="font-bold text-lg mb-3 hover:text-indigo-600 transition line-clamp-2">
+        <h3 className="font-bold text-lg mb-2 hover:text-blue-600 transition line-clamp-2">
           {blog.title}
         </h3>
-        <p className="text-gray-600 mb-4 text-sm line-clamp-2">{blog.excerpt}</p>
+        <p className="text-gray-600 mb-4 text-sm line-clamp-3">{blog.excerpt}</p>
       </div>
 
+      {/* Footer */}
       <div className="flex items-center justify-between pt-4 border-t border-gray-100 mt-4">
+        {/* Author Info */}
         <div className="flex items-center">
           <div className="relative w-10 h-10">
             {imageLoadingStates[`author-${blog._id}`] && (
-              <div className="absolute inset-0 bg-gray  animate-pulse rounded-full" />
+              <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-full" />
             )}
             <img
-              src={blog.author.image
-                ? blog.author.image
-                : "/default-avatar.jpg"
-              }
+              src={blog.author.image ? blog.author.image : "/default-avatar.jpg"}
               alt={blog.author.name}
-              className="w-10 h-10 rounded-full mr-3 border-2 border-gray-100 object-cover"
+              className="w-10 h-10 rounded-full border object-cover"
               onLoad={() => onImageLoad(`author-${blog._id}`)}
               onError={(e) => {
-                onImageError(blog._id, 'Author', blog.author.image);
+                onImageError(blog._id, "Author", blog.author.image);
                 e.target.src = "/default-avatar.jpg";
               }}
             />
           </div>
-          <div>
+          <div className="ml-3">
             <p className="text-sm font-medium">{blog.author.name}</p>
             <div className="flex items-center text-gray-500 text-xs">
               <Calendar size={12} className="mr-1" />
@@ -72,17 +75,20 @@ const BlogCard = ({ blog, onImageLoad, onImageError, imageLoadingStates }) => (
           </div>
         </div>
 
+        {/* Read More Button */}
         <Link
           to={`/home/blogs/${blog._id}`}
-          className="inline-flex items-center bg-Blue text-white text-sm px-3 py-2 rounded hover:bg-opacity-90 transition-colors"
+          className="inline-flex items-center bg-blue-600 text-white text-sm px-3 py-2 rounded-lg hover:bg-blue-700 transition-all"
         >
-          <span>Read</span>
+          <span>Read More</span>
           <ChevronRight size={16} className="ml-1" />
         </Link>
       </div>
     </div>
   </BaseCard>
 );
+
+
 
 export default function BlogListPage() {
   const [blogs, setBlogs] = useState([]);

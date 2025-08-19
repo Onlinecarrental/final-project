@@ -4,7 +4,7 @@ import { FaEnvelope, FaCarAlt, FaCalendarAlt, FaListAlt, FaPhoneAlt, FaSignOutAl
 import { useNavigate } from "react-router-dom"; // <-- Add this
 import { auth } from "../firebase/config";
 import { signOut } from "firebase/auth";
-
+import logo from "../assets/LOGO.png";
 function Sidebar() {
   const navigate = useNavigate(); // <-- Add this
 
@@ -36,7 +36,7 @@ function Sidebar() {
       {/* Logo and Title */}
       <div className="flex items-center mb-8">
         <div className="bg-white rounded-full p-2 mr-2">
-          <img src="../src/assets/LOGO.png" alt="AA Car Rental Logo" className="w-12 h-12 " />
+          <img src={logo} alt="AA Car Rental Logo" className="w-12 h-12 " />
         </div>
         <span className="text-lg font-bold">Online Car Rental</span>
       </div>

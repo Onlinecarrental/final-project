@@ -34,7 +34,7 @@ const Navbar = () => {
             <ul className="flex space-x-5 text-[16px] font-[400] font-jakarta">
               <li><Link to="/home/best-cars" className="hover:text-Blue" onClick={scrollToTop}>Best Cars</Link></li>
               <li><Link to="/home/my-bookings" className="hover:text-Blue" onClick={scrollToTop}>Bookings</Link></li>
-              <li><Link to="/customer-chat" className="hover:text-Blue" onClick={scrollToTop}>Messenger</Link></li>
+              <li><Link to="/home/customer-chat" className="hover:text-Blue" onClick={scrollToTop}>Messenger</Link></li>
               <li><Link to="/home/customerreviews" className="hover:text-Blue" onClick={scrollToTop}>Customer Review</Link></li>
               <li><Link to="/home/blogs" className="hover:text-Blue" onClick={scrollToTop}>Blogs</Link></li>
               <li><Link to="/home/contactus" className="hover:text-Blue" onClick={scrollToTop}>Contact Us</Link></li>

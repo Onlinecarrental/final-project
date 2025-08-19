@@ -14,7 +14,7 @@ function MainLayout({ children }) {
         <NavbarAgent />
 
         {/* Page Content */}
-        <div className="flex-1 bg-gray  p-6 overflow-auto">
+        <div className="flex-1 bg-white  p-6 overflow-auto">
           {children}
         </div>
       </div>
