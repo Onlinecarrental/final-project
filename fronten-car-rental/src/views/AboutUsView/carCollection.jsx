@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import Button from '../../components/button';
 import HeadingTitle from '../../components/heading';
 import axios from 'axios';
-import bluetick from '../../assets/bluetick.svg';
+import bluetick from './../../assets/bluetick.svg';
 // Add a helper function to format image URLs
 const getImageUrl = (path) => {
   if (!path) return "../src/assets/AUcar.svg";
