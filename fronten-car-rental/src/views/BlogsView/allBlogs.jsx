@@ -3,7 +3,6 @@ import { Calendar, User, Tag, Search, Menu, X, ChevronRight, ChevronLeft } from 
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import BaseCard from '../../components/card';
-import Button from '../../components/button';
 
 const BlogCard = ({ blog, onImageLoad, onImageError, imageLoadingStates }) => (
   <BaseCard
@@ -90,50 +89,44 @@ const BlogCard = ({ blog, onImageLoad, onImageError, imageLoadingStates }) => (
 
 
 
-export default function BlogListPage() {
+export default function AllBlogs({ searchTerm }) {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [activeCategory, setActiveCategory] = useState('All');
+  const [activeCategory, setActiveCategory] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
   const [imageLoadingStates, setImageLoadingStates] = useState({});
   const postsPerPage = 9;
 
   const handleImageLoad = useCallback((id) => {
-    setImageLoadingStates(prev => ({ ...prev, [id]: false }));
+    setImageLoadingStates((prev) => ({ ...prev, [id]: false }));
   }, []);
 
   const handleImageError = useCallback((id, type, imageUrl) => {
     console.error(`${type} image load error:`, imageUrl);
-    setImageLoadingStates(prev => ({ ...prev, [id]: false }));
+    setImageLoadingStates((prev) => ({ ...prev, [id]: false }));
   }, []);
 
   const fetchBlogs = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
-
       const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
-      const [blogsResponse, categoriesResponse] = await Promise.all([
-        axios.get(`${API_BASE_URL}/blogs`),
-        axios.get(`${API_BASE_URL}/categories`)
-      ]);
+      const blogsResponse = await axios.get(`${API_BASE_URL}/blogs`);
 
       if (blogsResponse.data.success) {
         setBlogs(blogsResponse.data.data);
         const initialLoadingStates = {};
-        blogsResponse.data.data.forEach(blog => {
+        blogsResponse.data.data.forEach((blog) => {
           initialLoadingStates[`blog-${blog._id}`] = true;
           initialLoadingStates[`author-${blog._id}`] = true;
         });
         setImageLoadingStates(initialLoadingStates);
       } else {
-        throw new Error(blogsResponse.data.message || 'Failed to fetch blogs');
+        throw new Error(blogsResponse.data.message || "Failed to fetch blogs");
       }
     } catch (error) {
-      console.error('Fetch blogs error:', error);
+      console.error("Fetch blogs error:", error);
       setError(error.response?.data?.message || error.message);
     } finally {
       setLoading(false);
@@ -142,25 +135,24 @@ export default function BlogListPage() {
 
   useEffect(() => {
     fetchBlogs();
-  }, []);
+  }, [fetchBlogs]);
 
   const categories = [
-    { name: 'All', count: blogs.length },
+    { name: "All", count: blogs.length },
     ...Object.entries(
       blogs.reduce((acc, blog) => {
         acc[blog.category] = (acc[blog.category] || 0) + 1;
         return acc;
       }, {})
-    ).map(([name, count]) => ({ name, count }))
+    ).map(([name, count]) => ({ name, count })),
   ];
 
-  const filteredBlogs = blogs.filter(blog => {
-    const matchesSearch = searchTerm === '' ||
+  const filteredBlogs = blogs.filter((blog) => {
+    const matchesSearch =
+      searchTerm === "" ||
       blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       blog.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
-
-    const matchesCategory = activeCategory === 'All' || blog.category === activeCategory;
-
+    const matchesCategory = activeCategory === "All" || blog.category === activeCategory;
     return matchesSearch && matchesCategory;
   });
 

@@ -40,6 +40,9 @@ export default function HerosectionCustomer({ onSearch }) {
                   className="w-full p-2 pr-10 rounded bg-white"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleSearch();
+                  }}
                 />
               </div>
               <div className="w-full sm:w-auto mt-2 sm:mt-0">

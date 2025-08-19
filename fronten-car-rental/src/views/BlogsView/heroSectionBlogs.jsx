@@ -1,18 +1,15 @@
-import React, { useState } from 'react';
+import { useState } from "react";
 import heroImage from "../../assets/Bannerimage.jpg";
 import BaseCard from "../../components/card";
-import Button from '../../components/button';
+import Button from "../../components/button";
 
-export default function HeroSectionBlogs() {
+export default function HeroSectionBlogs({ onSearch }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
   const handleSearch = () => {
     setSubmitted(true);
-    if (searchTerm) {
-      // perform search logic here
-      console.log("Searching with:", searchTerm);
-    }
+    onSearch(searchTerm); // parent ko bhejna
   };
 
   return (
@@ -38,42 +35,46 @@ export default function HeroSectionBlogs() {
         <BaseCard width="w-full max-w-2xl" bgColor="bg-gray" height="h-auto" className="flex">
           <div className="w-full bg-gray-200/80 p-4 rounded-md">
             <div className="flex flex-wrap gap-2">
-              
-              {/* Search Input with Icon */}
+              {/* Search Input */}
               <div className="flex-grow min-w-[200px] relative">
                 <div className="relative">
                   <input
                     type="text"
-                    placeholder="Search reviews..."
+                    placeholder="Search blogs..."
                     className="w-full p-2 pr-10 rounded bg-white"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") handleSearch();
+                    }}
                   />
                   <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                    <svg 
-                      xmlns="http://www.w3.org/2000/svg" 
-                      className="h-5 w-5 text-gray-400" 
-                      fill="none" 
-                      viewBox="0 0 24 24" 
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 text-gray-400"
+                      fill="none"
+                      viewBox="0 0 24 24"
                       stroke="currentColor"
                     >
-                      <path 
-                        strokeLinecap="round" 
-                        strokeLinejoin="round" 
-                        strokeWidth={2} 
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" 
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                       />
                     </svg>
                   </div>
                 </div>
                 {submitted && !searchTerm && (
-                  <p className="text-red-500 text-sm mt-1">Please enter a search term</p>
+                  <p className="text-red-500 text-sm mt-1">
+                    Please enter a search term
+                  </p>
                 )}
               </div>
 
               {/* Search Button */}
               <div className="w-full sm:w-auto mt-2 sm:mt-0">
-                <Button title="Search" height='41px' />
+                <Button title="Search" height="41px" onClick={handleSearch} />
               </div>
             </div>
           </div>

@@ -1,15 +1,14 @@
+import { useState } from "react";
+import HeroSectionBlogs from "./heroSectionBlogs";
+import AllBlogs from "./allBlogs";
 
+export default function BlogsView() {
+  const [searchTerm, setSearchTerm] = useState("");
 
-import HeroSectionBlogs from "./heroSectionBlogs"
-import AllBlogs from "./allBlogs"
-import BlogPost from "./showblog"
-export default function ContactUsView(){
-    return(
-
-        <div>
-          <HeroSectionBlogs/>
-          
-          <AllBlogs/>
-        </div>
-    )
+  return (
+    <div>
+      <HeroSectionBlogs onSearch={setSearchTerm} />
+      <AllBlogs searchTerm={searchTerm} />
+    </div>
+  );
 }
