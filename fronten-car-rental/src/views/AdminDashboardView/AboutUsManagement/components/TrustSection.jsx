@@ -36,8 +36,6 @@ export default function TrustSection({ sections, setSections, editingSection, se
     success: null
   });
   const fileInputRef = useRef(null);
-  const bannerImageRef = useRef(null);
-
   const CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1/dlinqw87p/image/upload";
   const CLOUDINARY_UPLOAD_PRESET = "upload_preset";
 
@@ -200,64 +198,64 @@ export default function TrustSection({ sections, setSections, editingSection, se
     }
   };
 
-  const handleBannerImageChange = async (e) => {
-    try {
-      const file = e.target.files[0];
-      if (!file) return;
+  // const handleBannerImageChange = async (e) => {
+  //   try {
+  //     const file = e.target.files[0];
+  //     if (!file) return;
 
-      if (!file.type.startsWith('image/')) {
-        setUpdateStatus({
-          error: 'Please upload an image file'
-        });
-        return;
-      }
+  //     if (!file.type.startsWith('image/')) {
+  //       setUpdateStatus({
+  //         error: 'Please upload an image file'
+  //       });
+  //       return;
+  //     }
 
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+  //     const formData = new FormData();
+  //     formData.append('file', file);
+  //     formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
 
-      const res = await fetch(CLOUDINARY_UPLOAD_URL, {
-        method: 'POST',
-        body: formData
-      });
+  //     const res = await fetch(CLOUDINARY_UPLOAD_URL, {
+  //       method: 'POST',
+  //       body: formData
+  //     });
 
-      if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`);
-      }
+  //     if (!res.ok) {
+  //       throw new Error(`HTTP error! status: ${res.status}`);
+  //     }
 
-      const data = await res.json();
+  //     const data = await res.json();
 
-      if (data.secure_url) {
-        const content = {
-          ...sections.trust,
-          bannerImage: data.secure_url
-        };
+  //     if (data.secure_url) {
+  //       const content = {
+  //         ...sections.trust,
+  //         bannerImage: data.secure_url
+  //       };
 
-        const result = await handleUpdate('trust', content);
+  //       const result = await handleUpdate('trust', content);
 
-        if (result?.success) {
-          setSections(prev => ({
-            ...prev,
-            trust: {
-              ...prev.trust,
-              bannerImage: data.secure_url
-            }
-          }));
-          setUpdateStatus({
-            success: 'Banner image updated successfully!'
-          });
-        } else {
-          throw new Error('Failed to update backend');
-        }
-      } else {
-        throw new Error('No secure URL in response');
-      }
-    } catch (error) {
-      setUpdateStatus({
-        error: error.message
-      });
-    }
-  };
+  //       if (result?.success) {
+  //         setSections(prev => ({
+  //           ...prev,
+  //           trust: {
+  //             ...prev.trust,
+  //             bannerImage: data.secure_url
+  //           }
+  //         }));
+  //         setUpdateStatus({
+  //           success: 'Banner image updated successfully!'
+  //         });
+  //       } else {
+  //         throw new Error('Failed to update backend');
+  //       }
+  //     } else {
+  //       throw new Error('No secure URL in response');
+  //     }
+  //   } catch (error) {
+  //     setUpdateStatus({
+  //       error: error.message
+  //     });
+  //   }
+  // };
 
   const handleTrustSave = async (index) => {
     try {

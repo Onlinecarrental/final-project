@@ -104,8 +104,8 @@ export default function CarCollectionSection({ sections, setSections, editingSec
   }, [sections, setSections]);
 
   const fileInputRef = useRef(null);
-  const bannerSvgRef = useRef(null);
-  const luxuryCarRef = useRef(null);
+  // const bannerSvgRef = useRef(null);
+  // const luxuryCarRef = useRef(null);
 
   // Move all handlers inside component
   const handleHeaderSave = async () => {
@@ -234,45 +234,45 @@ export default function CarCollectionSection({ sections, setSections, editingSec
     }
   };
 
-  const handleBannerSvgChange = async (e) => {
-    try {
-      const file = e.target.files[0];
-      if (!file) return;
+  // const handleBannerSvgChange = async (e) => {
+  //   try {
+  //     const file = e.target.files[0];
+  //     if (!file) return;
 
-      if (!file.type.includes('svg')) {
-        setUpdateStatus({
-          error: 'Please upload an SVG file'
-        });
-        return;
-      }
+  //     if (!file.type.includes('svg')) {
+  //       setUpdateStatus({
+  //         error: 'Please upload an SVG file'
+  //       });
+  //       return;
+  //     }
 
-      const formData = new FormData();
-      formData.append('image', file);
-      formData.append('bannerSvg', 'true');
-      formData.append('content', JSON.stringify({
-        ...sections.carCollection
-      }));
+  //     const formData = new FormData();
+  //     formData.append('image', file);
+  //     formData.append('bannerSvg', 'true');
+  //     formData.append('content', JSON.stringify({
+  //       ...sections.carCollection
+  //     }));
 
-      const result = await handleUpdate('carCollection', formData);
+  //     const result = await handleUpdate('carCollection', formData);
 
-      if (result?.success) {
-        setSections(prev => ({
-          ...prev,
-          carCollection: {
-            ...prev.carCollection,
-            bannerSvg: result.data.content.bannerSvg
-          }
-        }));
-        setUpdateStatus({
-          success: 'Banner updated successfully!'
-        });
-      }
-    } catch (error) {
-      setUpdateStatus({
-        error: error.message || 'Failed to update banner'
-      });
-    }
-  };
+  //     if (result?.success) {
+  //       setSections(prev => ({
+  //         ...prev,
+  //         carCollection: {
+  //           ...prev.carCollection,
+  //           bannerSvg: result.data.content.bannerSvg
+  //         }
+  //       }));
+  //       setUpdateStatus({
+  //         success: 'Banner updated successfully!'
+  //       });
+  //     }
+  //   } catch (error) {
+  //     setUpdateStatus({
+  //       error: error.message || 'Failed to update banner'
+  //     });
+  //   }
+  // };
 
   const addNewCar = () => {
     setSections(prev => ({
