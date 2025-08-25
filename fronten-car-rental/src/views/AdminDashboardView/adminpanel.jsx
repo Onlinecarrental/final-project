@@ -7,7 +7,6 @@ import {
   Users,
   LogOut,
   ChevronDown,
-  Activity,
   DollarSign,
   ShoppingCart,
   MessageSquare,
