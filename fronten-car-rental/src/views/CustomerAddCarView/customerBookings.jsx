@@ -28,7 +28,7 @@ function PaymentForm({ booking, onPaymentSuccess, onPaymentError }) {
 
         try {
             // Create payment intent
-            const paymentIntentResponse = await axios.post(`${import.meta.env.VITE_API_URL}/payments/create-payment-intent`, {
+            const paymentIntentResponse = await axios.post(`${import.meta.env.VITE_API_URL}payments/create-payment-intent`, {
                 bookingId: booking._id,
                 amount: booking.price,
                 currency: 'usd'
@@ -51,7 +51,7 @@ function PaymentForm({ booking, onPaymentSuccess, onPaymentError }) {
 
             if (paymentIntent.status === 'succeeded') {
                 // Confirm payment with backend
-                await axios.post(`${import.meta.env.VITE_API_URL}/payments/confirm-payment`, {
+                await axios.post(`${import.meta.env.VITE_API_URL}payments/confirm-payment`, {
                     paymentIntentId,
                     paymentId
                 });
