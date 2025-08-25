@@ -83,6 +83,12 @@ const AgentLogin = () => {
           setError('Please use appropriate login page');
           return;
         } else {
+          // Enforce admin approval gate for agents
+          const approved = userDoc.data().approved === true;
+          if (!approved) {
+            setError('Your agent account is pending admin approval. Please wait for approval.');
+            return;
+          }
           // Store user data and role type for agent
           const userData = {
             email: userEmail,

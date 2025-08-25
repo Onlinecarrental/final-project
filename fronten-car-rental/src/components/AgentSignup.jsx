@@ -160,7 +160,8 @@ const AgentSignup = () => {
         license,
         licensePicUrl: licenseUrl,
         createdAt: new Date(),
-        role: "agent"
+        role: "agent",
+        approved: false
       });
 
       alert('Signup successful! Redirecting to login...');

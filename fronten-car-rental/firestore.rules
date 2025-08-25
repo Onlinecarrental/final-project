@@ -1,13 +1,33 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /users/{userId} {
-      allow write: if request.auth != null && request.auth.uid == userId;
-      allow read: if request.auth != null;
+    function isSignedIn() {
+      return request.auth != null;
     }
+
+    // Determine if the current user is an admin by checking role in either collection
+    function isAdmin() {
+      return isSignedIn() && (
+        // Admin stored in users collection
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin'
+        ||
+        // Or admin stored in agent collection
+        exists(/databases/$(database)/documents/agent/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/agent/$(request.auth.uid)).data.role == 'admin'
+      );
+    }
+
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      // Users can write their own doc; admins may also update users if needed
+      allow write: if isSignedIn() && (request.auth.uid == userId || isAdmin());
+    }
+
     match /agent/{userId} {
-      allow write: if request.auth != null && request.auth.uid == userId;
-      allow read: if request.auth != null;
+      allow read: if isSignedIn();
+      // Allow self-writes OR admin writes (needed for approvals)
+      allow write: if isSignedIn() && (request.auth.uid == userId || isAdmin());
     }
   }
-} 
+}

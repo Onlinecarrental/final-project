@@ -27,6 +27,8 @@ import AdminChat from './AdminChat';
 import BookingManagement from './bookingManagement/BookingManagement';
 import PaymentManagement from './paymentManagemnt/PaymentManagement';
 import ContactManagement from "./ContactManagemnt/ContactManage";
+import UserManagement from './UserManagement/UserManagement';
+import DashboardContent from './DashboardContent';
 
 function SidebarItem({ icon, text, isOpen, isActive, onClick, badge }) {
   return (
@@ -210,16 +212,6 @@ function UsersContent() {
   );
 }
 
-function ProductsContent() {
-  return (
-    <div>
-      <h1 className="text-2xl font-bold mb-6">Product Management</h1>
-      <div className="bg-white rounded-lg shadow p-5">
-        <p className="text-gray-600">This is the products management panel.</p>
-      </div>
-    </div>
-  );
-}
 
 
 
@@ -353,6 +345,8 @@ export default function AdminDashboard() {
         return <CategoryContent />;
       case 'reviews':
         return <ReviewManagement />;
+      case 'users':
+        return <UserManagement />;
       case 'settings':
         return <SettingsContent />;
       case 'adminchat':
@@ -361,8 +355,7 @@ export default function AdminDashboard() {
         return <PaymentManagement />;
       case 'contactmanagement':
         return <ContactManagement />;
-      default:
-        return <DashboardContent />;
+    
     }
   };
 
@@ -392,6 +385,13 @@ export default function AdminDashboard() {
             isOpen={sidebarOpen}
             isActive={activeTab === 'bookings'}
             onClick={() => setActiveTab('bookings')}
+          />
+          <SidebarItem
+            icon={<Users size={20} />}
+            text="User Management"
+            isOpen={sidebarOpen}
+            isActive={activeTab === 'users'}
+            onClick={() => setActiveTab('users')}
           />
           <SidebarDropdownItem
             icon={<Home size={20} />}

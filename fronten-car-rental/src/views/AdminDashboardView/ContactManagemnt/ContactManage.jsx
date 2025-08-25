@@ -61,7 +61,12 @@ export default function ContactManagement() {
 
   return (
     <div className="p-8">
-      <h1 className="text-3xl font-bold mb-6">Contact Management</h1>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold">Contact Management</h1>
+        <div className="bg-blue-100 text-blue-800 px-4 py-2 rounded-lg">
+          Total Contacts: {contacts.length}
+        </div>
+      </div>
       <div className="grid gap-6">
         {contacts.map(contact => (
           <BaseCard key={contact._id} padding="p-6" width="100%" height="auto">
