@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { db } from '../../../firebase/config';
 import { collection, getDocs } from 'firebase/firestore';
-import { Users, FileText, MessageSquare, User, Clock } from 'lucide-react';
+import { Users, FileText, MessageSquare, User, Clock, AlertCircle } from 'lucide-react';
 
 const DashboardContent = () => {
   const [stats, setStats] = useState({
@@ -9,6 +10,7 @@ const DashboardContent = () => {
     totalReviews: 0,
     totalCustomers: 0,
     totalAgents: 0,
+    totalComplaints: 0,
   });
   const [recentAgents, setRecentAgents] = useState([]);
   const [recentCustomers, setRecentCustomers] = useState([]);
@@ -20,9 +22,12 @@ const DashboardContent = () => {
     setError('');
     try {
       // First fetch agents and users like in UserManagement
-      const [agentsSnap, usersSnap] = await Promise.all([
+      const [agentsSnap, usersSnap, blogsResp, reviewsResp, complaintsResp] = await Promise.all([
         getDocs(collection(db, 'agent')),
         getDocs(collection(db, 'users')),
+        axios.get('https://backend-car-rental-production.up.railway.app/api/blogs'),
+        axios.get('https://backend-car-rental-production.up.railway.app/api/reviews/all'),
+        axios.get('https://backend-car-rental-production.up.railway.app/api/contact'),
       ]);
 
       // Process agents and users
@@ -33,19 +38,20 @@ const DashboardContent = () => {
       const recentAgents = [...agentRows]
         .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0))
         .slice(0, 5);
-        
+
       const recentCustomers = [...userRows]
         .sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0))
         .slice(0, 5);
 
       // Set the state
       setStats({
-        totalBlogs: 0, // We'll handle these separately if needed
-        totalReviews: 0, // We'll handle these separately if needed
+        totalBlogs: Array.isArray(blogsResp.data?.data) ? blogsResp.data.data.length : 0,
+        totalReviews: Array.isArray(reviewsResp.data?.data) ? reviewsResp.data.data.length : 0,
         totalCustomers: userRows.length,
         totalAgents: agentRows.length,
+        totalComplaints: Array.isArray(complaintsResp.data) ? complaintsResp.data.length : 0,
       });
-      
+
       setRecentAgents(recentAgents);
       setRecentCustomers(recentCustomers);
     } catch (e) {
@@ -61,27 +67,27 @@ const DashboardContent = () => {
   }, []);
 
   const StatCard = ({ icon, title, value, color = 'blue' }) => (
-    <div className="bg-white rounded-lg shadow p-6">
-      <div className="flex items-center">
-        <div className={`p-3 rounded-full bg-${color}-100 text-${color}-600 mr-4`}>
-          {icon}
-        </div>
+    <div className="bg-white p-6 font-jakarta rounded-lg shadow">
+      <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-gray-500">{title}</p>
+          <p className="text-gray-500 text-sm">{title}</p>
           <h3 className="text-2xl font-bold">{loading ? '...' : value}</h3>
+        </div>
+        <div className={`p-3 bg-gray text-black rounded-full`}>
+          {icon}
         </div>
       </div>
     </div>
   );
 
   const RecentUsersTable = ({ users, type }) => (
-    <div className="bg-white rounded-lg shadow overflow-hidden">
+    <div className="bg-white rounded-lg font-jakarta shadow overflow-hidden">
       <div className="p-4 border-b">
         <h3 className="text-lg font-medium">Recent {type === 'agent' ? 'Agents' : 'Customers'}</h3>
       </div>
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+          <thead className="bg-gray">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Name
@@ -111,7 +117,7 @@ const DashboardContent = () => {
                 <tr key={user.id}>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
-                      <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
+                      <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray flex items-center justify-center">
                         <User className="h-5 w-5 text-gray-500" />
                       </div>
                       <div className="ml-4">
@@ -152,32 +158,39 @@ const DashboardContent = () => {
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold text-gray-800">Dashboard Overview</h1>
-      
+
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard 
-          icon={<FileText className="h-6 w-6" />} 
-          title="Total Blogs" 
-          value={stats.totalBlogs} 
-          color="blue"
-        />
-        <StatCard 
-          icon={<MessageSquare className="h-6 w-6" />} 
-          title="Total Reviews" 
-          value={stats.totalReviews}
-          color="green"
-        />
-        <StatCard 
-          icon={<Users className="h-6 w-6" />} 
-          title="Total Customers" 
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+        <StatCard
+          icon={<Users className="h-6 w-6" />}
+          title="Total Customers"
           value={stats.totalCustomers}
-          color="purple"
+          color="Blue"
         />
-        <StatCard 
-          icon={<User className="h-6 w-6" />} 
-          title="Total Agents" 
+        <StatCard
+          icon={<User className="h-6 w-6" />}
+          title="Total Agents"
           value={stats.totalAgents}
-          color="yellow"
+          color="Blue"
+        />
+        <StatCard
+          icon={<FileText className="h-6 w-6" />}
+          title="Total Blogs"
+          value={stats.totalBlogs}
+          color="Blue"
+        />
+        <StatCard
+          icon={<MessageSquare className="h-6 w-6" />}
+          title="Total Reviews"
+          value={stats.totalReviews}
+          color="gray"
+        />
+
+        <StatCard
+          icon={<AlertCircle className="h-6 w-6" />}
+          title="Total Complaints"
+          value={stats.totalComplaints}
+          color="Blue"
         />
       </div>
 

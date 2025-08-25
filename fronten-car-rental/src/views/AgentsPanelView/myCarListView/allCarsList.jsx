@@ -20,25 +20,25 @@ const Card = ({ car, onEdit, onDelete }) => {
       <img
         src={(function () {
           const ci = car.coverImage;
-          console.log('Cover Image Data:', { 
-            original: ci, 
+          console.log('Cover Image Data:', {
+            original: ci,
             hasValue: !!ci,
             isAbsolute: ci && /^https?:\/\//i.test(ci),
             carId: car._id,
             carName: car.name
           });
-          
+
           if (!ci) {
             console.log('No cover image, using default');
             return "/default-car.jpg";
           }
-          
+
           // If it's already an absolute URL, use it directly
           if (/^https?:\/\//i.test(ci)) {
             console.log('Using absolute URL:', ci);
             return ci;
           }
-          
+
           // Handle relative paths
           let imagePath = ci;
           // Remove leading slash if present
@@ -47,7 +47,7 @@ const Card = ({ car, onEdit, onDelete }) => {
           }
           // Remove any path that might be pointing to uploads directory already
           imagePath = imagePath.replace(/^uploads\//, '');
-          
+
           const fullUrl = `${BACKEND_BASE}/uploads/${imagePath}`;
           console.log('Constructed image URL:', fullUrl);
           return fullUrl;
@@ -334,7 +334,7 @@ const AllCarsList = () => {
             title="Add New Car"
             bgColor="bg-blue-600"
             textColor="text-white"
-            width="120px"
+            width="auto"
             onClick={() => navigate('/agent/addcar')}
           />
         </div>
@@ -357,13 +357,7 @@ const AllCarsList = () => {
       ) : cars.length === 0 ? (
         <div className="text-center py-16 text-gray-500">
           <p className="text-xl mb-4">No cars available</p>
-          <Button
-            title="Add Your First Car"
-            bgColor="bg-blue-600"
-            textColor="text-white"
-            width="160px"
-            onClick={() => navigate('/agent/addcar')}
-          />
+
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center py-10">

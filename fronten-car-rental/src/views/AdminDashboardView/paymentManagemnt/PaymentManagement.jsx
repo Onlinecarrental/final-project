@@ -28,7 +28,7 @@ function AdminPaymentForm({ payment, onPaymentSuccess, onPaymentError }) {
 
         try {
             // Create payment intent for admin to agent payment
-            const paymentIntentResponse = await axios.post(`${import.meta.env.VITE_API_URL}/payments/create-admin-payment-intent`, {
+            const paymentIntentResponse = await axios.post('http://localhost:5000/api/payments/create-admin-payment-intent', {
                 paymentId: payment._id,
                 amount: payment.amount,
                 currency: 'usd',
@@ -52,7 +52,7 @@ function AdminPaymentForm({ payment, onPaymentSuccess, onPaymentError }) {
 
             if (paymentIntent.status === 'succeeded') {
                 // Confirm admin payment to agent
-                await axios.post(`${import.meta.env.VITE_API_URL}/payments/${payment._id}/admin-pay-agent-stripe`, {
+                await axios.post(`http://localhost:5000/api/payments/${payment._id}/admin-pay-agent-stripe`, {
                     paymentIntentId,
                     paymentMethod: 'Stripe',
                     transactionId: paymentIntent.id,
@@ -121,7 +121,7 @@ export default function PaymentManagement() {
     const fetchPayments = async () => {
         try {
             setLoading(true);
-            const response = await axios.get(`${import.meta.env.VITE_API_URL}/payments/admin/all`);
+            const response = await axios.get('https://backend-car-rental-production.up.railway.app/api/payments/admin/all');
             setPayments(response.data.data || []);
         } catch (err) {
             setError('Failed to load payments.');
@@ -148,7 +148,7 @@ export default function PaymentManagement() {
     const handlePaymentSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post(`${import.meta.env.VITE_API_URL}/payments/${selectedPayment._id}/admin-pay-agent`, paymentForm);
+            await axios.post(`https://backend-car-rental-production.up.railway.app/${selectedPayment._id}/admin-pay-agent`, paymentForm);
             setPayments(prev => prev.map(p =>
                 p._id === selectedPayment._id
                     ? { ...p, adminPaymentDetails: { ...paymentForm, paymentDate: new Date() }, status: 'completed' }
@@ -310,7 +310,7 @@ export default function PaymentManagement() {
                                         className="text-xs mt-1"
                                         onClick={async () => {
                                             if (window.confirm('Are you sure you want to delete this booking and all related records?')) {
-                                                await axios.delete(`${import.meta.env.VITE_API_URL}/bookings/${payment.booking?._id || payment.booking}`);
+                                                await axios.delete(`http://localhost:5000/api/bookings/${payment.booking?._id || payment.booking}`);
                                                 setPayments(prev => prev.filter(p => (p.booking?._id || p.booking) !== (payment.booking?._id || payment.booking)));
                                             }
                                         }}
@@ -336,7 +336,7 @@ export default function PaymentManagement() {
                             </button>
                         </div>
 
-                        <div className="mb-4 p-3 bg-gray  rounded">
+                        <div className="mb-4 p-3 bg-gray-100 rounded">
                             <h4 className="font-semibold mb-2">Payment Details</h4>
                             <div className="text-sm space-y-1">
                                 <div><strong>Amount:</strong> ${selectedPayment.amount}</div>
@@ -423,7 +423,7 @@ export default function PaymentManagement() {
                             </button>
                         </div>
 
-                        <div className="mb-4 p-3 bg-gray  rounded">
+                        <div className="mb-4 p-3 bg-gray-100 rounded">
                             <h4 className="font-semibold mb-2">Payment Details</h4>
                             <div className="text-sm space-y-1">
                                 <div><strong>Amount:</strong> ${selectedPayment.amount}</div>

@@ -204,22 +204,28 @@ export default function HeroSection({ sections, setSections, editingSection, set
             </div>
           </div>
         ) : (
-          <div>
-            <div className="mb-4">
-              <h3 className="font-medium text-gray-700">Current Content:</h3>
-              <p className="font-bold mt-2">{heroData.title}</p>
-              <p className="text-gray-600 mt-1">{heroData.description}</p>
-              {(heroData.image || heroData.imagePreview) && (
-                <img
-                  src={heroData.imagePreview || heroData.image}
-                  alt="Hero"
-                  className="mt-2 max-w-xs rounded"
-                  onError={(e) => {
-                    console.error('Failed to load image:', e.target.src);
-                    e.target.style.display = 'none';
-                  }}
-                />
-              )}
+          <div className='flex justify-between items-baseline'>
+            <div className="mb-4 flex   gap-4" >
+          
+              <div>
+              <h1 className='text-[20px]'>Title and description</h1>
+                <h3 className="font-bold mt-2">{heroData.title}</h3>
+                <p className="text-gray-600 mt-1">{heroData.description}</p>
+              </div>
+              <div>
+                <h2>HeroSection Image</h2>
+                {(heroData.image || heroData.imagePreview) && (
+                  <img
+                    src={heroData.imagePreview || heroData.image}
+                    alt="Hero"
+                    className="mt-2 max-w-xs rounded"
+                    onError={(e) => {
+                      console.error('Failed to load image:', e.target.src);
+                      e.target.style.display = 'none';
+                    }}
+                  />
+                )}
+              </div>
             </div>
             <button
               onClick={handleEdit}

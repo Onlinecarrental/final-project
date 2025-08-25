@@ -237,11 +237,11 @@ export default function BlogManagement() {
       category: blog.category,
       content: blog.content,
       image: null,
-      imagePreview: null,
+      imagePreview: blog.image ? blog.image : null,
       author: {
-        name: blog.authorName || '',
+        name: blog.author?.name || blog.authorName || '',
         image: null,
-        imagePreview: null
+        imagePreview: blog.author?.image || null
       }
     });
     setIsEditing(true);

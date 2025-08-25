@@ -27,7 +27,7 @@ import BookingManagement from './bookingManagement/BookingManagement';
 import PaymentManagement from './paymentManagemnt/PaymentManagement';
 import ContactManagement from "./ContactManagemnt/ContactManage";
 import UserManagement from './UserManagement/UserManagement';
-import DashboardContent from './DashboardContent';
+import DashboardContent from './DashboardContent/Dashboard';
 
 function SidebarItem({ icon, text, isOpen, isActive, onClick, badge }) {
   return (
@@ -127,18 +127,10 @@ function BlogContent() {
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Blog Management</h1>
-        <button
-          onClick={() => setShowEditor(true)}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2"
-        >
-          <Plus size={20} />
-          Add New Blog
-        </button>
+        <h1 className="text-2xl text-white font-bold">Blog Management</h1>
+
       </div>
 
-      {/* Add Category Management Section */}
-      <CategoryManagement categories={categories} setCategories={setCategories} />
 
       {/* Rest of the existing code... */}
       <BlogManagement />
@@ -186,6 +178,8 @@ export default function AdminDashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [activeTab, setActiveTab] = useState('dashboard');
   const navigate = useNavigate();
+  const [adminName, setAdminName] = useState('');
+  const [adminEmail, setAdminEmail] = useState('');
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -195,6 +189,20 @@ export default function AdminDashboard() {
     localStorage.removeItem('user');
     navigate('/');
   };
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem('user');
+      if (!stored) return;
+      const user = JSON.parse(stored);
+      // Name preference: displayName || name || email username || 'Admin'
+      const derivedName = user.displayName || user.name || (user.email ? user.email.split('@')[0] : 'Admin');
+      setAdminName(derivedName);
+      setAdminEmail(user.email || '');
+    } catch (e) {
+      // Ignore parse errors; keep defaults
+    }
+  }, []);
 
   const renderContent = () => {
     // Homepage sections
@@ -257,7 +265,7 @@ export default function AdminDashboard() {
         return <PaymentManagement />;
       case 'contactmanagement':
         return <ContactManagement />;
-    
+
     }
   };
 
@@ -281,13 +289,7 @@ export default function AdminDashboard() {
             isActive={activeTab === 'dashboard'}
             onClick={() => setActiveTab('dashboard')}
           />
-          <SidebarItem
-            icon={<ShoppingCart size={20} />}
-            text="Booking Management"
-            isOpen={sidebarOpen}
-            isActive={activeTab === 'bookings'}
-            onClick={() => setActiveTab('bookings')}
-          />
+
           <SidebarItem
             icon={<Users size={20} />}
             text="User Management"
@@ -385,24 +387,17 @@ export default function AdminDashboard() {
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Top Navigation */}
         <header className="bg-white shadow-sm z-10">
-          <div className="flex items-center justify-between p-4">
-            <div className="flex items-center rounded-md bg-gray  px-3 py-2 w-64">
-              <Search size={18} className="text-gray-500" />
-              <input
-                type="text"
-                placeholder="Search..."
-                className="bg-transparent border-none outline-none ml-2 w-full"
-              />
-            </div>
-            <div className="flex items-center space-x-2">
+          <div className="flex items-center   p-4">
+
+            <div className="flex items-center space-x-2 ">
               <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white">
                 <User size={18} />
               </div>
               <div className="hidden md:block">
-                <div className="text-sm font-medium">John Doe</div>
-                <div className="text-xs text-gray-500">Admin</div>
+                <div className="text-sm font-medium">{adminName || 'Admin'}</div>
+                <div className="text-xs text-gray-500">{adminEmail || 'admin@example.com'}</div>
               </div>
-              <ChevronDown size={16} className="text-gray-500" />
+
             </div>
           </div>
         </header>

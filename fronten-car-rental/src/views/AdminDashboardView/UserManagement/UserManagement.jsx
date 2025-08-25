@@ -1,6 +1,30 @@
 import { useEffect, useState, useMemo } from 'react';
 import { db } from '../../../firebase/config';
 import { collection, getDocs, updateDoc, doc, deleteDoc } from 'firebase/firestore';
+import { Search, Users, User, CheckCircle, XCircle, Eye, Trash2, MoreVertical } from 'lucide-react';
+
+// Skeleton Loader Component
+const TableSkeleton = ({ rows = 5, cols = 5 }) => (
+  <div className="animate-pulse space-y-3">
+    {[...Array(rows)].map((_, i) => (
+      <div key={i} className="flex space-x-4">
+        {[...Array(cols)].map((_, j) => (
+          <div key={j} className="h-4 bg-gray-200 rounded w-full"></div>
+        ))}
+      </div>
+    ))}
+  </div>
+);
+
+// Status Badge Component
+const StatusBadge = ({ approved }) => (
+  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${approved
+    ? 'bg-green-100 text-green-800'
+    : 'bg-yellow-100 text-yellow-800'
+    }`}>
+    {approved ? 'Approved' : 'Pending'}
+  </span>
+);
 
 export default function UserManagement() {
   const [agents, setAgents] = useState([]);
@@ -9,11 +33,14 @@ export default function UserManagement() {
   const [updatingId, setUpdatingId] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [detailsOpen, setDetailsOpen] = useState(false);
-  const [selected, setSelected] = useState(null); // { type: 'agent'|'customer', data: {...} }
+  const [selected, setSelected] = useState(null);
   const [editMode, setEditMode] = useState(false);
   const [editedData, setEditedData] = useState(null);
   const [saving, setSaving] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [activeTab, setActiveTab] = useState('agents');
 
   const fetchData = async () => {
     setLoading(true);
@@ -58,11 +85,11 @@ export default function UserManagement() {
     }
   };
 
-  const openDetails = (type, row) => {
-    setSelected({ type, data: row });
+  const openDetails = (type, data) => {
+    setSelected({ type, data });
     setDetailsOpen(true);
     setEditMode(false);
-    setEditedData({ ...row });
+    setEditedData({ ...data });
   };
 
   const closeDetails = () => {
@@ -82,20 +109,20 @@ export default function UserManagement() {
     if (!window.confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
       return;
     }
-    
+
     setDeletingId(id);
     setError('');
     try {
       const col = type === 'agent' ? 'agent' : 'users';
       await deleteDoc(doc(db, col, id));
-      
+
       // Update local state
       if (type === 'agent') {
         setAgents(prev => prev.filter(a => a.id !== id));
       } else {
         setCustomers(prev => prev.filter(c => c.id !== id));
       }
-      
+
       // Close details if open for deleted user
       if (selected?.data?.id === id) {
         closeDetails();
@@ -151,7 +178,7 @@ export default function UserManagement() {
         if (v && typeof v === 'object' && v.seconds && v.nanoseconds) {
           try {
             value = new Date(v.seconds * 1000).toLocaleString();
-          } catch (_) {}
+          } catch (_) { }
         }
         if (typeof value === 'boolean') value = value ? 'Yes' : 'No';
         if (Array.isArray(value)) value = value.join(', ');
@@ -164,13 +191,13 @@ export default function UserManagement() {
   }, [selected]);
 
   return (
-    <div className="p-4">
+    <div className="p-4 font-jakarta">
       <h1 className="text-2xl font-bold mb-4">User Management</h1>
       {error && (
         <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">{error}</div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1  gap-6">
         <div className="bg-white rounded-lg shadow p-4">
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-lg font-semibold">Agents</h2>
@@ -181,12 +208,13 @@ export default function UserManagement() {
           ) : (
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+                <thead className="bg-gray">
                   <tr>
                     <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
                     <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
                     <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Phone</th>
                     <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Approved</th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Role</th>
                     <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
                   </tr>
                 </thead>
@@ -197,22 +225,23 @@ export default function UserManagement() {
                       <td className="px-4 py-2 whitespace-nowrap">{a.email || '-'}</td>
                       <td className="px-4 py-2 whitespace-nowrap">{a.phone || '-'}</td>
                       <td className="px-4 py-2 whitespace-nowrap">
-                        <span className={`px-2 py-0.5 rounded-full text-xs ${a.approved ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
+                        <span className={`px-2 py-2 rounded text-xs ${a.approved ? 'bg-gray text-black' : 'bg-yellow-400 text-black'}`}>
                           {a.approved ? 'Approved' : 'Pending'}
                         </span>
                       </td>
+                      <td className="px-4 py-2 whitespace-nowrap">{a.role || '-'}</td>
                       <td className="px-4 py-2 whitespace-nowrap">
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => openDetails('agent', a)}
-                            className="px-3 py-1 text-sm bg-gray-100 text-gray-800 rounded hover:bg-gray-200"
+                            className="px-3 py-1 text-sm bg-Blue text-white rounded hover:bg-gray"
                           >
                             Details
                           </button>
                           <button
                             onClick={() => handleDelete(a.id, 'agent')}
                             disabled={deletingId === a.id}
-                            className="px-3 py-1 text-sm bg-red-100 text-red-700 rounded hover:bg-red-200 disabled:opacity-50"
+                            className="px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-Blue disabled:opacity-50"
                           >
                             {deletingId === a.id ? 'Deleting...' : 'Delete'}
                           </button>
@@ -245,7 +274,7 @@ export default function UserManagement() {
           ) : (
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+                <thead className="bg-gray">
                   <tr>
                     <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
                     <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
@@ -260,12 +289,21 @@ export default function UserManagement() {
                       <td className="px-4 py-2 whitespace-nowrap">{u.email || '-'}</td>
                       <td className="px-4 py-2 whitespace-nowrap">{u.role || 'customer'}</td>
                       <td className="px-4 py-2 whitespace-nowrap">
-                        <button
-                          onClick={() => openDetails('customer', u)}
-                          className="px-3 py-1 text-sm bg-gray-100 text-gray-800 rounded hover:bg-gray-200"
-                        >
-                          Details
-                        </button>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => openDetails('customer', u)}
+                            className="px-3 py-1 text-sm bg-Blue text-white rounded hover:bg-gray-200"
+                          >
+                            Details
+                          </button>
+                          <button
+                            onClick={() => handleDelete(u.id, 'customer')}
+                            disabled={deletingId === u.id}
+                            className="px-3 py-1 text-sm  bg-red-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+                          >
+                            {deletingId === u.id ? 'Deleting...' : 'Delete'}
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}
