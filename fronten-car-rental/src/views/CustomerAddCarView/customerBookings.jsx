@@ -6,7 +6,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 
 // Initialize Stripe with Vite environment variables
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || 'pk_test_51RqC2THEE3qJceYUqEXZeK9wtxUMlcrD6WXqHby7DX2K6DO7E5w2YlpXGHVhZorCk84jqbMsAItJrSCSkaXko1KC00C0MIdUCD');
+const stripePromise = loadStripe('pk_test_51RqC2THEE3qJceYUqEXZeK9wtxUMlcrD6WXqhby7DX2K6DO7E5w2YlpXGHVhZorCk84jqbMsAItJrSCSkaXko1KC00C0MIdUCD');
 
 // Payment Form Component
 function PaymentForm({ booking, onPaymentSuccess, onPaymentError }) {
@@ -134,8 +134,8 @@ export default function CustomerBookings() {
 
     // After payment, show success, create/find chat, send message, and redirect to chat (same as bookingFormView)
     const handlePaymentSuccess = async (bookingId) => {
-        setBookings(prev => prev.map(booking => 
-            booking._id === bookingId 
+        setBookings(prev => prev.map(booking =>
+            booking._id === bookingId
                 ? { ...booking, paymentStatus: 'paid' }
                 : booking
         ));
