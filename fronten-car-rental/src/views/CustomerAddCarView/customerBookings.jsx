@@ -4,8 +4,9 @@ import { auth } from '../../firebase/config';
 import axios from 'axios';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
-
-// Initialize Stripe with Vite environment variables
+REACT_APP_STRIPE_PUBLISHABLE_KEY = pk_test_51RqC2THEE3qJceYUqEXZeK9wtxUMlcrD6WXqhby7DX2K6DO7E5w2YlpXGHVhZorCk84jqbMsAItJrSCSkaXko1KC00C0MIdUCD
+STRIPE_SECRET_KEY = sk_test_51RqC2THEE3qJceYUI18fL7H2u6MGIs0bvIsPpSCbkXb2ijvzIAUfIp8v3ZsDyYF6h8XXUQDje6zwzO2gFO9LDrM300KtMYZwDL
+// Initialize Stripe with direct key
 const stripePromise = loadStripe('pk_test_51RqC2THEE3qJceYUqEXZeK9wtxUMlcrD6WXqhby7DX2K6DO7E5w2YlpXGHVhZorCk84jqbMsAItJrSCSkaXko1KC00C0MIdUCD');
 
 // Payment Form Component
@@ -28,10 +29,15 @@ function PaymentForm({ booking, onPaymentSuccess, onPaymentError }) {
 
         try {
             // Create payment intent
-            const paymentIntentResponse = await axios.post(`${import.meta.env.VITE_API_URL}payments/create-payment-intent`, {
+            const paymentIntentResponse = await axios.post(`${import.meta.env.VITE_API_URL}/payments/create-payment-intent`, {
                 bookingId: booking._id,
-                amount: booking.price,
+                amount: booking.price * 100, // Convert to cents for Stripe
                 currency: 'usd'
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${await auth.currentUser?.getIdToken()}`
+                }
             });
 
             const { clientSecret, paymentIntentId, paymentId } = paymentIntentResponse.data.data;
@@ -51,9 +57,14 @@ function PaymentForm({ booking, onPaymentSuccess, onPaymentError }) {
 
             if (paymentIntent.status === 'succeeded') {
                 // Confirm payment with backend
-                await axios.post(`${import.meta.env.VITE_API_URL}payments/confirm-payment`, {
+                await axios.post(`${import.meta.env.VITE_API_URL}/payments/confirm-payment`, {
                     paymentIntentId,
                     paymentId
+                }, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${await auth.currentUser?.getIdToken()}`
+                    }
                 });
 
                 onPaymentSuccess(booking._id);
