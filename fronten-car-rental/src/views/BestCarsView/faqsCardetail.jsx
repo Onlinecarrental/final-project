@@ -5,24 +5,24 @@ import HeadingTitle from '../../components/heading';
 export default function FAQDetailCars() {
   const faqs = [
     {
-      question: "What is the difference between a UI and UX Designer?",
-      answer: "A UI (User Interface) Designer focuses on the visual elements of a product such as buttons, icons, spacing, typography, and color schemes. They create the look and feel of an interface. A UX (User Experience) Designer focuses on the overall feel and functionality of the product, how users interact with it, and ensuring it meets user needs through research, testing, and iteration."
+      question: "What is the best option if I need a budget-friendly car for daily use?",
+      answer: "Economy cars are the best choice for daily travel. They are fuel-efficient, easy to drive in the city, and available at the lowest rental rates."
     },
     {
-      question: "How to become a UI designer?",
-      answer: "To become a UI designer: 1) Learn design fundamentals including color theory, typography, and layout. 2) Master design tools like Figma, Adobe XD, or Sketch. 3) Study UI principles and patterns. 4) Build a portfolio of projects. 5) Practice by redesigning existing interfaces. 6) Get feedback from professional designers. 7) Network in the design community and apply for entry-level positions or internships."
+      question: "Which car category is suitable for long-distance family trips?",
+      answer: "SUVs are highly recommended for family trips. They have more space, strong performance, and better comfort for long journeys with luggage."
     },
     {
-      question: "What is the difference between a UI and UX Designer?",
-      answer: "UI Designers create the visual elements users interact with, focusing on aesthetics and presentation. UX Designers focus on the entire user journey and experience, conducting research to understand user needs and behaviors. While UI is about how things look, UX is about how things work and feel from the user's perspective."
+      question: "I am traveling for a business meeting. Which car category should I book?",
+      answer: "A Sedan or Luxury car is perfect for business travel. Sedans provide comfort and reliability, while Luxury cars give a premium and professional impression."
     },
     {
-      question: "How to become a UI designer?",
-      answer: "The path to becoming a UI designer includes: learning visual design principles, developing proficiency with industry-standard tools, understanding accessibility standards, creating a strong portfolio, gaining practical experience through projects or internships, staying updated with design trends, and potentially pursuing relevant education or certification programs."
+      question: "Do you have vehicles for larger groups like friends or office tours?",
+      answer: " Yes, Vans and MPVs are available for larger groups. They have multiple seating options, making them ideal for office tours, picnics, or airport transfers."
     },
     {
-      question: "How to become a UI designer?",
-      answer: "To become a UI designer, start by learning the fundamentals of visual design, developing technical skills with design software, building a portfolio showcasing your work, networking with other designers, seeking mentorship, participating in design challenges, and applying for junior positions to gain professional experience."
+      question: "What is the long-term vision of this project?",
+      answer: "Our vision is to become the most trusted car rental platform in the region, offering modern technology, wider car options, and a seamless user experience."
     }
   ];
 

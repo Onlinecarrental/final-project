@@ -190,34 +190,49 @@ export default function PaymentManagement() {
             default: return 'bg-gray-200 text-gray-800';
         }
     };
-    const handleDelete = async (payment) => {
-        const bookingId = payment.booking?._id || payment.booking;
 
-        if (window.confirm("Are you sure you want to delete this record?")) {
-            try {
-                if (bookingId) {
-                    // Delete whole booking
+    const handleDelete = async (payment) => {
+        if (!window.confirm("Are you sure you want to delete this payment record?")) {
+            return;
+        }
+
+        try {
+            // First delete the payment
+            await axios.delete(`https://backend-car-rental-production.up.railway.app/api/payments/${payment._id}`);
+            
+            // If payment is associated with a booking, delete the booking as well
+            const bookingId = payment.booking?._id || payment.booking;
+            if (bookingId) {
+                try {
                     await axios.delete(`https://backend-car-rental-production.up.railway.app/api/bookings/${bookingId}`);
-                    setPayments(prev => prev.filter(p => (p.booking?._id || p.booking) !== bookingId));
-                } else {
-                    // Delete only payment if no booking
-                    await axios.delete(`https://backend-car-rental-production.up.railway.app/api/payments/${payment._id}`);
-                    setPayments(prev => prev.filter(p => p._id !== payment._id));
+                } catch (bookingErr) {
+                    console.warn("Could not delete associated booking:", bookingErr);
                 }
-            } catch (err) {
-                console.error("Delete failed:", err);
-                alert("Failed to delete. Please try again.");
             }
+
+            // Refresh the payments list to get the updated data
+            const response = await axios.get('https://backend-car-rental-production.up.railway.app/api/payments/admin/all');
+            setPayments(response.data);
+            
+            alert("Payment record deleted successfully!");
+        } catch (err) {
+            console.error("Delete failed:", err);
+            alert(`Failed to delete payment: ${err.response?.data?.message || err.message}`);
         }
     };
+
     // Group payments by booking
     const paymentsByBooking = {};
-    for (const payment of payments) {
-        const bookingId = payment.booking?._id || payment.booking;
-        if (!paymentsByBooking[bookingId]) {
-            paymentsByBooking[bookingId] = [];
+    if (Array.isArray(payments)) {
+        for (const payment of payments) {
+            const bookingId = payment.booking?._id || payment.booking;
+            if (bookingId) {  // Only process if we have a valid booking ID
+                if (!paymentsByBooking[bookingId]) {
+                    paymentsByBooking[bookingId] = [];
+                }
+                paymentsByBooking[bookingId].push(payment);
+            }
         }
-        paymentsByBooking[bookingId].push(payment);
     }
 
     // For each booking, prefer the payment with agentBankDetails, else fallback to the first

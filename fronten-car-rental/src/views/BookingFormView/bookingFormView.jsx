@@ -329,8 +329,8 @@ export default function BookingForm() {
                 <div className="grid grid-cols-2 gap-4">
                   <div><p className="font-semibold">Car Name:</p><p>{carDetails.name}</p></div>
                   <div><p className="font-semibold">Model:</p><p>{carDetails.model}</p></div>
-                  <div><p className="font-semibold">Daily Rate:</p><p>${carDetails.dailyRate}/day</p></div>
-                  <div><p className="font-semibold">Weekly Rate:</p><p>${carDetails.weeklyRate}/week</p></div>
+                  <div><p className="font-semibold">Daily Rate:</p><p>{carDetails.dailyRate}pkr/day</p></div>
+                  <div><p className="font-semibold">Weekly Rate:</p><p>{carDetails.weeklyRate}pkr/week</p></div>
                 </div>
               </div>
             )}
@@ -423,7 +423,7 @@ export default function BookingForm() {
                   <div className="mb-4 ">
                     <label className="block text-lg font-[500] mb-1">Price:</label>
                     <div className="relative">
-                      <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">$</span>
+                      <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">RP </span>
                       <input type="number" name="price" value={formData.price} readOnly className="w-full p-2 pl-8 border border-gray-300 rounded-md bg-gray  cursor-not-allowed" />
                     </div>
                   </div>

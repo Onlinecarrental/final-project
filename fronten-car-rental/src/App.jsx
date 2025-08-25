@@ -28,7 +28,7 @@ import AdminDashboard from './views/AdminDashboardView/adminpanel';
 import BlogManagement from './views/AdminDashboardView/BlogManagement/BlogManagement';
 import CustomerBookings from './views/CustomerAddCarView/customerBookings';
 import ReviewView from './views/ReviewView/reviewView';
-
+import ScrollToTop from './components/TopScrollbar';
 
 const App = () => {
     React.useEffect(() => {
@@ -40,6 +40,7 @@ const App = () => {
 
     return (
         <Router>
+            <ScrollToTop />
             <Routes>
                 {/* User routes */}
                 <Route

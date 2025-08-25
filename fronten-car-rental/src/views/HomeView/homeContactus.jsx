@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import BaseCard from "../../components/card";
 import HeadingTitle from "../../components/heading";
 import Button from "../../components/button";
-import contactImage from "../../assets/contactus.svg"
+import contactImage from "../../assets/contactus.svg";
+import axios from 'axios';
+
 const HomeContactus = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -11,26 +13,28 @@ const HomeContactus = () => {
   });
 
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState({ success: false, message: '' });
 
-  // ✅ **Live Validation Function**
+  // Validation Function
   const validateForm = () => {
     let newErrors = {};
 
-    // ✅ **Name Validation (Only Letters)**
+    // Name Validation
     if (!formData.name.trim()) {
       newErrors.name = "Name is required.";
     } else if (!/^[A-Za-z\s]+$/.test(formData.name)) {
       newErrors.name = "Only alphabets are allowed in Name.";
     }
 
-    // ✅ **Email Validation**
+    // Email Validation
     if (!formData.email.trim()) {
       newErrors.email = "Email is required.";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = "Enter a valid email address.";
     }
 
-    // ✅ **Message Validation (Max 500 Characters)**
+    // Message Validation
     if (!formData.message.trim()) {
       newErrors.message = "Message is required.";
     } else if (formData.message.length > 500) {
@@ -38,28 +42,41 @@ const HomeContactus = () => {
     }
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0; // ✅ If no errors, return true
+    return Object.keys(newErrors).length === 0;
   };
 
-  // ✅ **Handle Input Change (Live Validation)**
+  // Handle Input Change
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
-
-    // ✅ Revalidate individual field
     setErrors((prevErrors) => ({ ...prevErrors, [id]: "" }));
   };
 
-  // ✅ **Handle Form Submit**
-  const handleSubmit = (e) => {
+  // Handle Form Submit
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-      alert("Form submitted successfully!");
-      // ✅ Reset form after submission
-      setFormData({ name: "", email: "", message: "" });
-      setErrors({});
+      try {
+        const API_BASE_URL = "https://backend-car-rental-production.up.railway.app/api";
+        const res = await fetch(`${API_BASE_URL}/contact`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...formData, role: 'customer' })
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          alert(data.errors ? data.errors.map(e => e.msg).join('\n') : data.error);
+          return;
+        }
+        alert("Form submitted successfully!");
+        setFormData({ name: "", email: "", message: "" });
+        setErrors({});
+      } catch (err) {
+        alert("Failed to submit: " + err.message);
+      }
     }
   };
+
 
   return (
     <section className="bg-gray flex font-jakarta justify-between flex-col py-8 lg:py-16  w-full">
@@ -127,17 +144,22 @@ const HomeContactus = () => {
               {errors.message && <p className="text-red-500 text-[16px] ">{errors.message}</p>}
             </div>
 
-            {/* ✅ Button Centered */}
-            <div className="flex  justify-center">
+            {/* Submit Button with Loading State */}
+            <div className="flex flex-col items-center gap-4">
               <Button
-                title="Submit"
-                onClick={(e) => {
-                  e.preventDefault(); // Prevent default button behavior
-                  handleSubmit(e);
-                }}
+                title={isSubmitting ? 'Sending...' : 'Submit'}
+                onClick={handleSubmit}
                 width="180px"
                 height="50px"
+                disabled={isSubmitting}
               />
+              {submitStatus.message && (
+                <div className={`text-center text-sm p-2 rounded-md ${
+                  submitStatus.success ? 'text-green-600 bg-green-100' : 'text-red-600 bg-red-100'
+                }`}>
+                  {submitStatus.message}
+                </div>
+              )}
             </div>
           </form>
         </BaseCard>

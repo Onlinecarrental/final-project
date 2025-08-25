@@ -26,7 +26,7 @@ export default function HerosectionCustomer({ onSearch }) {
       <div className="relative z-[1px] font-jakarta flex flex-col items-center justify-center h-full text-center px-4">
         <h1 className="text-4xl font-bold text-black mb-2">Customer Review</h1>
         <p className="text-lg text-black mb-8">
-          This is sample of page tagline and you can set it up using page option
+          here you can find all the reviews of the car rental service.
         </p>
 
         {/* Search Bar */}

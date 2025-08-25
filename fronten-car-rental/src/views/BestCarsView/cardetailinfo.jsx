@@ -1,4 +1,5 @@
 import React from 'react';
+import blueticket from "../../assets/bluetick.svg";
 
 export default function CarServicesInfo() {
   return (
@@ -17,15 +18,15 @@ export default function CarServicesInfo() {
         
         <ul className="space-y-2">
           <li className="flex items-center">
-            <img src="../src/assets/bluetick.svg" alt="Checkmark" className="w-5 h-5 mr-2" />
+            <img src={blueticket} alt="Checkmark" className="w-5 h-5 mr-2" />
             <span>24/7 Roadside Assistance</span>
           </li>
           <li className="flex items-center">
-            <img src="../src/assets/bluetick.svg" alt="Checkmark" className="w-5 h-5 mr-2" />
+            <img src={blueticket} alt="Checkmark" className="w-5 h-5 mr-2" />
             <span>Free Cancellation & Return</span>
           </li>
           <li className="flex items-center">
-            <img src="../src/assets/bluetick.svg" alt="Checkmark" className="w-5 h-5 mr-2" />
+            <img src={blueticket} alt="Checkmark" className="w-5 h-5 mr-2" />
             <span>Rent Now Pay When You Arrive</span>
           </li>
         </ul>
@@ -45,38 +46,38 @@ export default function CarServicesInfo() {
         <div className="grid  text-center gap-2">
         <div className='flex justify-center gap-60'>          <ul className="space-y-1">
             <li className="flex items-center">
-              <img src="../src/assets/bluetick.svg" alt="Checkmark" className="w-5 h-5 mr-2" />
+              <img src={blueticket} alt="Checkmark" className="w-5 h-5 mr-2" />
               <span className="text-sm">Comfortable and Spacious</span>
             </li>
             <li className="flex items-center">
-              <img src="../src/assets/bluetick.svg" alt="Checkmark" className="w-5 h-5 mr-2" />
+              <img src={blueticket} alt="Checkmark" className="w-5 h-5 mr-2" />
               <span className="text-sm">Smooth Handling</span>
             </li>
             <li className="flex items-center">
-              <img src="../src/assets/bluetick.svg" alt="Checkmark" className="w-5 h-5 mr-2" />
+              <img src={blueticket} alt="Checkmark" className="w-5 h-5 mr-2" />
               <span className="text-sm">Efficient Performance</span>
             </li>
             <li className="flex items-center">
-              <img src="../src/assets/bluetick.svg" alt="Checkmark" className="w-5 h-5 mr-2" />
+              <img src={blueticket} alt="Checkmark" className="w-5 h-5 mr-2" />
               <span className="text-sm">Modern Technology</span>
             </li>
           </ul>
           
           <ul className="space-y-1">
             <li className="flex items-center">
-              <img src="../src/assets/bluetick.svg" alt="Checkmark" className="w-5 h-5 mr-2" />
+              <img src={blueticket} alt="Checkmark" className="w-5 h-5 mr-2" />
               <span className="text-sm">Safety and Peace of Mind</span>
             </li>
             <li className="flex items-center">
-              <img src="../src/assets/bluetick.svg" alt="Checkmark" className="w-5 h-5 mr-2" />
+              <img src={blueticket} alt="Checkmark" className="w-5 h-5 mr-2" />
               <span className="text-sm">Efficient Performance</span>
             </li>
             <li className="flex items-center">
-              <img src="../src/assets/bluetick.svg" alt="Checkmark" className="w-5 h-5 mr-2" />
+              <img src={blueticket} alt="Checkmark" className="w-5 h-5 mr-2" />
               <span className="text-sm">Stabilized Control</span>
             </li>
             <li className="flex items-center">
-              <img src="../src/assets/bluetick.svg" alt="Checkmark" className="w-5 h-5 mr-2" />
+              <img src={blueticket} alt="Checkmark" className="w-5 h-5 mr-2" />
               <span className="text-sm">Otomatic Mode</span>
             </li>
           </ul>

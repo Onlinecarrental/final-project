@@ -5,7 +5,7 @@ const LocationSection = () => {
     <section className="text-center font-jakarta px-4 py-10">
       <h2 className="text-3xl font-bold mb-2">Location</h2>
       <p className="text-gray-500">
-        This is sample of page tagline and you can set it up using page option
+        here you can find the location of the car rental service.
       </p>
 
       <div className="mt-8 max-w-[900px]  mx-auto rounded-[10px] overflow-hidden shadow-lg">

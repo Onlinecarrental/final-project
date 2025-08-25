@@ -92,7 +92,7 @@ function PaymentForm({ booking, onPaymentSuccess, onPaymentError }) {
                 disabled={!stripe || loading}
                 className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 disabled:opacity-50"
             >
-                {loading ? 'Processing...' : `Pay $${booking.price}`}
+                {loading ? 'Processing...' : `Pay ${booking.price}rp`}
             </button>
         </form>
     );
@@ -172,9 +172,9 @@ export default function CustomerBookings() {
         setTimeout(() => {
             setPaymentSuccess(false);
             if (chatId) {
-                navigate('/customer-chat', { state: { chatId } });
+                navigate('home/customer-chat', { state: { chatId } });
             } else {
-                navigate('/customer-chat');
+                navigate('home/customer-chat');
             }
         }, 2000);
     };
@@ -227,11 +227,11 @@ export default function CustomerBookings() {
                                     <div className="font-semibold text-lg">{booking.car?.name} ({booking.car?.model})</div>
                                     <div className="text-sm text-gray-600">From: {new Date(booking.dateFrom).toLocaleDateString()} To: {new Date(booking.dateTo).toLocaleDateString()}</div>
                                     <div className="text-sm text-gray-600">Location: {booking.location}</div>
-                                    <div className="text-sm text-gray-600">Price: ${booking.price}</div>
+                                    <div className="text-sm text-gray-600">Price:{booking.price}rp</div>
                                 </div>
-                                <div className="flex flex-col items-end gap-2">
-                                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${booking.status === 'pending' ? 'bg-yellow-200 text-yellow-800' : booking.status === 'approved' ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'}`}>{booking.status}</span>
-                                    <span className={`px-3 py-1 rounded-full text-xs ${booking.paymentStatus === 'paid' ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-700'}`}>{booking.paymentStatus === 'paid' ? 'Paid' : 'Unpaid'}</span>
+                                <div className="flex flex-col items-center gap-2">
+                                    <span className={`px-3 py-2 px-4 rounded text-sm font-medium ${booking.status === 'pending' ? 'bg-black text-white' : booking.status === 'approved' ? 'bg-gray text-black' : 'bg-red-200 text-red-800'}`}>{booking.status}</span>
+                                    <span className={`px-3 py-2 px-4 rounded text-xs ${booking.paymentStatus === 'paid' ? 'bg-gray text-black' : 'bg-gray text-black'}`}>{booking.paymentStatus === 'paid' ? 'Paid' : 'Unpaid'}</span>
                                     {booking.paymentStatus === 'unpaid' && booking.status === 'pending' && (
                                         <button
                                             onClick={() => openPaymentModal(booking)}
@@ -267,7 +267,7 @@ export default function CustomerBookings() {
                             </button>
                         </div>
                         <div className="mb-4">
-                            <p className="text-sm text-gray-600 mb-2">Amount: ${selectedBooking.price}</p>
+                            <p className="text-sm text-gray-600 mb-2">Amount: {selectedBooking.price}rp</p>
                             <p className="text-sm text-gray-600">Car: {selectedBooking.car?.name} ({selectedBooking.car?.model})</p>
                         </div>
                         <Elements stripe={stripePromise}>

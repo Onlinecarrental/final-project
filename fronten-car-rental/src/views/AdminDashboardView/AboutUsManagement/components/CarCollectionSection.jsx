@@ -234,45 +234,7 @@ export default function CarCollectionSection({ sections, setSections, editingSec
     }
   };
 
-  // const handleBannerSvgChange = async (e) => {
-  //   try {
-  //     const file = e.target.files[0];
-  //     if (!file) return;
 
-  //     if (!file.type.includes('svg')) {
-  //       setUpdateStatus({
-  //         error: 'Please upload an SVG file'
-  //       });
-  //       return;
-  //     }
-
-  //     const formData = new FormData();
-  //     formData.append('image', file);
-  //     formData.append('bannerSvg', 'true');
-  //     formData.append('content', JSON.stringify({
-  //       ...sections.carCollection
-  //     }));
-
-  //     const result = await handleUpdate('carCollection', formData);
-
-  //     if (result?.success) {
-  //       setSections(prev => ({
-  //         ...prev,
-  //         carCollection: {
-  //           ...prev.carCollection,
-  //           bannerSvg: result.data.content.bannerSvg
-  //         }
-  //       }));
-  //       setUpdateStatus({
-  //         success: 'Banner updated successfully!'
-  //       });
-  //     }
-  //   } catch (error) {
-  //     setUpdateStatus({
-  //       error: error.message || 'Failed to update banner'
-  //     });
-  //   }
-  // };
 
   const addNewCar = () => {
     setSections(prev => ({
@@ -952,16 +914,10 @@ export default function CarCollectionSection({ sections, setSections, editingSec
         )}
       </div>
 
-      <div className="flex justify-between items-center mb-4">
+      {/* <div className="flex justify-between items-center mb-4">
         <h3 className="text-xl font-semibold">Car Collection</h3>
-        <button
-          onClick={addNewCar}
-          className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
-        >
-          <Plus size={18} />
-          <span>Add Car</span>
-        </button>
-      </div>
+  
+      </div> */}
 
       <div className="grid gap-4">
         {cars.map((car, index) => (

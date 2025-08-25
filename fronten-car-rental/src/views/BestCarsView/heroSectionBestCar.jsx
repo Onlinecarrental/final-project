@@ -160,9 +160,9 @@ export default function HerosectionCar() {
 
       {/* Header Content */}
       <div className="relative z-[1px] font-jakarta flex flex-col items-center justify-center h-full text-center px-4">
-        <h1 className="text-4xl font-bold text-black mb-2">Car Listing</h1>
+        <h1 className="text-4xl font-bold text-black mb-2">Search All Cars</h1>
         <p className="text-lg text-black mb-8">
-          This is sample of page tagline and you can set it up using page option
+          Here you can search all cars and find the one that suits your needs.
         </p>
 
         {/* Search Bar */}
