@@ -126,7 +126,7 @@ export default function HeroSectionCarForm() {
 
   return (
     <div className="w-full flex justify-center relative bottom-16 items-center">
-      <BaseCard width="max-w-[1280px]" height="auto" padding="24px">
+      <BaseCard width="max-w-[1240px]" height="auto" padding="24px">
         <div className="grid grid-cols-1 md:grid-cols-5 p-7 gap-4">
           {/* Car Model Dropdown */}
           <div className="flex flex-col relative">
@@ -228,8 +228,9 @@ export default function HeroSectionCarForm() {
           </div>
 
           {/* Submit Button */}
-          <div className="flex flex-col mt-[23px]">
+          <div className="flex flex-col w-[240px] mt-[23px]">
             <Button
+          
               title="Find the Vehicle"
               width="auto"
               boxShadow={false}
