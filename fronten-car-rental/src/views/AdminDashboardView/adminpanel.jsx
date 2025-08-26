@@ -270,7 +270,7 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="flex h-screen bg-black">
+    <div className="flex h-auto bg-black">
       {/* Sidebar */}
       <div className={`${sidebarOpen ? 'w-64' : 'w-20'} bg-gray-800 text-white transition-all duration-300 ease-in-out`}>
         <div className="flex items-center justify-between p-4 border-b border-gray-700">
