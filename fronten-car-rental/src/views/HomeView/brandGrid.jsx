@@ -34,7 +34,7 @@ const CarBrandsGrid = () => {
   const carBrands = [
     { id: 1, name: 'Toyota', logo: toyotaLogo, path: '/assets/toyota.svg' },
     { id: 2, name: 'BMW', logo: bmwLogo, path: '/cars/bmw' },
-    { id: 3, name: 'Mercedes-Benz', logo: mercedesLogo, path: '/cars/mercedes' },
+    { id: 3, name: 'Mer-Benz', logo: mercedesLogo, path: '/cars/mercedes' },
     { id: 4, name: 'Honda', logo: hondaLogo, path: '/cars/honda' },
     { id: 5, name: 'Suzuki', logo: suzukiLogo, path: '/cars/suzuki' },
     { id: 6, name: 'Nissan', logo: nissanLogo, path: '/cars/nissan' },

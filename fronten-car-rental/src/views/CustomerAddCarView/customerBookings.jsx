@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { replace, useNavigate } from 'react-router-dom';
 import { auth } from '../../firebase/config';
 import axios from 'axios';
 import { loadStripe } from '@stripe/stripe-js';
@@ -172,9 +172,9 @@ export default function CustomerBookings() {
         setTimeout(() => {
             setPaymentSuccess(false);
             if (chatId) {
-                navigate('home/customer-chat', { state: { chatId } });
+                navigate('/home/customer-chat', { state: { chatId }, replace: true });
             } else {
-                navigate('home/customer-chat');
+                navigate('/home/customer-chat', { replace: true });
             }
         }, 2000);
     };
@@ -230,8 +230,8 @@ export default function CustomerBookings() {
                                     <div className="text-sm text-gray-600">Price:{booking.price}rp</div>
                                 </div>
                                 <div className="flex flex-col items-center gap-2">
-                                    <span className={`px-3 py-2 px-4 rounded text-sm font-medium ${booking.status === 'pending' ? 'bg-black text-white' : booking.status === 'approved' ? 'bg-gray text-black' : 'bg-red-200 text-red-800'}`}>{booking.status}</span>
-                                    <span className={`px-3 py-2 px-4 rounded text-xs ${booking.paymentStatus === 'paid' ? 'bg-gray text-black' : 'bg-gray text-black'}`}>{booking.paymentStatus === 'paid' ? 'Paid' : 'Unpaid'}</span>
+                                    <span className={` py-2 px-4 rounded text-sm font-medium ${booking.status === 'pending' ? 'bg-black text-white' : booking.status === 'approved' ? 'bg-gray text-black' : 'bg-red-200 text-red-800'}`}>{booking.status}</span>
+                                    <span className={` py-2 px-4 rounded text-xs ${booking.paymentStatus === 'paid' ? 'bg-gray text-black' : 'bg-gray text-black'}`}>{booking.paymentStatus === 'paid' ? 'Paid' : 'Unpaid'}</span>
                                     {booking.paymentStatus === 'unpaid' && booking.status === 'pending' && (
                                         <button
                                             onClick={() => openPaymentModal(booking)}
@@ -282,4 +282,4 @@ export default function CustomerBookings() {
             )}
         </div>
     );
-} 
+}
